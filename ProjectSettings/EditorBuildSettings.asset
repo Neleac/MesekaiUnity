@@ -5,10 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 0
+    path: Assets/Scenes/Start Scene.unity
+    guid: 65e1d7fec3bf8ce4287cc48b585f727a
+  - enabled: 0
+    path: Assets/Scenes/Holistic.unity
+    guid: 3c3497a3ce3c1db4387f61276a1ada22
   - enabled: 1
-    path: Assets/Mediapipe/Samples/Scenes/Start Scene.unity
-    guid: f7b359c19e6ae2d208e5ca4608b7c0b8
+    path: Assets/Scenes/ESC Menu.unity
+    guid: 68d2adbf2741ec345affa7cc80fc1332
   - enabled: 1
-    path: Assets/Mediapipe/Samples/Scenes/Holistic/Holistic.unity
-    guid: 530502d398830609297010a1521c815f
+    path: Assets/Scenes/Setting Menu.unity
+    guid: f738ec8c514443b4c85bee525de17229
   m_configObjects: {}
