@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4183516897102132}
   - component: {fileID: 33999078403542552}
   - component: {fileID: 23697325097947614}
+  - component: {fileID: -6052720684286997788}
   m_Layer: 0
   m_Name: rpgpp_lt_bird_house_01
   m_TagString: Untagged
@@ -83,3 +84,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!136 &-6052720684286997788
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1668681844432972}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.3727177
+  m_Height: 2.5634563
+  m_Direction: 1
+  m_Center: {x: 0.00063711405, y: 1.2818903, z: 0.00694789}

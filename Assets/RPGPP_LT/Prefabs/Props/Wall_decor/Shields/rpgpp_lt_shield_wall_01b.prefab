@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4568939754381720}
   - component: {fileID: 33042164994484580}
   - component: {fileID: 23864409030199178}
+  - component: {fileID: 3621713455983050821}
   m_Layer: 0
   m_Name: rpgpp_lt_shield_wall_01b
   m_TagString: Untagged
@@ -83,3 +84,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!58 &3621713455983050821
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1680521860787764}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.0010495186, y: -0.00007250905}
+  serializedVersion: 2
+  m_Radius: 0.5
