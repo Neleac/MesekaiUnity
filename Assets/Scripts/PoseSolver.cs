@@ -10,7 +10,6 @@ public class PoseSolver : MonoBehaviour
     private Transform leftShoulder;
 
     private LandmarkList poseLandmarks;
-    private NormalizedLandmarkList leftHandLandmarks;
 
     void Start()
     {
@@ -24,18 +23,12 @@ public class PoseSolver : MonoBehaviour
     void Update()
     {
         if (poseLandmarks != null) SolvePose();
-        if (leftHandLandmarks != null) SolveLeftHand();
     }
 
     // called from HolisticTrackingSolution.cs
     public void SetPoseLandmarks(LandmarkList poseWorldLandmarks)
     {
         poseLandmarks = poseWorldLandmarks;
-    }
-
-    public void SetLeftHandLandmarks(NormalizedLandmarkList leftHandLandmarks)
-    {
-        this.leftHandLandmarks = leftHandLandmarks;
     }
 
     private void SolvePose()
@@ -77,49 +70,5 @@ public class PoseSolver : MonoBehaviour
         Vector3 direction = new Vector3(to.X - from.X, to.Y - from.Y, to.Z - from.Z);
         return direction;
         // return direction.normalized;
-    }
-
-    private void SolveLeftHand()
-    {
-        //for now, the result is shown in the console --YT Mar 29, 2022
-        NormalizedLandmark wrist = leftHandLandmarks.Landmark[0];
-        NormalizedLandmark indexTip = leftHandLandmarks.Landmark[8];
-        NormalizedLandmark indexMCP = leftHandLandmarks.Landmark[5];
-        // a closed finger tip is placed between the center of the palm and the wrist
-        // y value is used when the hand is upright, x value is used when hand is horizontal
-        bool indexClosed = (wrist.X - indexTip.X) * (indexMCP.X - indexTip.X) < -0.001 || (wrist.Y - indexTip.Y) * (indexMCP.Y - indexTip.Y) < -0.001;
-
-        NormalizedLandmark middleTip = leftHandLandmarks.Landmark[12];
-        NormalizedLandmark middleMCP = leftHandLandmarks.Landmark[9];
-        bool middleClosed = (wrist.X - middleTip.X) * (middleMCP.X - middleTip.X) < -0.001 || (wrist.Y - middleTip.Y) * (middleMCP.Y - middleTip.Y) < -0.001;
-
-        NormalizedLandmark ringTip = leftHandLandmarks.Landmark[16];
-        NormalizedLandmark ringMCP = leftHandLandmarks.Landmark[13];
-        bool ringClosed = (wrist.X - ringTip.X) * (ringMCP.X - ringTip.X) < -0.001 || (wrist.Y - ringTip.Y) * (ringMCP.Y - ringTip.Y) < -0.001;
-        //print((wrist.X - ringTip.X) * (ringMCP.X - ringTip.X));
-        //print((wrist.Y - ringTip.Y) * (ringMCP.Y - ringTip.Y));
-
-        NormalizedLandmark pinkyTip = leftHandLandmarks.Landmark[20];
-        NormalizedLandmark pinkyMCP = leftHandLandmarks.Landmark[17];
-        bool pinkyClosed = (wrist.X - pinkyTip.X) * (pinkyMCP.X - pinkyTip.X) < -0.001 || (wrist.Y - pinkyTip.Y) * (pinkyMCP.Y - pinkyTip.Y) < -0.001;
-
-
-        // print(indexClosed + ", " + indexTip + ", " + indexMCP + ", " + wrist);
-
-        print(indexClosed + ", " + middleClosed  + ", " + ringClosed + ", " + pinkyClosed);
-        if (indexClosed && middleClosed && ringClosed && pinkyClosed)
-        {
-            print("rock");
-        } else if (!indexClosed && !middleClosed && ringClosed && pinkyClosed)
-        {
-            print("scissor");
-        } else if (!indexClosed && !middleClosed && !ringClosed && !pinkyClosed)
-        {
-            print("paper");
-        } else
-        {
-            print("N/A");
-        }
-
     }
 }

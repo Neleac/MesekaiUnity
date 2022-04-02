@@ -464,6 +464,7 @@ MonoBehaviour:
   _textureFramePool: {fileID: 275874970}
   faceSolver: {fileID: 1775846025}
   poseSolver: {fileID: 1775846024}
+  handSolver: {fileID: 1775846026}
   runningMode: 0
 --- !u!114 &275874970
 MonoBehaviour:
@@ -2724,6 +2725,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   headBone: {fileID: 509563654}
   faceMesh: {fileID: 509563655}
+--- !u!114 &1775846026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1775846023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1da1628c6d4a914e8dea98cdf27f868, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1782549141
 GameObject:
   m_ObjectHideFlags: 0
