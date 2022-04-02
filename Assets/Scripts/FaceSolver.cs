@@ -21,6 +21,7 @@ public class FaceSolver : MonoBehaviour
     const float SMOOTHING = 0.1f;   // lower value = smoother, but less responsive
 
     [SerializeField] private Transform headBone;
+    [SerializeField] private SkinnedMeshRenderer faceMesh;
     private NormalizedLandmarkList faceLandmarks;
 
     void Start()
@@ -43,6 +44,10 @@ public class FaceSolver : MonoBehaviour
 
     private void SolveFace()
     {
+        ///////////////////////
+        // PROCESS LANDMARKS //
+        ///////////////////////
+
         // convert Landmarks to Vector3s, with nose being the origin
         Vector3 nose = new Vector3(-faceLandmarks.Landmark[NOSE].X * WIDTH, -faceLandmarks.Landmark[NOSE].Y * HEIGHT, faceLandmarks.Landmark[NOSE].Z * WIDTH);
 
@@ -50,7 +55,7 @@ public class FaceSolver : MonoBehaviour
         for (int i = 0; i < landmarks.Length; i++)
         {
             /*
-            image coordinate frame
+            landmark coordinate frame
                 x-axis: left to right
                 y-axis: bottom to top
                 z-axis: into the screen
@@ -75,7 +80,7 @@ public class FaceSolver : MonoBehaviour
         Vector3 nasal = Vector3.ProjectOnPlane(landmarks[NASAL], normal);
 
         /*
-        face coordinate frame
+        face plane coordinate frame
             x-axis: right to left
             y-axis: bottom to top
             z-axis: out of the screen
@@ -83,7 +88,12 @@ public class FaceSolver : MonoBehaviour
         Vector3 faceY = (nasal - origin).normalized;
         Vector3 faceZ = normal;
         Vector3 faceX = Vector3.Cross(faceY, faceZ).normalized;
+        Matrix4x4 faceBasis = new Matrix4x4(faceX, faceY, faceZ, new Vector4(0, 0, 0, 1));
         
+        /////////////////
+        // ROTATE HEAD //
+        /////////////////
+
         // avatar head local axes
         Vector3 avatarX = headBone.parent.worldToLocalMatrix.MultiplyVector(headBone.right).normalized;
         Vector3 avatarY = headBone.parent.worldToLocalMatrix.MultiplyVector(headBone.up).normalized;
@@ -99,8 +109,87 @@ public class FaceSolver : MonoBehaviour
         double zRad = Math.PI / 2 - Math.Acos(faceY.x);
         float zDeg = (float)(180 / Math.PI * zRad);
 
-        Quaternion currRot = headBone.localRotation;
+        Quaternion oldRot = headBone.localRotation;
         Quaternion newRot = Quaternion.Euler(xDeg, yDeg, zDeg);
-        headBone.localRotation = Quaternion.Slerp(currRot, newRot, SMOOTHING);
+        headBone.localRotation = Quaternion.Slerp(oldRot, newRot, SMOOTHING);
+
+        ///////////////////////////
+        // CALCULATE BLENDSHAPES //
+        ///////////////////////////
+
+        // convert landmarks to 2D
+        for (int i = 0; i < landmarks.Length; i++)
+        {
+            // project landmarks onto face plane
+            landmarks[i] = Vector3.ProjectOnPlane(landmarks[i], normal);
+
+            // change of basis: landmark axes -> face plane axes
+            // landmark = (x, y, 0)
+            landmarks[i] = faceBasis.inverse.MultiplyVector(landmarks[i]);
+
+            // normalize by head dimensions
+            landmarks[i].x /= headWidth;
+            landmarks[i].y /= headHeight;
+        }
+
+        // eyes
+        Vector3 eyeRT = landmarks[27];
+        Vector3 eyeRB = landmarks[23];
+        Vector3 eyeLT = landmarks[257];
+        Vector3 eyeLB = landmarks[253];
+
+        SetBlendshape("eyeBlinkLeft", eyeRT.y - eyeRB.y, 0.1f, 0.09f);
+        SetBlendshape("eyeBlinkRight", eyeLT.y - eyeLB.y, 0.1f, 0.09f);
+
+        // SetBlendshape("eyeSquintLeft", eyeRT.y - eyeRB.y, 0.1f, 0.095f);
+        // SetBlendshape("eyeSquintRight", eyeLT.y - eyeLB.y, 0.1f, 0.095f);
+
+        SetBlendshape("eyeWideLeft", eyeRT.y - eyeRB.y, 0.1f, 0.12f);
+        SetBlendshape("eyeWideRight", eyeLT.y - eyeLB.y, 0.1f, 0.12f);
+
+        // eyebrows
+        Vector3 browR = landmarks[66];
+        Vector3 browL = landmarks[296];
+
+        // SetBlendshape("browOuterUpLeft", browR.y, 0.35f, 0.4f);
+        // SetBlendshape("browOuterUpRight", browL.y, 0.35f, 0.4f);
+        SetBlendshape("browInnerUp", 0.5f * (browR.y + browL.y), 0.35f, 0.4f);
+
+        // SetBlendshape("browDownLeft", browR.y, 0.35f, 0.33f);
+        // SetBlendshape("browDownRight", browL.y, 0.35f, 0.33f);
+
+        // mouth
+        Vector3 mouthT = landmarks[13];
+        Vector3 mouthB = landmarks[14];
+        Vector3 mouthL = landmarks[291];
+        Vector3 mouthR = landmarks[61];
+
+        SetBlendshape("jawOpen", mouthT.y - mouthB.y, 0.01f, 0.20f);
+
+        SetBlendshape("mouthSmileLeft", mouthR.y, -0.22f, -0.2f);
+        SetBlendshape("mouthSmileRight", mouthL.y, -0.22f, -0.2f);
+
+        SetBlendshape("mouthFrownLeft", mouthR.y, -0.22f, -0.30f);
+        SetBlendshape("mouthFrownRight", mouthL.y, -0.22f, -0.30f);
+
+        // nose
+        // Vector3 noseR = landmarks[64];
+        // Vector3 noseL = landmarks[294];
+        // SetBlendshape("noseSneerLeft", noseR.y, -0.027f, -0.022f);
+        // SetBlendshape("noseSneerRight", noseL.y, -0.027f, -0.022f);
+    }
+
+    private void SetBlendshape(string name, float value, float low, float high)
+    {   
+        // linear interpolate
+        float newWeight = (value - low) / (high - low);
+
+        // clamp between [0, 100]
+        newWeight = Math.Min(1, Math.Max(0, newWeight)) * 100;
+
+        // interpolate with previous weight for smoother animation
+        int index = faceMesh.sharedMesh.GetBlendShapeIndex(name);
+        float oldWeight = faceMesh.GetBlendShapeWeight(index);
+        faceMesh.SetBlendShapeWeight(index, (1 - SMOOTHING) * oldWeight + SMOOTHING * newWeight);
     }
 }
