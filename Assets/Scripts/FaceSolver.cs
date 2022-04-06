@@ -10,7 +10,7 @@ public class FaceSolver : MonoBehaviour
     const int WIDTH = 640;
     const int HEIGHT = 480;
     
-    // face mesh indices
+    // landmark indices
     const int NOSE = 4;        // tip of nose
     const int NASAL = 5;       // 1 point above nose
     const int LEFT = 454;      // left most point
@@ -27,8 +27,6 @@ public class FaceSolver : MonoBehaviour
     void Start()
     {
         faceLandmarks = null;
-
-        Debug.Log(headBone.eulerAngles.x);
     }
 
     void Update()
@@ -48,9 +46,9 @@ public class FaceSolver : MonoBehaviour
         // PROCESS LANDMARKS //
         ///////////////////////
 
-        // convert Landmarks to Vector3s, with nose being the origin
         Vector3 nose = new Vector3(-faceLandmarks.Landmark[NOSE].X * WIDTH, -faceLandmarks.Landmark[NOSE].Y * HEIGHT, faceLandmarks.Landmark[NOSE].Z * WIDTH);
-
+        
+        // convert Landmarks to Vector3s, with nose being the origin
         Vector3[] landmarks = new Vector3[faceLandmarks.Landmark.Count];
         for (int i = 0; i < landmarks.Length; i++)
         {

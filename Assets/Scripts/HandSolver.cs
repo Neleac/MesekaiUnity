@@ -38,7 +38,7 @@ public class HandSolver : MonoBehaviour
         
     }
 
-    private void RockPaperSscissors()
+    private void RockPaperScissors()
     {
         //for now, the result is shown in the console --YT Mar 29, 2022
         NormalizedLandmark wrist = leftHandLandmarks.Landmark[0];
