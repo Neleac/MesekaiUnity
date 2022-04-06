@@ -171,20 +171,26 @@ public class HandSolver : MonoBehaviour
                         if (z > 180) z -= 360;
                         else if (z < -180) z += 360;
 
-                        z = (hand.Equals("left")) ? Math.Clamp(z, -90, 0) : Math.Clamp(z, 0, 90);
+                        if (mirrorMode) z = (hand.Equals("left")) ? Math.Clamp(z, -90, 0) : Math.Clamp(z, 0, 90);
+                        else z = (hand.Equals("right")) ? Math.Clamp(z, -90, 0) : Math.Clamp(z, 0, 90);
+
                         parentTf.localRotation = Quaternion.Euler(0, 0, z);
                     }
                 }
                 else // index, middle, ring, pinky
                 {
                     float x = angles.x;
+                    float z = angles.z;
 
                     // spaghetti code lmao
                     if (x > 180) x -= 360;
                     else if (x < -180) x += 360;
+                    if (z > 180) z -= 360;
+                    else if (z < -180) z += 360;
 
                     x = Math.Clamp(x, 0, 90);
-                    parentTf.localRotation = Quaternion.Euler(x, 0, 0);
+                    z = Math.Clamp(z, -10, 10);
+                    parentTf.localRotation = Quaternion.Euler(x, 0, z);
                 }
                 
                 parentTf = childTf;
