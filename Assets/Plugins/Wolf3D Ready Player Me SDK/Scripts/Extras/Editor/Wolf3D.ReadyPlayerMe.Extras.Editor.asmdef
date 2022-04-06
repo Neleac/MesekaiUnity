@@ -1,0 +1,16 @@
+{
+    "name": "Wolf3D.ReadyPlayerMe.Extras.Editor",
+    "references": [
+        "Wolf3D.ReadyPlayerMe"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": []
+}
