@@ -177,8 +177,8 @@ public class FaceSolver : MonoBehaviour
         // SetBlendshape("noseSneerRight", noseL.y, -0.027f, -0.022f);
 
 
-        bool oShapeMouth = Math.Abs(mouthT.y - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) > 0.25;
-        bool vShapeMouth = !oShapeMouth && Math.Abs((mouthR.y + mouthL.y) / 2 - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) > 0.1;
+        bool oShapeMouth = Math.Abs(mouthT.y - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) > 0.18;
+        bool vShapeMouth = !oShapeMouth && Math.Abs((mouthR.y + mouthL.y) / 2 - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) > 0.08;
 
         string emotion = "N/A";
         if (vShapeMouth)
@@ -188,6 +188,7 @@ public class FaceSolver : MonoBehaviour
         {
             emotion = "suprise";
         }
+        print(Math.Abs(mouthT.y - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) + "," + Math.Abs((mouthR.y + mouthL.y) / 2 - mouthB.y) / Math.Abs(mouthR.x - mouthL.x));
         GameObject obj = GameObject.Find("Emotion");
         obj.GetComponent<TMPro.TextMeshProUGUI>().text = emotion;
     }
