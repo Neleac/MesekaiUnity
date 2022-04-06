@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311915, g: 0.3807396, b: 0.35872662, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1142,27 +1142,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2800602913417539097, guid: 2df63c7bcf555694f925948c93103339, type: 3}
       propertyPath: m_LocalScale.x
-      value: 50
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 2800602913417539097, guid: 2df63c7bcf555694f925948c93103339, type: 3}
       propertyPath: m_LocalScale.y
-      value: 50
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 2800602913417539097, guid: 2df63c7bcf555694f925948c93103339, type: 3}
       propertyPath: m_LocalScale.z
-      value: 50
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 2800602913417539097, guid: 2df63c7bcf555694f925948c93103339, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -50
+      value: -40
       objectReference: {fileID: 0}
     - target: {fileID: 2800602913417539097, guid: 2df63c7bcf555694f925948c93103339, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -45
+      value: -120
       objectReference: {fileID: 0}
     - target: {fileID: 2800602913417539097, guid: 2df63c7bcf555694f925948c93103339, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 300
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 2800602913417539097, guid: 2df63c7bcf555694f925948c93103339, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3019,6 +3019,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   headBone: {fileID: 509563654}
   faceMesh: {fileID: 509563655}
+  emotionDetection: 1
 --- !u!114 &1775846026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3031,6 +3032,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1da1628c6d4a914e8dea98cdf27f868, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rockPaperScissors: 1
 --- !u!1 &1782549141
 GameObject:
   m_ObjectHideFlags: 0

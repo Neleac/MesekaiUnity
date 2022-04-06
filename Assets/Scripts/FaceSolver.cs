@@ -22,6 +22,8 @@ public class FaceSolver : MonoBehaviour
 
     [SerializeField] private Transform headBone;
     [SerializeField] private SkinnedMeshRenderer faceMesh;
+    [SerializeField] private bool emotionDetection;
+
     private NormalizedLandmarkList faceLandmarks;
 
     void Start()
@@ -176,21 +178,19 @@ public class FaceSolver : MonoBehaviour
         // SetBlendshape("noseSneerLeft", noseR.y, -0.027f, -0.022f);
         // SetBlendshape("noseSneerRight", noseL.y, -0.027f, -0.022f);
 
-
-        bool oShapeMouth = Math.Abs(mouthT.y - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) > 0.18;
-        bool vShapeMouth = !oShapeMouth && Math.Abs((mouthR.y + mouthL.y) / 2 - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) > 0.08;
-
-        string emotion = "N/A";
-        if (vShapeMouth)
+        if (emotionDetection)
         {
-            emotion = "smile";
-        } else if (oShapeMouth)
-        {
-            emotion = "suprise";
+            bool oShapeMouth = Math.Abs(mouthT.y - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) > 0.18;
+            bool vShapeMouth = !oShapeMouth && Math.Abs((mouthR.y + mouthL.y) / 2 - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) > 0.08;
+
+            string emotion = "N/A";
+            if (vShapeMouth) emotion = "smile";
+            else if (oShapeMouth) emotion = "suprise";
+            
+            print(Math.Abs(mouthT.y - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) + "," + Math.Abs((mouthR.y + mouthL.y) / 2 - mouthB.y) / Math.Abs(mouthR.x - mouthL.x));
+            GameObject obj = GameObject.Find("Emotion");
+            obj.GetComponent<TMPro.TextMeshProUGUI>().text = emotion;
         }
-        print(Math.Abs(mouthT.y - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) + "," + Math.Abs((mouthR.y + mouthL.y) / 2 - mouthB.y) / Math.Abs(mouthR.x - mouthL.x));
-        GameObject obj = GameObject.Find("Emotion");
-        obj.GetComponent<TMPro.TextMeshProUGUI>().text = emotion;
     }
 
     private void SetBlendshape(string name, float value, float low, float high)

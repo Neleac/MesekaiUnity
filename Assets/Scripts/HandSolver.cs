@@ -33,6 +33,8 @@ public class HandSolver : MonoBehaviour
     private NormalizedLandmarkList leftHandLandmarks;
     private NormalizedLandmarkList rightHandLandmarks;
 
+    [SerializeField] private bool rockPaperScissors;
+
     void Start()
     {
         Transform spine2 = transform.Find("Hips").Find("Spine").Find("Spine1").Find("Spine2");
@@ -60,7 +62,7 @@ public class HandSolver : MonoBehaviour
         if (leftHandLandmarks != null) SolveHand("left");
         if (rightHandLandmarks != null) SolveHand("right");
 
-        if (leftHandLandmarks != null) RockPaperScissors();
+        if (rockPaperScissors && leftHandLandmarks != null) RockPaperScissors();
     }
 
     // called from HolisticTrackingSolution.cs
@@ -116,7 +118,7 @@ public class HandSolver : MonoBehaviour
         int[] landmarkIdxs = { THUMB, INDEX, MIDDLE, RING, PINKY };
 
         // solve rotations for each finger
-        for (int i = 0; i < fingerTfs.Length; i++)
+        for (int i = 1; i < fingerTfs.Length; i++)
         {
             Transform parentTf = fingerTfs[i];
             int parentLmIdx = landmarkIdxs[i];
@@ -143,7 +145,8 @@ public class HandSolver : MonoBehaviour
                 Vector3 angles = parentTf.localRotation.eulerAngles;
                 if (i == 0) // thumb
                 {
-                    if (n == 0) continue;
+                    continue;
+                    if (n == 0 || n == 1) continue;
 
                     float z = angles.z;
 
