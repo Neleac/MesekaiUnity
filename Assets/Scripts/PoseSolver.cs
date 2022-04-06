@@ -21,7 +21,6 @@ public class PoseSolver : MonoBehaviour
     const int LEFTFINGER = 19;
     const int RIGHTFINGER = 20;
 
-    private Transform spine;
     private Transform lShoulderTf;
     private Transform lElbowTf;
     private Transform lWristTf;
@@ -35,17 +34,15 @@ public class PoseSolver : MonoBehaviour
 
     void Start()
     {
-        Transform hips = transform.Find("Hips");
-        spine = hips.Find("Spine");
-        Transform spine2 = spine.Find("Spine1").Find("Spine2");
+        Transform spine2 = transform.Find("Hips").Find("Spine").Find("Spine1").Find("Spine2");
 
-        lShoulderTf = spine2.Find("LeftShoulder");
-        lElbowTf = lShoulderTf.Find("LeftArm").Find("LeftForeArm");
+        lShoulderTf = spine2.Find("LeftShoulder").Find("LeftArm");
+        lElbowTf = lShoulderTf.Find("LeftForeArm");
         lWristTf = lElbowTf.Find("LeftHand");
         lFingerTf = lWristTf.Find("LeftHandIndex1");
 
-        rShoulderTf = spine2.Find("RightShoulder");
-        rElbowTf = rShoulderTf.Find("RightArm").Find("RightForeArm");
+        rShoulderTf = spine2.Find("RightShoulder").Find("RightArm");
+        rElbowTf = rShoulderTf.Find("RightForeArm");
         rWristTf = rElbowTf.Find("RightHand");
         rFingerTf = rWristTf.Find("RightHandIndex1");
 
@@ -67,9 +64,9 @@ public class PoseSolver : MonoBehaviour
     {
         /*
         naming: 
-            *Lm denotes Landmark
-            *Tf denotes Transform
-            v_* denotes vector
+            Lm denotes Landmark
+            Tf denotes Transform
+            v_ denotes vector
         */
 
         Vector3 lShoulderLm = new Vector3(-poseLandmarks.Landmark[LEFTSHOULDER].X * WIDTH, -poseLandmarks.Landmark[LEFTSHOULDER].Y * HEIGHT, poseLandmarks.Landmark[LEFTSHOULDER].Z * WIDTH);
@@ -99,17 +96,21 @@ public class PoseSolver : MonoBehaviour
                                           (RIGHTSHOULDER, RIGHTELBOW), (RIGHTELBOW, RIGHTWRIST), (RIGHTWRIST, RIGHTFINGER) };
         Debug.Assert(transformPairs.Length == landmarkIdxPairs.Length);
 
+        // solve rotations
         for (int i = 0; i < transformPairs.Length; i++)
         {
             (Transform parentTf, Transform childTf) = transformPairs[i];
             (int parentLmIdx, int childLmIdx) = landmarkIdxPairs[i];
             
+            // current avatar limb direction, in joint Transform's local space
             Vector3 vOld = (childTf.position - parentTf.position).normalized;
             vOld = parentTf.InverseTransformDirection(vOld);
 
+            // current player limb direction, in joint Transform's local space
             Vector3 vNew = (landmarks[childLmIdx] - landmarks[parentLmIdx]).normalized;
             vNew = parentTf.InverseTransformDirection(vNew);
 
+            // smooth, interpolated rotation
             Quaternion rotOld = parentTf.localRotation;
             Quaternion rotNew = rotOld * Quaternion.FromToRotation(vOld, vNew);
             parentTf.localRotation = Quaternion.Slerp(rotOld, rotNew, SMOOTHING);

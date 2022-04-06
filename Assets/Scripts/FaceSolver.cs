@@ -183,7 +183,7 @@ public class FaceSolver : MonoBehaviour
         float newWeight = (value - low) / (high - low);
 
         // clamp between [0, 100]
-        newWeight = Math.Min(1, Math.Max(0, newWeight)) * 100;
+        newWeight = Math.Clamp(newWeight, 0, 1) * 100;
 
         // interpolate with previous weight for smoother animation
         int index = faceMesh.sharedMesh.GetBlendShapeIndex(name);
