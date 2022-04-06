@@ -180,13 +180,16 @@ public class FaceSolver : MonoBehaviour
         bool oShapeMouth = Math.Abs(mouthT.y - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) > 0.25;
         bool vShapeMouth = !oShapeMouth && Math.Abs((mouthR.y + mouthL.y) / 2 - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) > 0.1;
 
+        string emotion = "N/A";
         if (vShapeMouth)
         {
-            print("smile");
+            emotion = "smile";
         } else if (oShapeMouth)
         {
-            print("suprise");
+            emotion = "suprise";
         }
+        GameObject obj = GameObject.Find("Emotion");
+        obj.GetComponent<TMPro.TextMeshProUGUI>().text = emotion;
     }
 
     private void SetBlendshape(string name, float value, float low, float high)
