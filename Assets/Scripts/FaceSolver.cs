@@ -175,6 +175,18 @@ public class FaceSolver : MonoBehaviour
         // Vector3 noseL = landmarks[294];
         // SetBlendshape("noseSneerLeft", noseR.y, -0.027f, -0.022f);
         // SetBlendshape("noseSneerRight", noseL.y, -0.027f, -0.022f);
+
+
+        bool oShapeMouth = Math.Abs(mouthT.y - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) > 0.25;
+        bool vShapeMouth = !oShapeMouth && Math.Abs((mouthR.y + mouthL.y) / 2 - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) > 0.1;
+
+        if (vShapeMouth)
+        {
+            print("smile");
+        } else if (oShapeMouth)
+        {
+            print("suprise");
+        }
     }
 
     private void SetBlendshape(string name, float value, float low, float high)
