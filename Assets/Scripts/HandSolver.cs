@@ -60,7 +60,7 @@ public class HandSolver : MonoBehaviour
         if (leftHandLandmarks != null) SolveHand("left");
         if (rightHandLandmarks != null) SolveHand("right");
 
-        //if (leftHandLandmarks != null) RockPaperScissors();
+        if (leftHandLandmarks != null) RockPaperScissors();
     }
 
     // called from HolisticTrackingSolution.cs
@@ -199,19 +199,27 @@ public class HandSolver : MonoBehaviour
 
         // print(indexClosed + ", " + indexTip + ", " + indexMCP + ", " + wrist);
 
-        print(indexClosed + ", " + middleClosed  + ", " + ringClosed + ", " + pinkyClosed);
+        string result = "N/A";
+        //print(indexClosed + ", " + middleClosed  + ", " + ringClosed + ", " + pinkyClosed);
         if (indexClosed && middleClosed && ringClosed && pinkyClosed)
         {
-            print("rock");
+            //print("rock");
+            result = "rock";
         } else if (!indexClosed && !middleClosed && ringClosed && pinkyClosed)
         {
-            print("scissor");
+            //print("scissor");
+            result = "scissor";
         } else if (!indexClosed && !middleClosed && !ringClosed && !pinkyClosed)
         {
-            print("paper");
+            //print("paper");
+            result = "paper";
         } else
         {
-            print("N/A");
+            //print("N/A");
+            result = "N/A";
         }
+
+        GameObject obj = GameObject.Find("LeftHandResult");
+        obj.GetComponent<TMPro.TextMeshProUGUI>().text = result;
     }
 }
