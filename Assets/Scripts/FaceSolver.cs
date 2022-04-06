@@ -22,6 +22,7 @@ public class FaceSolver : MonoBehaviour
 
     [SerializeField] private Transform headBone;
     [SerializeField] private SkinnedMeshRenderer faceMesh;
+    [SerializeField] private bool mirrorMode;
     [SerializeField] private bool emotionDetection;
 
     private NormalizedLandmarkList faceLandmarks;
@@ -105,9 +106,11 @@ public class FaceSolver : MonoBehaviour
 
         double yRad = Math.Acos(faceZ.x) - Math.PI / 2;
         float yDeg = (float)(180 / Math.PI * yRad);
+        if (!mirrorMode) yDeg *= -1;
 
         double zRad = Math.PI / 2 - Math.Acos(faceY.x);
         float zDeg = (float)(180 / Math.PI * zRad);
+        if (!mirrorMode) zDeg *= -1;
 
         Quaternion oldRot = headBone.localRotation;
         Quaternion newRot = Quaternion.Euler(xDeg, yDeg, zDeg);
@@ -137,6 +140,11 @@ public class FaceSolver : MonoBehaviour
         Vector3 eyeRB = landmarks[23];
         Vector3 eyeLT = landmarks[257];
         Vector3 eyeLB = landmarks[253];
+        if (!mirrorMode)
+        {
+            (eyeRT, eyeLT) = (eyeLT, eyeRT);
+            (eyeRB, eyeLB) = (eyeLB, eyeRB);
+        }
 
         SetBlendshape("eyeBlinkLeft", eyeRT.y - eyeRB.y, 0.1f, 0.09f);
         SetBlendshape("eyeBlinkRight", eyeLT.y - eyeLB.y, 0.1f, 0.09f);
@@ -150,6 +158,7 @@ public class FaceSolver : MonoBehaviour
         // eyebrows
         Vector3 browR = landmarks[66];
         Vector3 browL = landmarks[296];
+        if (!mirrorMode) (browR, browL) = (browL, browR);
 
         // SetBlendshape("browOuterUpLeft", browR.y, 0.35f, 0.4f);
         // SetBlendshape("browOuterUpRight", browL.y, 0.35f, 0.4f);
@@ -163,6 +172,7 @@ public class FaceSolver : MonoBehaviour
         Vector3 mouthB = landmarks[14];
         Vector3 mouthL = landmarks[291];
         Vector3 mouthR = landmarks[61];
+        if (!mirrorMode) (mouthR, mouthL) = (mouthL, mouthR);
 
         SetBlendshape("jawOpen", mouthT.y - mouthB.y, 0.01f, 0.20f);
 

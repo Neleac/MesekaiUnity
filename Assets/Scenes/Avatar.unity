@@ -3005,6 +3005,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32d10cbac36fe634194c346ec3de347d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mirrorMode: 1
 --- !u!114 &1775846025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3019,6 +3020,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   headBone: {fileID: 509563654}
   faceMesh: {fileID: 509563655}
+  mirrorMode: 1
   emotionDetection: 1
 --- !u!114 &1775846026
 MonoBehaviour:
@@ -3032,6 +3034,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1da1628c6d4a914e8dea98cdf27f868, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mirrorMode: 1
   rockPaperScissors: 1
 --- !u!1 &1782549141
 GameObject:

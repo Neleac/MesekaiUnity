@@ -32,6 +32,8 @@ public class PoseSolver : MonoBehaviour
 
     private LandmarkList poseLandmarks;
 
+    [SerializeField] private bool mirrorMode;
+
     void Start()
     {
         Transform spine2 = transform.Find("Hips").Find("Spine").Find("Spine1").Find("Spine2");
@@ -45,6 +47,14 @@ public class PoseSolver : MonoBehaviour
         rElbowTf = rShoulderTf.Find("RightForeArm");
         rWristTf = rElbowTf.Find("RightHand");
         rFingerTf = rWristTf.Find("RightHandIndex1");
+
+        if (!mirrorMode)
+        {
+            (lShoulderTf, rShoulderTf) = (rShoulderTf, lShoulderTf);
+            (lElbowTf, rElbowTf) = (rElbowTf, lElbowTf);
+            (lWristTf, rWristTf) = (rWristTf, lWristTf);
+            (lFingerTf, rFingerTf) = (rFingerTf, lFingerTf);
+        }
 
         poseLandmarks = null;
     }
@@ -71,6 +81,12 @@ public class PoseSolver : MonoBehaviour
 
         Vector3 lShoulderLm = new Vector3(-poseLandmarks.Landmark[LEFTSHOULDER].X * WIDTH, -poseLandmarks.Landmark[LEFTSHOULDER].Y * HEIGHT, poseLandmarks.Landmark[LEFTSHOULDER].Z * WIDTH);
         Vector3 rShoulderLm = new Vector3(-poseLandmarks.Landmark[RIGHTSHOULDER].X * WIDTH, -poseLandmarks.Landmark[RIGHTSHOULDER].Y * HEIGHT, poseLandmarks.Landmark[RIGHTSHOULDER].Z * WIDTH);
+        if (!mirrorMode)
+        {
+            lShoulderLm.z *= -1;
+            rShoulderLm.z *= -1;
+        }
+        
         Vector3 v_ShoulderLm = (rShoulderLm - lShoulderLm).normalized;
         Vector3 v_ShoulderTf = (lShoulderTf.position - rShoulderTf.position).normalized;
         Quaternion rot = Quaternion.FromToRotation(v_ShoulderLm, v_ShoulderTf);
@@ -86,6 +102,8 @@ public class PoseSolver : MonoBehaviour
                z-axis: into the screen
             */
             landmarks[i] = new Vector3(-poseLandmarks.Landmark[i].X * WIDTH, -poseLandmarks.Landmark[i].Y * HEIGHT, poseLandmarks.Landmark[i].Z * WIDTH);
+            if (!mirrorMode) landmarks[i].z *= -1;
+
             landmarks[i] = rot * landmarks[i];
         }
 

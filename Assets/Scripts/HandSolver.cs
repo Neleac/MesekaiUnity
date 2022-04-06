@@ -33,6 +33,7 @@ public class HandSolver : MonoBehaviour
     private NormalizedLandmarkList leftHandLandmarks;
     private NormalizedLandmarkList rightHandLandmarks;
 
+    [SerializeField] private bool mirrorMode;
     [SerializeField] private bool rockPaperScissors;
 
     void Start()
@@ -52,6 +53,15 @@ public class HandSolver : MonoBehaviour
         lMiddleTf = lHand.Find("LeftHandMiddle1");
         lRingTf = lHand.Find("LeftHandRing1");
         lPinkyTf = lHand.Find("LeftHandPinky1");
+
+        if (!mirrorMode)
+        {
+            (lThumbTf, rThumbTf) = (rThumbTf, lThumbTf);
+            (lIndexTf, rIndexTf) = (rIndexTf, lIndexTf);
+            (lMiddleTf, rMiddleTf) = (rMiddleTf, lMiddleTf);
+            (lRingTf, rRingTf) = (rRingTf, lRingTf);
+            (lPinkyTf, rPinkyTf) = (rPinkyTf, lPinkyTf);
+        }
 
         leftHandLandmarks = null;
         rightHandLandmarks = null;
@@ -95,6 +105,12 @@ public class HandSolver : MonoBehaviour
 
         Vector3 indexLm = new Vector3(-handLandmarks.Landmark[INDEX].X * WIDTH, -handLandmarks.Landmark[INDEX].Y * HEIGHT, handLandmarks.Landmark[INDEX].Z * WIDTH);
         Vector3 pinkyLm = new Vector3(-handLandmarks.Landmark[PINKY].X * WIDTH, -handLandmarks.Landmark[PINKY].Y * HEIGHT, handLandmarks.Landmark[PINKY].Z * WIDTH);
+        if (!mirrorMode)
+        {
+            indexLm.z *= -1;
+            pinkyLm.z *= -1;
+        }
+
         Vector3 v_handLm = (indexLm - pinkyLm).normalized;
         Vector3 v_handTf = (indexTf.position - pinkyTf.position).normalized;
         Quaternion rot = Quaternion.FromToRotation(v_handLm, v_handTf);
@@ -110,6 +126,8 @@ public class HandSolver : MonoBehaviour
                 z-axis: into the screen
             */
             landmarks[i] = new Vector3(-handLandmarks.Landmark[i].X * WIDTH, -handLandmarks.Landmark[i].Y * HEIGHT, handLandmarks.Landmark[i].Z * WIDTH);
+            if (!mirrorMode) landmarks[i].z *= -1;
+
             landmarks[i] = rot * landmarks[i];
         }
 
@@ -118,7 +136,7 @@ public class HandSolver : MonoBehaviour
         int[] landmarkIdxs = { THUMB, INDEX, MIDDLE, RING, PINKY };
 
         // solve rotations for each finger
-        for (int i = 1; i < fingerTfs.Length; i++)
+        for (int i = 0; i < fingerTfs.Length; i++)
         {
             Transform parentTf = fingerTfs[i];
             int parentLmIdx = landmarkIdxs[i];
@@ -139,23 +157,23 @@ public class HandSolver : MonoBehaviour
                 // smooth, interpolated rotation
                 Quaternion rotOld = parentTf.localRotation;
                 Quaternion rotNew = rotOld * Quaternion.FromToRotation(vOld, vNew);
-                parentTf.localRotation = Quaternion.Slerp(rotOld, rotNew, SMOOTHING);
+                Quaternion rotSmooth = Quaternion.Slerp(rotOld, rotNew, SMOOTHING);
 
                 // rotation constraint
-                Vector3 angles = parentTf.localRotation.eulerAngles;
+                Vector3 angles = rotSmooth.eulerAngles;
                 if (i == 0) // thumb
                 {
-                    continue;
-                    if (n == 0 || n == 1) continue;
+                    if (n ==1 || n == 2)
+                    {
+                        float z = angles.z;
 
-                    float z = angles.z;
+                        // spaghetti code lmao
+                        if (z > 180) z -= 360;
+                        else if (z < -180) z += 360;
 
-                    // spaghetti code lmao
-                    if (z > 180) z -= 360;
-                    else if (z < -180) z += 360;
-
-                    z = (hand.Equals("left")) ? Math.Clamp(z, -90, 0) : Math.Clamp(z, 0, 90);
-                    parentTf.localRotation = Quaternion.Euler(0, 0, z);
+                        z = (hand.Equals("left")) ? Math.Clamp(z, -90, 0) : Math.Clamp(z, 0, 90);
+                        parentTf.localRotation = Quaternion.Euler(0, 0, z);
+                    }
                 }
                 else // index, middle, ring, pinky
                 {
