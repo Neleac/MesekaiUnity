@@ -6,12 +6,11 @@ public class PartnerSO : ScriptableObject
 
     public string GetUrl()
     {
-        return $"https://{GetSubdomain()}.readyplayer.me/avatar?frameApi";
+        return $"https://{GetSubdomain()}.readyplayer.me/avatar";
     }
 
     public string GetSubdomain()
     {
-        if (string.IsNullOrEmpty(Subdomain)) Subdomain = "demo";
         return Subdomain;
     }
 }

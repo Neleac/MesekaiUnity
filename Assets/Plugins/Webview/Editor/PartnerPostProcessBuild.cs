@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
+using System;
 
 public class PartnerPostProcessBuild : IPreprocessBuildWithReport
 {
@@ -19,8 +20,11 @@ public class PartnerPostProcessBuild : IPreprocessBuildWithReport
 
             if (result)
             {
-                partnerSO.Subdomain = "demo";
-                EditorUtility.SetDirty(partnerSO);
+                ScriptableObject partner = Resources.Load<ScriptableObject>("Partner");
+                Type type = partner.GetType();
+                var field = type.GetField("Subdomain");
+                field.SetValue(partner, "demo");
+                EditorUtility.SetDirty(partner);
                 AssetDatabase.SaveAssets();
             }
             else

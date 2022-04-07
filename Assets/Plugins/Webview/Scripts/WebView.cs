@@ -1,13 +1,9 @@
 using System;
 using UnityEngine;
-using Newtonsoft.Json;
-using System.Collections.Generic;
 
 public class WebView: MonoBehaviour
 {
-    private const string GlbExtension = ".glb";
-    private const string DataUrlFieldName = "url";
-    private const string AvatarExportEventName = "v1.avatar.exported";
+    public bool Loaded { get; private set; }
 
     private WebViewWindowBase webViewObject = null;
 
@@ -18,8 +14,6 @@ public class WebView: MonoBehaviour
     [SerializeField] private int top;
     [SerializeField] private int right;
     [SerializeField] private int bottom;
-      
-    public bool Loaded { get; private set; }
     
     // Event to call when avatar is created, receives GLB url.
     public Action<string> OnAvatarCreated;
@@ -94,7 +88,11 @@ public class WebView: MonoBehaviour
         if (webViewObject)
         {
             webViewObject.IsVisible = visible;
-            messagePanel.SetVisible(visible);
+        }
+
+        if (!visible)
+        {
+            messagePanel.SetVisible(false);
         }
     }
 
@@ -102,22 +100,10 @@ public class WebView: MonoBehaviour
     {
         Debug.Log($"--- WebView Message: { message }");
 
-        try
+        if (message.Contains(".glb"))
         {
-            WebMessage webMessage = JsonConvert.DeserializeObject<WebMessage>(message);
-
-            if(webMessage.eventName == AvatarExportEventName)
-            {
-                if (webMessage.data.TryGetValue(DataUrlFieldName, out string avatarUrl))
-                {
-                    webViewObject.IsVisible = false;
-                    OnAvatarCreated?.Invoke(avatarUrl);
-                }
-            }
-        }
-        catch(Exception e)
-        {
-            Debug.Log($"--- Message is not JSON: { message }\nError Message: { e.Message }");
+            webViewObject.IsVisible = false;
+            OnAvatarCreated?.Invoke(message);
         }
     }
 
@@ -136,7 +122,7 @@ public class WebView: MonoBehaviour
                         window.webkit.messageHandlers.unityControl.postMessage(msg); 
                     }
                 }
-            }
+            } 
             else {
                 window.Unity = {
                     call: function(msg) {
@@ -145,52 +131,23 @@ public class WebView: MonoBehaviour
                 }
             }
 
-            function subscribe(event) {
-                // post message v1, this will be deprecated
-                if(event.data.endsWith('.glb')) {
-                    Unity.call(event.data);
-                }
-                // post message v2
-                else {
-                    const json = parse(event);
-                    const source = json.source;
-                    
-                    if (source !== 'readyplayerme') {
-                      return;
-                    }
-
-			        Unity.call(event.data);
-                }
+            function receiveMessage(event) {
+			    Unity.call(event.data);
 		    }
 
-            function parse(event) {
-                try {
-                    return JSON.parse(event.data);
-                } catch (error) {
-                    return null;
-                }
-            }
-
-            window.postMessage(
-                JSON.stringify({
-                    target: 'readyplayerme',
-                    type: 'subscribe',
-                    eventName: 'v1.**'
-                }),
-                '*'
-            );
-
-            window.removeEventListener('message', subscribe);
-            window.addEventListener('message', subscribe)
+            window.removeEventListener('message', receiveMessage, false);
+            window.addEventListener('message', receiveMessage, false);
         ");
 
         Loaded = true;
 
         // Tasks break WebView, used invoke instead.
         Invoke(nameof(DisplayWebView), 1f);
+        Invoke(nameof(HideMessagePanel), 1.5f);
     }
 
     private void DisplayWebView() => webViewObject.IsVisible = true;
+    private void HideMessagePanel() => messagePanel.gameObject.SetActive(false);
 
     private void OnDrawGizmos()
     {
@@ -203,12 +160,4 @@ public class WebView: MonoBehaviour
 
         Gizmos.DrawWireCube(center, size);
     }
-}
-
-public struct WebMessage
-{
-    public string type;
-    public string source;
-    public string eventName;
-    public Dictionary<string, string> data;
 }
