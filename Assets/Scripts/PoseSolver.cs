@@ -32,11 +32,12 @@ public class PoseSolver : MonoBehaviour
 
     private LandmarkList poseLandmarks;
 
+    [SerializeField] private Transform hips;
     [SerializeField] private bool mirrorMode;
 
     void Start()
     {
-        Transform spine2 = transform.Find("Hips").Find("Spine").Find("Spine1").Find("Spine2");
+        Transform spine2 = hips.Find("Spine").Find("Spine1").Find("Spine2");
 
         lShoulderTf = spine2.Find("LeftShoulder").Find("LeftArm");
         lElbowTf = lShoulderTf.Find("LeftForeArm");

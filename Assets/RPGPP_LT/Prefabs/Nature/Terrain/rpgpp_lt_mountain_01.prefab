@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 33732981895488272}
   - component: {fileID: 23991852965333892}
   - component: {fileID: -1236368791102309870}
-  - component: {fileID: -3662110555181225352}
   m_Layer: 0
   m_Name: rpgpp_lt_mountain_01
   m_TagString: Untagged
@@ -99,14 +98,3 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 9d123ff5b15c0bd4fbd33779e2acdbd9, type: 3}
---- !u!154 &-3662110555181225352
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1185380165875998}
-  m_Material: {fileID: 0}
-  m_Enabled: 1
-  m_TerrainData: {fileID: 0}
-  m_EnableTreeColliders: 1

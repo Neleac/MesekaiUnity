@@ -33,12 +33,13 @@ public class HandSolver : MonoBehaviour
     private NormalizedLandmarkList leftHandLandmarks;
     private NormalizedLandmarkList rightHandLandmarks;
 
+    [SerializeField] private Transform hips;
     [SerializeField] private bool mirrorMode;
     [SerializeField] private bool rockPaperScissors;
 
     void Start()
     {
-        Transform spine2 = transform.Find("Hips").Find("Spine").Find("Spine1").Find("Spine2");
+        Transform spine2 = hips.Find("Spine").Find("Spine1").Find("Spine2");
         
         Transform rHand = spine2.Find("RightShoulder").Find("RightArm").Find("RightForeArm").Find("RightHand");
         rThumbTf = rHand.Find("RightHandThumb1");
@@ -231,19 +232,19 @@ public class HandSolver : MonoBehaviour
         if (indexClosed && middleClosed && ringClosed && pinkyClosed)
         {
             //print("rock");
-            result = "rock";
+            result = "Rock";
         } else if (!indexClosed && !middleClosed && ringClosed && pinkyClosed)
         {
             //print("scissor");
-            result = "scissor";
+            result = "Scissor";
         } else if (!indexClosed && !middleClosed && !ringClosed && !pinkyClosed)
         {
             //print("paper");
-            result = "paper";
+            result = "Paper";
         } else
         {
             //print("N/A");
-            result = "N/A";
+            result = "Hand";
         }
 
         GameObject obj = GameObject.Find("LeftHandResult");

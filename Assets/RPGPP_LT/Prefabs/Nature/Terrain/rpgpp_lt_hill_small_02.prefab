@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 33012352679397112}
   - component: {fileID: 23097766817657972}
   - component: {fileID: 183956571779873683}
-  - component: {fileID: 5788727784073491759}
   m_Layer: 0
   m_Name: rpgpp_lt_hill_small_02
   m_TagString: Untagged
@@ -99,14 +98,3 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 87dc0b67e5fe70f40a31e17b0c0058b4, type: 3}
---- !u!154 &5788727784073491759
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1694894201118028}
-  m_Material: {fileID: 0}
-  m_Enabled: 1
-  m_TerrainData: {fileID: 0}
-  m_EnableTreeColliders: 1
