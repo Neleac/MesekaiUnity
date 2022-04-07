@@ -146,8 +146,8 @@ public class FaceSolver : MonoBehaviour
             (eyeRB, eyeLB) = (eyeLB, eyeRB);
         }
 
-        SetBlendshape("eyeBlinkLeft", eyeRT.y - eyeRB.y, 0.1f, 0.09f);
-        SetBlendshape("eyeBlinkRight", eyeLT.y - eyeLB.y, 0.1f, 0.09f);
+        SetBlendshape("eyeBlinkLeft", eyeRT.y - eyeRB.y, 0.1f, 0.08f);
+        SetBlendshape("eyeBlinkRight", eyeLT.y - eyeLB.y, 0.1f, 0.08f);
 
         // SetBlendshape("eyeSquintLeft", eyeRT.y - eyeRB.y, 0.1f, 0.095f);
         // SetBlendshape("eyeSquintRight", eyeLT.y - eyeLB.y, 0.1f, 0.095f);
@@ -190,14 +190,33 @@ public class FaceSolver : MonoBehaviour
 
         if (emotionDetection)
         {
-            bool oShapeMouth = Math.Abs(mouthT.y - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) > 0.18;
-            bool vShapeMouth = !oShapeMouth && Math.Abs((mouthR.y + mouthL.y) / 2 - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) > 0.08;
+            // bool oShapeMouth = Math.Abs(mouthT.y - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) > 0.18;
+            // bool vShapeMouth = !oShapeMouth && Math.Abs((mouthR.y + mouthL.y) / 2 - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) > 0.08;
+            // print(Math.Abs(mouthT.y - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) + "," + Math.Abs((mouthR.y + mouthL.y) / 2 - mouthB.y) / Math.Abs(mouthR.x - mouthL.x));
 
-            string emotion = "N/A";
-            if (vShapeMouth) emotion = "smile";
-            else if (oShapeMouth) emotion = "suprise";
+            // TODO: factor in eyes
+
+            int index = faceMesh.sharedMesh.GetBlendShapeIndex("mouthSmileLeft");
+            float smileLeft = faceMesh.GetBlendShapeWeight(index);
+            index = faceMesh.sharedMesh.GetBlendShapeIndex("mouthSmileRight");
+            float smileRight = faceMesh.GetBlendShapeWeight(index);
+            bool happy = smileLeft > 25 && smileRight > 25;
+
+            index = faceMesh.sharedMesh.GetBlendShapeIndex("mouthFrownLeft");
+            float frownLeft = faceMesh.GetBlendShapeWeight(index);
+            index = faceMesh.sharedMesh.GetBlendShapeIndex("mouthFrownRight");
+            float frownRight = faceMesh.GetBlendShapeWeight(index);
+            bool sad = frownLeft > 60 && frownRight > 60;
+
+            index = faceMesh.sharedMesh.GetBlendShapeIndex("jawOpen");
+            float jawOpen = faceMesh.GetBlendShapeWeight(index);
+            bool wow = jawOpen > 75;
+
+            string emotion = "Neutral";
+            if (wow) emotion = "Wow";
+            else if (happy) emotion = "Happy";
+            else if (sad) emotion = "Sad";
             
-            print(Math.Abs(mouthT.y - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) + "," + Math.Abs((mouthR.y + mouthL.y) / 2 - mouthB.y) / Math.Abs(mouthR.x - mouthL.x));
             GameObject obj = GameObject.Find("Emotion");
             obj.GetComponent<TMPro.TextMeshProUGUI>().text = emotion;
         }

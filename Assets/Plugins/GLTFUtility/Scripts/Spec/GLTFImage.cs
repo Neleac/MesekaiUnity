@@ -71,7 +71,7 @@ namespace Siccity.GLTFUtility {
 						uwr.Dispose();
 					}
 				} else {
-					Texture2D tex = new Texture2D(2, 2, TextureFormat.ARGB32, true, linear);
+					Texture2D tex = new Texture2D(2, 2, TextureFormat.ARGB32, false, linear);
 					if (!tex.LoadImage(bytes)) {
 						Debug.Log("mimeType not supported");
 						yield break;
