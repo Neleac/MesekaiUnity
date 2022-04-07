@@ -15,7 +15,7 @@ MonoBehaviour:
   Path: Assets/Audio/GeneratedSoundbanks/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 637825512689988403
+  lastModified: 637826031100532092
   FileSizes: []
   Exists: 1
 --- !u!114 &-2561627389623927255
@@ -33,7 +33,7 @@ MonoBehaviour:
   Path: Assets/Audio/GeneratedSoundbanks/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 637825512690038001
+  lastModified: 637826031100532092
   FileSizes:
   - Name: 
     Value: 906
@@ -80,7 +80,7 @@ MonoBehaviour:
   Path: Assets/Audio/GeneratedSoundbanks/Test.bank
   Name: Test
   StudioPath: bank:/Test
-  lastModified: 637825512690247419
+  lastModified: 637826031100592091
   FileSizes: []
   Exists: 1
 --- !u!114 &11400000
@@ -108,7 +108,7 @@ MonoBehaviour:
   - {fileID: -7656022160797474037}
   StringsBanks:
   - {fileID: -2561627389623927255}
-  cacheTime: 637825512690247419
+  cacheTime: 637826031100592091
   cacheVersion: 10
 --- !u!114 &5824977149355923078
 MonoBehaviour:
