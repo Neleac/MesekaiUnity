@@ -2440,7 +2440,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 36e109a4134d0774baee70913bf0ea81, type: 3}
+  m_Texture: {fileID: 2800000, guid: dd3e4c08b34f2e642805512c92346422, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -2667,7 +2667,7 @@ GameObject:
   - component: {fileID: 1910944315}
   - component: {fileID: 1910944314}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: Settings Menu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
