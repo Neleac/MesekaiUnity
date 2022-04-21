@@ -209,7 +209,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 309996909}
         m_TargetAssemblyTypeName: ButtonController, Assembly-CSharp
-        m_MethodName: getPlayerResult
+        m_MethodName: onClickChoiceButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -588,7 +588,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 309996909}
         m_TargetAssemblyTypeName: ButtonController, Assembly-CSharp
-        m_MethodName: getPlayerResult
+        m_MethodName: onClickChoiceButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -782,7 +782,7 @@ GameObject:
   - component: {fileID: 309996910}
   - component: {fileID: 309996909}
   m_Layer: 0
-  m_Name: SceneManager
+  m_Name: ProcessManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1843,7 +1843,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 309996909}
         m_TargetAssemblyTypeName: ButtonController, Assembly-CSharp
-        m_MethodName: getPlayerResult
+        m_MethodName: onClickChoiceButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
