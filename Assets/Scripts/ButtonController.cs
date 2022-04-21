@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.EventSystems;
+using System;
 
 public class ButtonController : MonoBehaviour
 {
@@ -20,11 +21,11 @@ public class ButtonController : MonoBehaviour
     private float remainingTime = 10f;
     private const int TOTALROUNDS = 3;
     private int currentRound = 1;
-    private int[] historyResults = new int[TOTALROUNDS];
-    private string gameHistoryText = "";
+    private int[] historyResults = new int[TOTALROUNDS]; //store all the round results of the first 3 rounds
+    private string gameHistoryText = ""; //to show history on board
 
 
-    //TODO: run-time error, rename SceneManager
+    //TODO: run-time error
     private void Awake()
     {
         rockButton = GameObject.Find("RockButton");
@@ -60,29 +61,28 @@ public class ButtonController : MonoBehaviour
         startCountdown();
     }
 
-    public void getPlayerResult()
+    //when the player clicked the choice button made his choice:
+    public void getPlayerResult()//TODO: rename: onClickChoiceButton
     {
+        //get player and Ai choice
+        string playerChoice = getPlayerChoice();
+        int aiInt = generateAiResult();
+        string aiChoice = decodeToChoice(aiInt);
+
+        //game logic
+        int roundResultInt = playGame(choiceEncode(playerChoice), aiInt);
+        string roundResultText = decodeToResultText(roundResultInt);
 
         //set components invisible
         prompt.enabled = false;
         activateChoiceButtons(false);
         timer.enabled = false;
 
-        //get player and Ai choice
-        string playerChoice = EventSystem.current.currentSelectedGameObject.GetComponentInChildren<TextMeshProUGUI>().text;
-        int playerInt = choiceEncode(playerChoice);
-        int aiInt = generateAiResult();
-        string aiChoice = decodeToChoice(aiInt);
-
-        //game logic
-        int resultInt = roundResult(playerInt, aiInt);
-        string roundResultText = decodeToResultText(resultInt);
-
         //update result field
         resultField.enabled = true;
         resultField.text = "You: " + playerChoice + ", AI: " + aiChoice + "\n" + roundResultText;
 
-        //if in round 1 & 2
+        //if in round 1 & 2 & 3
         if (currentRound <= TOTALROUNDS)
         {
             //update gameHistory
@@ -90,24 +90,24 @@ public class ButtonController : MonoBehaviour
             {
                 gameHistory.enabled = true;
             }
-            updateGameHistory(resultInt);
+            updateGameHistory(roundResultInt);//store the round result
             updateGameHistoryText(roundResultText);
 
             //show nextRoundButton
             nextRoundButton.SetActive(true);
         }
 
-        //in round 3 and above
+        //do the following only in round 3 and above
         if (currentRound >= TOTALROUNDS)
         {
             //debug print
-            foreach (var item in historyResults)
+            foreach (var roundResult in historyResults)
             {
-                Debug.Log(item);
+                Debug.Log(roundResult);
             }
 
             //test if final round is needed
-            if (needAdditionalRound(resultInt))
+            if (needAdditionalRound(roundResultInt))
             {
                 nextRoundButton.GetComponentsInChildren<TextMeshProUGUI>()[0].text = "Final Round";
                 nextRoundButton.SetActive(true);
@@ -119,10 +119,16 @@ public class ButtonController : MonoBehaviour
                 //TODO: animate or fade out the result
 
                 //show final result
-                finalResult.text = "You " + roundResultText;
+                finalResult.text = "You " + decodeToResultText(getFinalResultInt(roundResultInt));
                 finalResult.enabled = true;
             }
         }
+    }
+
+
+    private string getPlayerChoice()
+    {
+        return EventSystem.current.currentSelectedGameObject.GetComponentInChildren<TextMeshProUGUI>().text;
     }
 
 
@@ -134,7 +140,7 @@ public class ButtonController : MonoBehaviour
         return aiResult;
     }
 
-    private int roundResult(int playerInt, int aiInt)
+    private int playGame(int playerInt, int aiInt)
     {
         //decode table: 1 == Rock; 2 == Paper; 3 == Scissors
         bool playerWins = (playerInt == 1 && aiInt == 3)
@@ -224,6 +230,49 @@ public class ButtonController : MonoBehaviour
         return playerResult;
     }
 
+    private int getFinalResultInt(int roundResultInt)
+    {
+        if (currentRound == 3)
+        {
+            int score = get3RoundsSum();
+            int finalResultInt = 0;
+            if (score == 0)
+            {
+                finalResultInt = 0;
+            }
+            else if (score > 0)
+            {
+                finalResultInt = 1;
+            }
+            else
+            {
+                finalResultInt = -1;
+            }
+            return finalResultInt;
+        } else
+        {
+            return roundResultInt;
+        }
+        
+
+    }
+
+    private int get3RoundsSum()
+    {
+        if (currentRound == 3)
+        {
+            int sum = 0;
+            foreach (var item in historyResults)
+            {
+                sum += item;
+            }
+            return sum; 
+        } 
+       
+        Debug.Log("Error: access 3-rounds-result at round: " + currentRound);
+        return Int32.MinValue; 
+    }
+
     private void startCountdown()
     {
         remainingTime -= 1 * Time.deltaTime;
@@ -280,6 +329,7 @@ public class ButtonController : MonoBehaviour
         //reset timer
         remainingTime = 10f;
         timer.enabled = true;
+        Debug.Log(remainingTime);
 
         //activate choice buttons & prompt
         activateChoiceButtons(true);
@@ -308,23 +358,19 @@ public class ButtonController : MonoBehaviour
 
     private bool needAdditionalRound(int resultInt)
     {
+        Debug.Log("currentRount:" + currentRound);
         if(currentRound == 3)
         {
-            int sum = 0;
-            foreach (var item in historyResults)
+            if(get3RoundsSum()!= 0)
             {
-                sum += item;
+                return false;//no need additional round if the 3-rounds-result indicates a winner
             }
-            if (sum == 0)
-            {
-                return true;
-            }
-            return false; ;
+            return true;
         }else
         {
             if(resultInt == 0)
             {
-                return true;
+                return true;//need additional round is the extra round has no winner still
             }
             return false;
         }
