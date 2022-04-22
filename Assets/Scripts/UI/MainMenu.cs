@@ -7,19 +7,19 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    private NetworkManager networkManager;
+    private MessageQueue msgQueue;
+
     private GameObject nameInput;
     private GameObject startButton;
 
-    [SerializeField] private NetworkManager networkManager;
-    private MessageQueue msgQueue;
-
 	void Start()
 	{
+        networkManager = GameObject.Find("Network Manager").GetComponent<NetworkManager>();;
+        msgQueue = networkManager.GetComponent<MessageQueue>();
+
         nameInput = transform.Find("Name Input").gameObject;
         startButton = transform.Find("Start Button").gameObject;
-
-        msgQueue = networkManager.GetComponent<MessageQueue>();
-		msgQueue.AddCallback(Constants.SMSG_JOIN, OnResponseJoin);
     }
 
     public void OnStartClick()
@@ -30,16 +30,7 @@ public class MainMenu : MonoBehaviour
             bool connected = networkManager.SendJoinRequest(name);
             if (!connected) Debug.LogWarning("SendJoinRequest failed.");
 
-            //SceneManager.LoadScene("Hub");
+            SceneManager.LoadScene("Hub");
         }
 	}
-
-    public void OnResponseJoin(ExtendedEventArgs eventArgs)
-    {
-        // TODO: create avatar with name of player that joined
-        
-        ResponseJoinEventArgs args = eventArgs as ResponseJoinEventArgs;
-
-        print("JOINED: " + args.name);
-    }
 }
