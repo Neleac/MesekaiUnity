@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mediapipe;
+using TMPro;
 
 public class HandSolver : MonoBehaviour
 {
@@ -36,6 +37,15 @@ public class HandSolver : MonoBehaviour
     [SerializeField] private Transform hips;
     [SerializeField] private bool mirrorMode;
     [SerializeField] private bool rockPaperScissors;
+
+    private static GameObject gameCanvas;
+    private TextMeshProUGUI LeftHandResult;
+
+    private void Awake()
+    {
+        gameCanvas = GameObject.Find("gameCanvas");
+        LeftHandResult = gameCanvas.GetComponentsInChildren<TextMeshProUGUI>()[0];
+    }
 
     void Start()
     {
@@ -236,7 +246,7 @@ public class HandSolver : MonoBehaviour
         } else if (!indexClosed && !middleClosed && ringClosed && pinkyClosed)
         {
             //print("scissor");
-            result = "Scissor";
+            result = "Scissors";
         } else if (!indexClosed && !middleClosed && !ringClosed && !pinkyClosed)
         {
             //print("paper");
@@ -247,7 +257,9 @@ public class HandSolver : MonoBehaviour
             result = "Hand";
         }
 
-        GameObject obj = GameObject.Find("LeftHandResult");
-        obj.GetComponent<TMPro.TextMeshProUGUI>().text = result;
+        //GameObject obj = GameObject.Find("LeftHandResult");
+        //obj.GetComponent<TMPro.TextMeshProUGUI>().text = result;
+
+        LeftHandResult.text = result;
     }
 }
