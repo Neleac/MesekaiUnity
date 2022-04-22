@@ -4,48 +4,62 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.EventSystems;
 using System;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class ButtonController : MonoBehaviour
 {
 
-    public TextMeshProUGUI timer;
     public TextMeshProUGUI roundField;
-    public TextMeshProUGUI prompt;
     public TextMeshProUGUI resultField;
     public TextMeshProUGUI gameHistory;
     public TextMeshProUGUI finalResult;
 
-    private GameObject rockButton;
-    private GameObject paperButton;
-    private GameObject scissorsButton;
     private GameObject nextRoundButton;
-    private float remainingTime = 10f;
-    private const int TOTALROUNDS = 3;
-    private int currentRound = 1;
-    private int[] historyResults = new int[TOTALROUNDS]; //store all the round results of the first 3 rounds
-    private string gameHistoryText = ""; //to show history on board
 
+    //get components from previous scene
+    private GameObject previousCanvas;
+    private TextMeshProUGUI gesturePrevScene;
+    private TextMeshProUGUI timer;
+    private TextMeshProUGUI prompt;
+    private Button confirmPrevBtn;
 
     //find and link button objects
     private void Awake()
     {
-        rockButton = GameObject.Find("RockButton");
-        paperButton = GameObject.Find("PaperButton");
-        scissorsButton = GameObject.Find("ScissorsButton");
         nextRoundButton = GameObject.Find("nextRoundButton");
+
+        previousCanvas = GameObject.Find("gameCanvas");
+        //gesturePrevScene = previousCanvas.GetComponentsInChildren<TextMeshProUGUI>()[0];
+        //confirmPrevBtn = previousCanvas.GetComponentInChildren<Button>(); 
+        //timer = previousCanvas.GetComponentsInChildren<TextMeshProUGUI>()[2];
+        //prompt = previousCanvas.GetComponentsInChildren<TextMeshProUGUI>()[3];
+
+
+        TextMeshProUGUI[] texts = previousCanvas.GetComponentsInChildren<TextMeshProUGUI>();
+        if (texts.Length == 3)
+        {
+            gesturePrevScene = texts[0];
+            timer = texts[1];
+            prompt = texts[2];
+        }
+        else
+        {
+            gesturePrevScene = texts[0];
+            timer = texts[2];
+            prompt = texts[3];
+        }
+
     }
 
 
     void Start() //preset components:
     {
-        //timer
-        timer.enabled = true;
-        timer.text = remainingTime.ToString("F2");
-        //prompt
-        prompt.enabled = true;
+        //disable previous components
+        activePrevCanvasComponents(false);
         //round
         roundField.enabled = true;
-        roundField.text = "Round " + currentRound;
+        roundField.text = "Round " + GlobalGameMngr.Instance.currentRound;
         //result
         resultField.enabled = false;
         //nextRoundbutton
@@ -55,16 +69,20 @@ public class ButtonController : MonoBehaviour
         //final result
         finalResult.enabled = false;
 
+        if(GlobalGameMngr.Instance != null)
+        {
+            startGame();
+        }
+        
     }
 
-    void Update() //start countdown
+    void Update() 
     {
-        startCountdown();
     }
 
-    //when the player clicked the choice button
-    public void onClickChoiceButton()
+    public void startGame()
     {
+        Debug.Log("Game Starts");
         //get player and Ai choice
         string playerChoice = getPlayerChoice();
         int playerInt = choiceEncode(playerChoice);
@@ -76,14 +94,12 @@ public class ButtonController : MonoBehaviour
         //display current round result
         displayRoundResult(playerInt, aiInt, roundResultInt);
 
-        //set components invisible
-        prompt.enabled = false;
-        activateChoiceButtons(false);
-        timer.enabled = false;
 
-        
+        //update round info
+        updateRoundField();
+
         //if in round 1 & 2 & 3
-        if (currentRound <= TOTALROUNDS)
+        if (GlobalGameMngr.Instance.currentRound <= GlobalGameMngr.TOTALROUNDS)
         {
             updateAndDisplayHistoryInfo(roundResultInt);
 
@@ -92,7 +108,7 @@ public class ButtonController : MonoBehaviour
         }
 
         //do the following only in round 3 and above
-        if (currentRound >= TOTALROUNDS)
+        if (GlobalGameMngr.Instance.currentRound >= GlobalGameMngr.TOTALROUNDS)
         {
             //debug print
             //foreach (var roundResult in historyResults)
@@ -110,7 +126,7 @@ public class ButtonController : MonoBehaviour
             {
                 //disable the button
                 nextRoundButton.SetActive(false);
-                //TODO: animate or fade out the result
+                //TODO: animate or fade out the round result
 
                 displayFinalResult(roundResultInt);
             }
@@ -119,28 +135,34 @@ public class ButtonController : MonoBehaviour
 
     public void onClickNextRound()
     {
-        //update round info
-        updateRoundField();
+        //TODO: go to the previous scene & dontdestroyonload
 
-        //hide this button itself
-        nextRoundButton.SetActive(false);
+        backToAvatarScene();
 
-        //hide round result field
-        resultField.enabled = false;
 
-        //reset timer
-        remainingTime = 10f;
-        timer.enabled = true;
-        // Debug.Log(remainingTime);
+        ////update round info
+        //updateRoundField();
 
-        //activate choice buttons & prompt
-        activateChoiceButtons(true);
-        prompt.enabled = true;
+        ////hide this button itself
+        //nextRoundButton.SetActive(false);
+
+        ////hide round result field
+        //resultField.enabled = false;
+
+        ////reset timer
+        ////remainingTime = 10f;
+        ////timer.enabled = true;
+        //// Debug.Log(remainingTime);
+
+        ////activate choice buttons & prompt
+        ////activateChoiceButtons(true);
+        //prompt.enabled = true;
     }
 
     private string getPlayerChoice()
     {
-        return EventSystem.current.currentSelectedGameObject.GetComponentInChildren<TextMeshProUGUI>().text;
+        //return EventSystem.current.currentSelectedGameObject.GetComponentInChildren<TextMeshProUGUI>().text;
+        return gesturePrevScene.text;
     }
 
     private int generateAiResult()
@@ -245,23 +267,23 @@ public class ButtonController : MonoBehaviour
 
     private int get3RoundsSum()
     {
-        if (currentRound == 3)
+        if (GlobalGameMngr.Instance.currentRound == 3)
         {
             int sum = 0;
-            foreach (var item in historyResults)
+            foreach (var item in GlobalGameMngr.Instance.historyResults)
             {
                 sum += item;
             }
             return sum;
         }
 
-        Debug.Log("Error: access 3-rounds-result at round: " + currentRound);
+        Debug.Log("Error: access 3-rounds-result at round: " + GlobalGameMngr.Instance.currentRound);
         return Int32.MinValue;
     }
 
     private int getFinalResultInt(int roundResultInt)
     {
-        if (currentRound == 3)
+        if (GlobalGameMngr.Instance.currentRound == 3)
         {
             int score = get3RoundsSum();
             int finalResultInt = 0;
@@ -288,8 +310,8 @@ public class ButtonController : MonoBehaviour
 
     private bool needAdditionalRound(int resultInt)
     {
-        Debug.Log("Testing for additional round. currentRount:" + currentRound + ".");
-        if (currentRound == 3)
+        Debug.Log("Testing for additional round. currentRount:" + GlobalGameMngr.Instance.currentRound + ".");
+        if (GlobalGameMngr.Instance.currentRound == 3)
         {
             if (get3RoundsSum() != 0)
             {
@@ -308,51 +330,19 @@ public class ButtonController : MonoBehaviour
 
     }
 
-    private void startCountdown()
-    {
-        remainingTime -= 1 * Time.deltaTime;
-
-        if (remainingTime < 4)
-        {
-            timer.faceColor = Color.red;
-        }else
-        {
-            timer.faceColor = Color.black;
-        }
-
-        if (remainingTime <= 0)
-        {
-            if (!nextRoundButton.activeInHierarchy)
-            {
-                timer.text = "0.00";
-                activateChoiceButtons(false);
-                prompt.text = "Time Out!";
-            }
-        }
-        else
-        {
-            timer.text = remainingTime.ToString("F2");
-        }
-    }
 
     private void pauseCountdown()
     {
         
     }
 
-    private void activateChoiceButtons(bool activated)
-    {
-        rockButton.SetActive(activated);
-        paperButton.SetActive(activated);
-        scissorsButton.SetActive(activated);
-    }
 
     private void updateRoundField()
     {
-        currentRound += 1;
-        if (currentRound <= TOTALROUNDS)
+        GlobalGameMngr.Instance.currentRound += 1;
+        if (GlobalGameMngr.Instance.currentRound <= GlobalGameMngr.TOTALROUNDS)
         {
-            roundField.text = "Round " + currentRound;
+            roundField.text = "Round " + GlobalGameMngr.Instance.currentRound;
         }
         else
         {
@@ -363,20 +353,20 @@ public class ButtonController : MonoBehaviour
     private void updateGameHistoryText(int roundResultInt)
     {
         string roundResultText = decodeToResultText(roundResultInt);
-        if (currentRound == 1)
+        if (GlobalGameMngr.Instance.currentRound == 1)
         {
-            gameHistoryText = "Round 1: " + roundResultText;
+            GlobalGameMngr.Instance.gameHistoryText = "Round 1: " + roundResultText;
         }
         else
         {
-            gameHistoryText += "\nRound " + currentRound + ": " + roundResultText;
+            GlobalGameMngr.Instance.gameHistoryText += "\nRound " + GlobalGameMngr.Instance.currentRound + ": " + roundResultText;
         }
-        gameHistory.text = gameHistoryText;
+        gameHistory.text = GlobalGameMngr.Instance.gameHistoryText;
     }
 
     private void updateGameHistory(int resultInt)
     {
-        historyResults[currentRound - 1] = resultInt;
+        GlobalGameMngr.Instance.historyResults[GlobalGameMngr.Instance.currentRound - 1] = resultInt;
     }
 
     private void updateAndDisplayHistoryInfo(int roundResultInt)
@@ -405,6 +395,26 @@ public class ButtonController : MonoBehaviour
         //show final result
         finalResult.text = "You " + decodeToResultText(getFinalResultInt(roundResultInt));
         finalResult.enabled = true;
+    }
+
+
+    private void backToAvatarScene()
+    {
+        if (SceneManager.GetActiveScene().name == "faceOffPrototype")
+        {
+            SceneManager.LoadScene("Avatar", LoadSceneMode.Single);
+        }
+        Debug.Log("Loading Avatar scene");
+    }
+
+
+    private void activePrevCanvasComponents(bool isActive)
+    {
+        timer.enabled = isActive;
+        gesturePrevScene.enabled = isActive;
+        prompt.enabled = isActive;
+        //confirmPrevBtn.enabled = isActive;
+            //enabled = isActive;
     }
 
 }
