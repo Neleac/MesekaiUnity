@@ -20,12 +20,13 @@ public class PlayerManager : MonoBehaviour
         
         msgQueue = networkManager.GetComponent<MessageQueue>();
 		msgQueue.AddCallback(Constants.SMSG_JOIN, OnResponseJoin);
+        msgQueue.AddCallback(Constants.SMSG_MOVE, OnResponseMove);
 
-        avatar.name = networkManager.playerName;
+        avatar.name = networkManager.playerName + " Avatar";
 
+        // TODO: random start location
         startPos = avatar.transform.position;
         startRot = avatar.transform.rotation;
-
 
         // TODO: instantiate avatars for players already in hub
     }
@@ -54,5 +55,15 @@ public class PlayerManager : MonoBehaviour
         newAvatar.GetComponent<HandSolver>().enabled = false;
         newAvatar.GetComponent<FaceSolver>().enabled = false;
         newAvatar.GetComponent<MotionToggle>().enabled = false;
+    }
+
+    // called every frame from every player
+    public void OnResponseMove(ExtendedEventArgs eventArgs)
+    {
+        ResponseMoveEventArgs args = eventArgs as ResponseMoveEventArgs;
+
+        Transform avatarTf = GameObject.Find(args.playerName + " Avatar").transform;
+        avatarTf.position = args.position;
+        avatarTf.eulerAngles = args.rotation;
     }
 }

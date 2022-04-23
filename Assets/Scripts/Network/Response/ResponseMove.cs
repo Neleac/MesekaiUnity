@@ -5,7 +5,8 @@ using UnityEngine;
 public class ResponseMoveEventArgs : ExtendedEventArgs
 {
 	public string playerName { get; set; }
-    public Vector3 transform { get; set; }
+    public Vector3 position { get; set; }
+	public Vector3 rotation { get; set; }
 
 	public ResponseMoveEventArgs()
 	{
@@ -16,7 +17,8 @@ public class ResponseMoveEventArgs : ExtendedEventArgs
 public class ResponseMove : NetworkResponse
 {
 	private string playerName;
-    private float x, y, z;
+    private float xPos, yPos, zPos;
+	private float xRot, yRot, zRot;
 
 	public ResponseMove()
 	{
@@ -25,9 +27,12 @@ public class ResponseMove : NetworkResponse
 	public override void parse()
 	{
 		playerName = DataReader.ReadString(dataStream);
-        x = DataReader.ReadFloat(dataStream);
-        y = DataReader.ReadFloat(dataStream);
-        z = DataReader.ReadFloat(dataStream);
+        xPos = DataReader.ReadFloat(dataStream);
+        yPos = DataReader.ReadFloat(dataStream);
+        zPos = DataReader.ReadFloat(dataStream);
+		xRot = DataReader.ReadFloat(dataStream);
+        yRot = DataReader.ReadFloat(dataStream);
+        zRot = DataReader.ReadFloat(dataStream);
 	}
 
 	public override ExtendedEventArgs process()
@@ -35,7 +40,8 @@ public class ResponseMove : NetworkResponse
 		ResponseMoveEventArgs args = new ResponseMoveEventArgs
 		{
 			playerName = playerName,
-            transform = new Vector3(x, y, z),
+            position = new Vector3(xPos, yPos, zPos),
+			rotation = new Vector3(xRot, yRot, zRot)
 		};
 
 		return args;
