@@ -12,6 +12,7 @@ public class NetworkResponseTable
 		responseTable = new Dictionary<short, Type>();
 		add(Constants.SMSG_JOIN, "ResponseJoin");
 		add(Constants.SMSG_LEAVE, "ResponseLeave");
+		add(Constants.SMSG_MOVE, "ResponseMove");
 	}
 
 	public static void add(short response_id, string name)

@@ -6048,6 +6048,7 @@ GameObject:
   - component: {fileID: 586055738}
   - component: {fileID: 586055740}
   - component: {fileID: 586055741}
+  - component: {fileID: 586055742}
   m_Layer: 0
   m_Name: Player Avatar
   m_TagString: Player
@@ -6275,6 +6276,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   secondsToMotion: 1
+--- !u!114 &586055742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 586055730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a43cf76121b3c8e43a2a50439cff39e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &587903383
 PrefabInstance:
   m_ObjectHideFlags: 0

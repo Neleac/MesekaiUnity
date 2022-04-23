@@ -9,14 +9,25 @@ public class PlayerManager : MonoBehaviour
     private NetworkManager networkManager;
     private MessageQueue msgQueue;
 
+    private Vector3 startPos;
+    private Quaternion startRot;
+
     [SerializeField] GameObject avatar;
 
     void Start()
     {
         networkManager = GameObject.Find("Network Manager").GetComponent<NetworkManager>();;
+        
         msgQueue = networkManager.GetComponent<MessageQueue>();
-
 		msgQueue.AddCallback(Constants.SMSG_JOIN, OnResponseJoin);
+
+        avatar.name = networkManager.playerName;
+
+        startPos = avatar.transform.position;
+        startRot = avatar.transform.rotation;
+
+
+        // TODO: instantiate avatars for players already in hub
     }
 
     void Update()
@@ -28,9 +39,11 @@ public class PlayerManager : MonoBehaviour
     public void OnResponseJoin(ExtendedEventArgs eventArgs)
     {
         ResponseJoinEventArgs args = eventArgs as ResponseJoinEventArgs;
-        print("JOINED: " + args.name);
+        print("JOINED: " + args.playerName);
 
-        GameObject newAvatar = Instantiate(avatar, avatar.transform.position, avatar.transform.rotation);
+        GameObject newAvatar = Instantiate(avatar, startPos, startRot);
+        newAvatar.name = args.playerName + " Avatar";
+        
         // disable client control components
         newAvatar.GetComponent<CharacterController>().enabled = false;
         newAvatar.GetComponent<PlayerInput>().enabled = false;

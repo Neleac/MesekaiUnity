@@ -12,6 +12,7 @@ public class NetworkRequestTable
 		requestTable = new Dictionary<short, Type>();
 		add(Constants.CMSG_JOIN, "RequestJoin");
 		add(Constants.CMSG_LEAVE, "RequestLeave");
+		add(Constants.CMSG_MOVE, "RequestMove");
 	}
 
 	public static void add(short request_id, string name)

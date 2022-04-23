@@ -24,10 +24,10 @@ public class MainMenu : MonoBehaviour
 
     public void OnStartClick()
     {
-        string name = nameInput.GetComponent<TMP_InputField>().text;
-        if (name.Length > 0)
+        string playerName = nameInput.GetComponent<TMP_InputField>().text;
+        if (playerName.Length > 0)
         {
-            bool connected = networkManager.SendJoinRequest(name);
+            bool connected = networkManager.SendJoinRequest(playerName);
             if (!connected) Debug.LogWarning("SendJoinRequest failed.");
 
             SceneManager.LoadScene("Hub");

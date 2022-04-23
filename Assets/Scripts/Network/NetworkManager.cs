@@ -7,6 +7,8 @@ public class NetworkManager : MonoBehaviour
 {
 	private ConnectionManager cManager;
 
+	public string playerName;
+
 	void Awake()
 	{
 		DontDestroyOnLoad(gameObject);
@@ -30,12 +32,14 @@ public class NetworkManager : MonoBehaviour
 		}
 	}
 
-	public bool SendJoinRequest(string name)
+	public bool SendJoinRequest(string playerName)
 	{
 		if (cManager && cManager.IsConnected())
 		{
+			this.playerName = playerName;
+
 			RequestJoin request = new RequestJoin();
-			request.send(name);
+			request.send(playerName);
 			cManager.send(request);
 			return true;
 		}
@@ -48,6 +52,18 @@ public class NetworkManager : MonoBehaviour
 		{
 			RequestLeave request = new RequestLeave();
 			request.send();
+			cManager.send(request);
+			return true;
+		}
+		return false;
+	}
+
+	public bool SendMoveRequest(string playerName, Vector3 transform)
+	{
+		if (cManager && cManager.IsConnected())
+		{
+			RequestMove request = new RequestMove();
+			request.send(playerName, transform);
 			cManager.send(request);
 			return true;
 		}

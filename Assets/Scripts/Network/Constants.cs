@@ -10,6 +10,8 @@ public class Constants
 	public static readonly short SMSG_JOIN = 201;
 	public static readonly short CMSG_LEAVE = 102;
 	public static readonly short SMSG_LEAVE = 202;
+	public static readonly short CMSG_MOVE = 103;
+	public static readonly short SMSG_MOVE = 203;
 
 	public static readonly short CMSG_HEARTBEAT = 111;
 
