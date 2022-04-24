@@ -15,11 +15,65 @@ MonoBehaviour:
   Path: Assets/Audio/GeneratedSoundbanks/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 637826031100532092
+  lastModified: 637863415403546052
   FileSizes:
   - Name: 
-    Value: 906
+    Value: 1298
   Exists: 1
+--- !u!114 &-5336587789222844238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Music/Hub_Music
+  m_EditorClassIdentifier: 
+  Path: event:/Music/Hub_Music
+  Guid:
+    Data1: 505762539
+    Data2: 1143926792
+    Data3: 437047973
+    Data4: 1869789719
+  Banks:
+  - {fileID: -955842799320100021}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 115287
+--- !u!114 &-5005275225062106877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Hub/Locomotion/Footstep_Dirt
+  m_EditorClassIdentifier: 
+  Path: event:/Hub/Locomotion/Footstep_Dirt
+  Guid:
+    Data1: -159404537
+    Data2: 1101436904
+    Data3: 871189931
+    Data4: 1381950855
+  Banks:
+  - {fileID: -955842799320100021}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-3291323269143114933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,7 +116,7 @@ MonoBehaviour:
   Path: Assets/Audio/GeneratedSoundbanks/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 637826031100532092
+  lastModified: 637863415403916049
   FileSizes: []
   Exists: 1
 --- !u!114 &11400000
@@ -85,12 +139,20 @@ MonoBehaviour:
   - {fileID: 5537301148835803388}
   - {fileID: -3291323269143114933}
   - {fileID: 2558588908024160204}
+  - {fileID: -5005275225062106877}
+  - {fileID: 2066227881717204391}
+  - {fileID: 4867663824520459271}
+  - {fileID: 2195620140014283916}
+  - {fileID: 1567306651985465971}
+  - {fileID: 3639936130962208891}
+  - {fileID: 2444454653555401087}
+  - {fileID: -5336587789222844238}
   EditorParameters: []
   MasterBanks:
   - {fileID: -955842799320100021}
   StringsBanks:
   - {fileID: -7973468906156969152}
-  cacheTime: 637826031100592091
+  cacheTime: 637863415404276081
   cacheVersion: 10
 --- !u!114 &1431948590069103099
 MonoBehaviour:
@@ -107,9 +169,117 @@ MonoBehaviour:
   Path: Assets/Audio/GeneratedSoundbanks/Test.bank
   Name: Test
   StudioPath: bank:/Test
-  lastModified: 637826031100592091
+  lastModified: 637863415404276081
   FileSizes: []
   Exists: 1
+--- !u!114 &1567306651985465971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Hub/Locomotion/Footstep_Wood
+  m_EditorClassIdentifier: 
+  Path: event:/Hub/Locomotion/Footstep_Wood
+  Guid:
+    Data1: -1775464084
+    Data2: 1195538275
+    Data3: -1503577680
+    Data4: -1346383176
+  Banks:
+  - {fileID: -955842799320100021}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &2066227881717204391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Hub/Ambiance
+  m_EditorClassIdentifier: 
+  Path: event:/Hub/Ambiance
+  Guid:
+    Data1: 755212583
+    Data2: 1257360505
+    Data3: 1596666017
+    Data4: 1321619183
+  Banks:
+  - {fileID: -955842799320100021}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 69927
+--- !u!114 &2195620140014283916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Hub/Locomotion/Jump_Landing_Wood
+  m_EditorClassIdentifier: 
+  Path: event:/Hub/Locomotion/Jump_Landing_Wood
+  Guid:
+    Data1: 1755484243
+    Data2: 1143562691
+    Data3: 2081779897
+    Data4: -1403602596
+  Banks:
+  - {fileID: -955842799320100021}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &2444454653555401087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Hub/Locomotion/Footstep_Sand
+  m_EditorClassIdentifier: 
+  Path: event:/Hub/Locomotion/Footstep_Sand
+  Guid:
+    Data1: -621085494
+    Data2: 1294014326
+    Data3: -1935205450
+    Data4: -1132043283
+  Banks:
+  - {fileID: -955842799320100021}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &2558588908024160204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,6 +302,60 @@ MonoBehaviour:
   - {fileID: 1431948590069103099}
   IsStream: 0
   Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &3639936130962208891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Hub/Locomotion/Jump_Landing_Dirt
+  m_EditorClassIdentifier: 
+  Path: event:/Hub/Locomotion/Jump_Landing_Dirt
+  Guid:
+    Data1: -189314122
+    Data2: 1278324448
+    Data3: -1414109807
+    Data4: 423874146
+  Banks:
+  - {fileID: -955842799320100021}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &4867663824520459271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Hub/Locomotion/Jump_Landing_Sand
+  m_EditorClassIdentifier: 
+  Path: event:/Hub/Locomotion/Jump_Landing_Sand
+  Guid:
+    Data1: 1987144249
+    Data2: 1164405426
+    Data3: -1772509028
+    Data4: 453434186
+  Banks:
+  - {fileID: -955842799320100021}
+  IsStream: 0
+  Is3D: 1
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
