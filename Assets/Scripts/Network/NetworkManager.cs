@@ -7,7 +7,8 @@ public class NetworkManager : MonoBehaviour
 {
 	private ConnectionManager cManager;
 
-	public string playerName;
+	public string playerName;		// name of this client
+	public string[] otherPlayers;	// name of players joined BEFORE client
 
 	void Awake()
 	{
@@ -36,8 +37,6 @@ public class NetworkManager : MonoBehaviour
 	{
 		if (cManager && cManager.IsConnected())
 		{
-			this.playerName = playerName;
-
 			RequestJoin request = new RequestJoin();
 			request.send(playerName);
 			cManager.send(request);

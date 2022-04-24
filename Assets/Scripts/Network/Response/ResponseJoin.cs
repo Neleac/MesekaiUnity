@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class ResponseJoinEventArgs : ExtendedEventArgs
 {
+	public bool success { get; set; }
 	public string playerName { get; set; }
+	public string[] otherPlayers { get; set; }
 
 	public ResponseJoinEventArgs()
 	{
@@ -14,7 +16,9 @@ public class ResponseJoinEventArgs : ExtendedEventArgs
 
 public class ResponseJoin : NetworkResponse
 {
+	private bool success;
 	private string playerName;
+	private string[] otherPlayers;
 
 	public ResponseJoin()
 	{
@@ -22,14 +26,24 @@ public class ResponseJoin : NetworkResponse
 
 	public override void parse()
 	{
+		success = DataReader.ReadBool(dataStream);
 		playerName = DataReader.ReadString(dataStream);
+		
+		int nOtherPlayers = DataReader.ReadInt(dataStream);
+		otherPlayers = new string[nOtherPlayers];
+		for (int i = 0; i < otherPlayers.Length; i++)
+		{
+			otherPlayers[i] = DataReader.ReadString(dataStream);
+		}
 	}
 
 	public override ExtendedEventArgs process()
 	{
 		ResponseJoinEventArgs args = new ResponseJoinEventArgs
 		{
-			playerName = playerName
+			success = success,
+			playerName = playerName,
+			otherPlayers = otherPlayers
 		};
 
 		return args;
