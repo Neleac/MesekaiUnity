@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4346065073637332}
   - component: {fileID: 33498635280281230}
   - component: {fileID: 23588862761464124}
+  - component: {fileID: -8454057560682795928}
   m_Layer: 0
   m_Name: Padded Ground
   m_TagString: Untagged
@@ -83,3 +84,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &-8454057560682795928
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1882799095187592}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 9eae8348e5e70f24a943b43a3b2f41a2, type: 3}

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4649567022118372}
   - component: {fileID: 33764604348105126}
   - component: {fileID: 23506784731555248}
+  - component: {fileID: 7504396892473444785}
   m_Layer: 0
   m_Name: Big Screen
   m_TagString: Untagged
@@ -84,3 +85,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &7504396892473444785
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1702129426462454}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 9ecb63efe6e42ea41b6afc2ba5716681, type: 3}

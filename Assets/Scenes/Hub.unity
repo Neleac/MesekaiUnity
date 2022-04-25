@@ -3568,7 +3568,7 @@ MonoBehaviour:
   _textureFramePool: {fileID: 312243067}
   faceSolver: {fileID: 586055740}
   poseSolver: {fileID: 586055739}
-  handSolver: {fileID: 586055738}
+  handSolver: {fileID: 0}
   runningMode: 0
 --- !u!1 &314093470
 GameObject:
@@ -6045,7 +6045,6 @@ GameObject:
   - component: {fileID: 586055734}
   - component: {fileID: 586055733}
   - component: {fileID: 586055739}
-  - component: {fileID: 586055738}
   - component: {fileID: 586055740}
   - component: {fileID: 586055741}
   m_Layer: 0
@@ -6217,21 +6216,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &586055738
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 586055730}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1da1628c6d4a914e8dea98cdf27f868, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hips: {fileID: 570654511}
-  mirrorMode: 0
-  rockPaperScissors: 0
 --- !u!114 &586055739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11529,6 +11513,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 8944336655422409496, guid: f6d148d888ffbf54b9afe9936dfaec1f, type: 3}
+      propertyPath: field of view
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 8944336655422409496, guid: f6d148d888ffbf54b9afe9936dfaec1f, type: 3}
       propertyPath: far clip plane
       value: 500
       objectReference: {fileID: 0}
@@ -13590,7 +13578,7 @@ RectTransform:
   m_Children:
   - {fileID: 829749442}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -17988,8 +17976,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1924942699}
     - target: {fileID: 2070925441746177913, guid: a1a802ecaf6775746bb2a929fb554ad8, type: 3}
+      propertyPath: m_Lens.FieldOfView
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 2070925441746177913, guid: a1a802ecaf6775746bb2a929fb554ad8, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.8813695
+      value: 2.3287938
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a1a802ecaf6775746bb2a929fb554ad8, type: 3}
@@ -21530,7 +21522,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: -39.44, z: 0}
 --- !u!64 &1826345457
 MeshCollider:

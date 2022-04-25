@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 4987656578017662}
   - component: {fileID: 33763185896543610}
   - component: {fileID: 23489357596561078}
+  - component: {fileID: -8702424995397201393}
   m_Layer: 0
   m_Name: Seat
   m_TagString: Untagged
@@ -170,3 +171,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &-8702424995397201393
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1503585492025200}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: d60f3db7881915946878587361eb5ca6, type: 3}

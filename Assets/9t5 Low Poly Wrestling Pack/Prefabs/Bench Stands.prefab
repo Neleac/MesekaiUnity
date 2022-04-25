@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4377973152142142}
   - component: {fileID: 33106601732668698}
   - component: {fileID: 23483623436449614}
+  - component: {fileID: 5527154257606282799}
   m_Layer: 0
   m_Name: Bench Stands
   m_TagString: Untagged
@@ -83,3 +84,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &5527154257606282799
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1857153351616228}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: c7add0f28d8f2d14a9e90e246b4f0f2b, type: 3}

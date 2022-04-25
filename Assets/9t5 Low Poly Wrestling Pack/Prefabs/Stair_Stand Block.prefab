@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 33079281905139634}
   - component: {fileID: 65796473960132782}
   - component: {fileID: 23797549654790976}
+  - component: {fileID: 6992687272986253990}
   m_Layer: 0
   m_Name: Stair_Stand Block
   m_TagString: Untagged
@@ -97,3 +98,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &6992687272986253990
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1007121345653216}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
