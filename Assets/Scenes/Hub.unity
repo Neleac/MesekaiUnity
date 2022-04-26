@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3568,7 +3568,7 @@ MonoBehaviour:
   _textureFramePool: {fileID: 312243067}
   faceSolver: {fileID: 586055740}
   poseSolver: {fileID: 586055739}
-  handSolver: {fileID: 586055738}
+  handSolver: {fileID: 0}
   runningMode: 0
 --- !u!1 &314093470
 GameObject:
@@ -6045,9 +6045,9 @@ GameObject:
   - component: {fileID: 586055734}
   - component: {fileID: 586055733}
   - component: {fileID: 586055739}
-  - component: {fileID: 586055738}
   - component: {fileID: 586055740}
   - component: {fileID: 586055741}
+  - component: {fileID: 586055742}
   m_Layer: 0
   m_Name: PlayerAvatar
   m_TagString: Player
@@ -6217,21 +6217,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &586055738
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 586055730}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1da1628c6d4a914e8dea98cdf27f868, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hips: {fileID: 570654511}
-  mirrorMode: 0
-  rockPaperScissors: 0
 --- !u!114 &586055739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6275,6 +6260,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   secondsToMotion: 1
+--- !u!114 &586055742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 586055730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dd92741dc7ad4d9da7e460a41ea84bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hips: {fileID: 570654511}
+  mirrorMode: 0
+  rockPaperScissors: 0
 --- !u!1001 &587903383
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13590,7 +13590,7 @@ RectTransform:
   m_Children:
   - {fileID: 829749442}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -21530,7 +21530,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: -39.44, z: 0}
 --- !u!64 &1826345457
 MeshCollider:
