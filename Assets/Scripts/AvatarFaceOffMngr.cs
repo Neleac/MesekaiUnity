@@ -95,7 +95,7 @@ public class AvatarFaceOffMngr : MonoBehaviour
     public void onClickConfirmGesture()
     {
         //confirmGestureBtn.gameObject.SetActive(false);
-        if (SceneManager.GetActiveScene().name == "Avatar")
+        if (SceneManager.GetActiveScene().name == "Arena")
         {
             SceneManager.LoadScene("faceOffPrototype", LoadSceneMode.Single);
         }

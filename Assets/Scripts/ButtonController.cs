@@ -137,7 +137,7 @@ public class ButtonController : MonoBehaviour
     {
         //TODO: go to the previous scene & dontdestroyonload
 
-        backToAvatarScene();
+        backToArenaScene();
 
 
         ////update round info
@@ -398,13 +398,13 @@ public class ButtonController : MonoBehaviour
     }
 
 
-    private void backToAvatarScene()
+    private void backToArenaScene()
     {
         if (SceneManager.GetActiveScene().name == "faceOffPrototype")
         {
-            SceneManager.LoadScene("Avatar", LoadSceneMode.Single);
+            SceneManager.LoadScene("Arena", LoadSceneMode.Single);
         }
-        Debug.Log("Loading Avatar scene");
+        Debug.Log("Loading Arena scene");
     }
 
 
