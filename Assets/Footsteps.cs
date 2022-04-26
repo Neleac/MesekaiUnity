@@ -7,21 +7,43 @@ using StarterAssets;
 public class Footsteps : MonoBehaviour
 {
     [SerializeField] private StarterAssetsInputs input;
+    [SerializeField] private ThirdPersonController controller;
     
     const float deltaTimeWalk = 0.6f;
-    const float deltaTimeRun = 0.3f;
+    const float deltaTimeRun = 0.4f;
     float timer;
+    bool jumped;
 
     void Start()
     {
         timer = 0;
+        jumped = false;
     }
 
     void FixedUpdate()
     {
-        if (input.sprint)
+        // Jumping
+        if (!controller.Grounded) 
         {
-            // RUNNING
+            jumped = true;
+        }
+        else if (jumped && controller.Grounded)
+        {
+            jumped = false;
+
+            RaycastHit hit;
+            float maxDist = 1.0f;
+            int layerMask = 1 << 0; // layer 0: Default
+            
+            if (Physics.Raycast(transform.position, -Vector3.up, out hit, maxDist, layerMask))
+            {    
+                transform.Find(hit.collider.tag + " Jump").GetComponent<FMODUnity.StudioEventEmitter>().Play();
+            }
+        }
+        // Walking and Running
+        else if (input.sprint || input.move.magnitude > 0)
+        {
+            float deltaTime = (input.sprint) ? deltaTimeRun : deltaTimeWalk;
 
             timer += Time.fixedDeltaTime;
 
@@ -29,25 +51,9 @@ public class Footsteps : MonoBehaviour
             float maxDist = 1.0f;
             int layerMask = 1 << 0; // layer 0: Default
             
-            if (timer >= deltaTimeRun && Physics.Raycast(transform.position, -Vector3.up, out hit, maxDist, layerMask))
+            if (timer >= deltaTime && Physics.Raycast(transform.position, -Vector3.up, out hit, maxDist, layerMask))
             {    
-                transform.Find(hit.collider.tag).GetComponent<FMODUnity.StudioEventEmitter>().Play();
-                timer = 0;
-            }
-        }
-        else if (input.move.magnitude > 0)
-        {
-            // WALKING
-
-            timer += Time.fixedDeltaTime;
-
-            RaycastHit hit;
-            float maxDist = 1.0f;
-            int layerMask = 1 << 0; // layer 3: Default
-            
-            if (timer >= deltaTimeWalk && Physics.Raycast(transform.position, -Vector3.up, out hit, maxDist, layerMask))
-            {    
-                transform.Find(hit.collider.tag).GetComponent<FMODUnity.StudioEventEmitter>().Play();
+                transform.Find(hit.collider.tag + " Move").GetComponent<FMODUnity.StudioEventEmitter>().Play();
                 timer = 0;
             }
         }
