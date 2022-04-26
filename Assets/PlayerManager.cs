@@ -9,9 +9,6 @@ public class PlayerManager : MonoBehaviour
     private NetworkManager networkManager;
     private MessageQueue msgQueue;
 
-    private Vector3 startPos;
-    private Quaternion startRot;
-
     [SerializeField] GameObject avatar;
 
     void Awake()
@@ -25,22 +22,23 @@ public class PlayerManager : MonoBehaviour
         avatar.name = networkManager.playerName + " Avatar";
 
         // instantiate avatar for players joined BEFORE client
-        // foreach (string otherName in networkManager.otherPlayers)
-        // {
-        //     GameObject newAvatar = Instantiate(avatar);
-        //     newAvatar.name = otherName + " Avatar";
+        foreach (string otherName in networkManager.otherPlayers)
+        {
+            GameObject newAvatar = Instantiate(avatar);
+            newAvatar.name = otherName + " Avatar";
             
-        //     // disable client control components
-        //     newAvatar.GetComponent<CharacterController>().enabled = false;
-        //     newAvatar.GetComponent<PlayerInput>().enabled = false;
-        //     newAvatar.GetComponent<ThirdPersonController>().enabled = false;
-        //     newAvatar.GetComponent<BasicRigidBodyPush>().enabled = false;
-        //     newAvatar.GetComponent<StarterAssetsInputs>().enabled = false;
-        //     newAvatar.GetComponent<PoseSolver>().enabled = false;
-        //     newAvatar.GetComponent<HandSolver>().enabled = false;
-        //     newAvatar.GetComponent<FaceSolver>().enabled = false;
-        //     newAvatar.GetComponent<MotionToggle>().enabled = false;
-        // }
+            // disable client control components
+            newAvatar.GetComponent<CharacterController>().enabled = false;
+            newAvatar.GetComponent<PlayerInput>().enabled = false;
+            newAvatar.GetComponent<ThirdPersonController>().enabled = false;
+            newAvatar.GetComponent<BasicRigidBodyPush>().enabled = false;
+            newAvatar.GetComponent<StarterAssetsInputs>().enabled = false;
+            newAvatar.GetComponent<PoseSolver>().enabled = false;
+            newAvatar.GetComponent<HandSolver>().enabled = false;
+            newAvatar.GetComponent<FaceSolver>().enabled = false;
+            newAvatar.GetComponent<MotionToggle>().enabled = false;
+            newAvatar.GetComponent<NetworkPlayer>().enabled = false;
+        }
     }
 
     void Update()
@@ -48,7 +46,7 @@ public class PlayerManager : MonoBehaviour
         
     }
 
-    // called every frame from every player
+    // called every frame from every other player
     public void OnResponseMove(ExtendedEventArgs eventArgs)
     {
         ResponseMoveEventArgs args = eventArgs as ResponseMoveEventArgs;

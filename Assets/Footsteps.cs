@@ -41,7 +41,7 @@ public class Footsteps : MonoBehaviour
             }
         }
         // Walking and Running
-        else if (input.sprint || input.move.magnitude > 0)
+        else if (input.move.magnitude > 0)
         {
             float deltaTime = (input.sprint) ? deltaTimeRun : deltaTimeWalk;
 

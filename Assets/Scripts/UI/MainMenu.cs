@@ -15,6 +15,9 @@ public class MainMenu : MonoBehaviour
     private GameObject nameInput;
     private GameObject startButton;
 
+    private Vector3 startPos;
+    private Quaternion startRot;
+
 	void Start()
 	{
         networkManager = GameObject.Find("Network Manager").GetComponent<NetworkManager>();;
@@ -23,6 +26,10 @@ public class MainMenu : MonoBehaviour
 
         nameInput = transform.Find("Name Input").gameObject;
         startButton = transform.Find("Start Button").gameObject;
+
+        // TODO: randomize new player spawn
+        startPos = new Vector3(65f, 22.175f, 43f);
+        startRot = Quaternion.Euler(0, 0, 0);
     }
 
     public void OnStartClick()
@@ -64,7 +71,7 @@ public class MainMenu : MonoBehaviour
             {
                 // instantiate avatar for players joined AFTER client
                 GameObject avatar = GameObject.Find(networkManager.playerName + " Avatar");
-                GameObject newAvatar = Instantiate(avatar);
+                GameObject newAvatar = Instantiate(avatar, startPos, startRot);
                 newAvatar.name = args.playerName + " Avatar";
                 
                 // disable client control components
@@ -77,6 +84,9 @@ public class MainMenu : MonoBehaviour
                 newAvatar.GetComponent<HandSolver>().enabled = false;
                 newAvatar.GetComponent<FaceSolver>().enabled = false;
                 newAvatar.GetComponent<MotionToggle>().enabled = false;
+                newAvatar.GetComponent<NetworkPlayer>().enabled = false;
+
+                networkManager.otherJoined = true;
             }
         }
     }
