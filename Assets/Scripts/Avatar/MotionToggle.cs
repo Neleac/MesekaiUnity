@@ -38,7 +38,6 @@ public class MotionToggle : MonoBehaviour
 
     public void OnMove(InputValue value)
     {
-        //print("MOVE");
         animator.enabled = true;
     }
 }

@@ -7,6 +7,7 @@ public class ResponseMoveEventArgs : ExtendedEventArgs
 	public string playerName { get; set; }
     public Vector3 position { get; set; }
 	public Vector3 rotation { get; set; }
+	public float[] jointAngles { get; set; }
 
 	public ResponseMoveEventArgs()
 	{
@@ -17,8 +18,9 @@ public class ResponseMoveEventArgs : ExtendedEventArgs
 public class ResponseMove : NetworkResponse
 {
 	private string playerName;
-    private float xPos, yPos, zPos;
-	private float xRot, yRot, zRot;
+    private float xPos, yPos, zPos;	// avatar root position
+	private float xRot, yRot, zRot;	// avatar root rotation
+	private float[] jointAngles;	// armature joints angles
 
 	public ResponseMove()
 	{
@@ -33,6 +35,13 @@ public class ResponseMove : NetworkResponse
 		xRot = DataReader.ReadFloat(dataStream);
         yRot = DataReader.ReadFloat(dataStream);
         zRot = DataReader.ReadFloat(dataStream);
+
+		int nAngles = DataReader.ReadInt(dataStream);
+		jointAngles = new float[nAngles];
+		for (int i = 0; i < jointAngles.Length; i++)
+		{
+			jointAngles[i] = DataReader.ReadFloat(dataStream);
+		}
 	}
 
 	public override ExtendedEventArgs process()
@@ -41,7 +50,8 @@ public class ResponseMove : NetworkResponse
 		{
 			playerName = playerName,
             position = new Vector3(xPos, yPos, zPos),
-			rotation = new Vector3(xRot, yRot, zRot)
+			rotation = new Vector3(xRot, yRot, zRot),
+			jointAngles = jointAngles
 		};
 
 		return args;

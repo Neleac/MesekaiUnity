@@ -28,6 +28,7 @@ public class PlayerManager : MonoBehaviour
             newAvatar.name = otherName + " Avatar";
             
             // disable client control components
+            newAvatar.GetComponent<Animator>().enabled = false;
             newAvatar.GetComponent<CharacterController>().enabled = false;
             newAvatar.GetComponent<PlayerInput>().enabled = false;
             newAvatar.GetComponent<ThirdPersonController>().enabled = false;
@@ -54,5 +55,22 @@ public class PlayerManager : MonoBehaviour
         Transform avatarTf = GameObject.Find(args.playerName + " Avatar").transform;
         avatarTf.position = args.position;
         avatarTf.eulerAngles = args.rotation;
+
+        Transform spine = avatarTf.Find("Armature/Hips/Spine");
+        int finalIdx = setJointAngles(spine, args.jointAngles, 0);
+        Debug.Assert(finalIdx == args.jointAngles.Length);
+    }
+
+    private int setJointAngles(Transform jointTf, float[] angles, int idx)
+    {
+        jointTf.eulerAngles = new Vector3(angles[idx++], angles[idx++], angles[idx++]);
+
+		// DFS
+		foreach (Transform child in jointTf)
+        {
+            idx = setJointAngles(child, angles, idx);
+        }
+
+        return idx;
     }
 }

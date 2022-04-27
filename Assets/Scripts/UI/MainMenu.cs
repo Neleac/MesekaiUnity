@@ -75,6 +75,7 @@ public class MainMenu : MonoBehaviour
                 newAvatar.name = args.playerName + " Avatar";
                 
                 // disable client control components
+                newAvatar.GetComponent<Animator>().enabled = false;
                 newAvatar.GetComponent<CharacterController>().enabled = false;
                 newAvatar.GetComponent<PlayerInput>().enabled = false;
                 newAvatar.GetComponent<ThirdPersonController>().enabled = false;

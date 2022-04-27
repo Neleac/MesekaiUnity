@@ -58,12 +58,12 @@ public class NetworkManager : MonoBehaviour
 		return false;
 	}
 
-	public bool SendMoveRequest(string playerName, Vector3 position, Vector3 rotation)
+	public bool SendMoveRequest(string playerName, Transform avatarTF)
 	{
 		if (cManager && cManager.IsConnected())
 		{
 			RequestMove request = new RequestMove();
-			request.send(playerName, position, rotation);
+			request.send(playerName, avatarTF);
 			cManager.send(request);
 			return true;
 		}

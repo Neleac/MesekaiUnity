@@ -442,6 +442,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 756a29afffd1040968e90738984a7825, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerName: 
+  otherPlayers: []
+  otherJoined: 0
 --- !u!4 &185601904
 Transform:
   m_ObjectHideFlags: 0
@@ -1062,7 +1065,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d5f9f127d2100f4ca7e0beed1a63d3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkManager: {fileID: 185601903}
 --- !u!1 &1180636787
 GameObject:
   m_ObjectHideFlags: 0
