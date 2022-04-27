@@ -23,6 +23,8 @@ public class AvatarFaceOffMngr : MonoBehaviour
     public TextMeshProUGUI finalResult;                 //to show the final game result--win/lose
     public GameObject nextRoundButton;                  //to navigate to the next round
 
+    public GameObject exitButton;
+
     private float remainingTime = 10f;
     //private const int DEFAULTGAMELAYER = 0;
     private const int TOTALROUNDS = 3;
@@ -30,12 +32,16 @@ public class AvatarFaceOffMngr : MonoBehaviour
     private int[] historyResults = new int[TOTALROUNDS]; //store all the round results of the first 3 rounds
     private string gameHistoryText = "";                 //to show history on board
     private int gameCanvasLayer;
+    private Color timerColor;
 
 
     // Start is called before the first frame update
     void Start()
     {
         Debug.Log("Arena Scene Starts");
+
+        //save the pre-set timer color
+        timerColor = timer.faceColor;
         //save the canvas layer number
         gameCanvasLayer = gameCanvas.GetComponent<Canvas>().sortingOrder;
 
@@ -56,6 +62,7 @@ public class AvatarFaceOffMngr : MonoBehaviour
 
     public void onClickConfirmGesture()
     {
+        exitButton.SetActive(false);
         showGameCanvas(false);
 
         updateResultCanvasInfo();
@@ -68,13 +75,15 @@ public class AvatarFaceOffMngr : MonoBehaviour
     {
         remainingTime -= 1 * Time.deltaTime;
 
+        //Debug.Log("timerColor: " + timerColor);
+
         if (remainingTime < 4)
         {
             timer.faceColor = Color.red;
         }
         else
         {
-            timer.faceColor = Color.black;
+            timer.faceColor = timerColor;
         }
 
         if (remainingTime <= 0)
@@ -164,6 +173,7 @@ public class AvatarFaceOffMngr : MonoBehaviour
                 nextRoundButton.SetActive(false);
 
                 displayFinalResult(roundResultInt);
+                exitButton.SetActive(true);
             }
         }
     }
@@ -404,5 +414,16 @@ public class AvatarFaceOffMngr : MonoBehaviour
         //show final result
         finalResult.text = "You " + decodeToResultText(getFinalResultInt(roundResultInt));
         finalResult.enabled = true;
+    }
+
+
+
+    //PS: immatural function, hub world has error msg.
+    public void onClickExitButton()
+    {
+        if(SceneManager.GetActiveScene().name == "Arena")
+        {
+            SceneManager.LoadScene("Hub");
+        }
     }
 }
