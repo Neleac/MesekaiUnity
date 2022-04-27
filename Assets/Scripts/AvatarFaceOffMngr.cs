@@ -16,6 +16,7 @@ public class AvatarFaceOffMngr : MonoBehaviour
     public TextMeshProUGUI roundField;                 //to show the round #
     public TextMeshProUGUI gameHistory;                //to show the history result
     public Button confirmGestureBtn;                  //to ask for the player to confirm the result
+    public GameObject exitButton1;
 
 
     public GameObject resultCanvas;
@@ -112,8 +113,13 @@ public class AvatarFaceOffMngr : MonoBehaviour
             timer.text = "0.00";
             //update prompt
             prompt.enabled = true;
-            prompt.text = "Time Out!";
+            prompt.text = "Time Out! You lose.";
             prompt.faceColor = Color.red;
+
+            //disable confirm
+            confirmGestureBtn.GetComponent<Button>().interactable = false;
+            //display exit button
+            exitButton1.SetActive(true);
 
         }
         else
@@ -144,10 +150,10 @@ public class AvatarFaceOffMngr : MonoBehaviour
             //diable the prompt, gameHistory and final result
             prompt.enabled = false;
             finalResult.enabled = false;
+            exitButton1.SetActive(false);
             //update rounds
             updateRoundField();
         }
-
     }
 
 
