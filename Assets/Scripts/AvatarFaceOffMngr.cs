@@ -57,6 +57,7 @@ public class AvatarFaceOffMngr : MonoBehaviour
     void Update()
     {
         startCountdown();
+        //isOpponentReady(); //call this func when network is done
     }
 
 
@@ -64,12 +65,21 @@ public class AvatarFaceOffMngr : MonoBehaviour
     {
         if (isValidGesture())
         {
-            exitButton.SetActive(false);
-            showGameCanvas(false);
+            if (isOpponentReady())
+            {
+                exitButton.SetActive(false);
+                showGameCanvas(false);
 
-            updateResultCanvasInfo();
+                updateResultCanvasInfo();
 
-            showGameResultCanvas(true);
+                showGameResultCanvas(true);
+            }
+            else
+            {
+                prompt.enabled = true;
+                prompt.text = "waiting for the other player...";
+            }
+            
         } else
         {
             prompt.enabled = true;
@@ -441,6 +451,11 @@ public class AvatarFaceOffMngr : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    private bool isOpponentReady()
+    {
+        return true;
     }
 
 }
