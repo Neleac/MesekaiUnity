@@ -62,12 +62,22 @@ public class AvatarFaceOffMngr : MonoBehaviour
 
     public void onClickConfirmGesture()
     {
-        exitButton.SetActive(false);
-        showGameCanvas(false);
+        if (isValidGesture())
+        {
+            exitButton.SetActive(false);
+            showGameCanvas(false);
 
-        updateResultCanvasInfo();
+            updateResultCanvasInfo();
 
-        showGameResultCanvas(true);
+            showGameResultCanvas(true);
+        } else
+        {
+            prompt.enabled = true;
+            prompt.text = "Invalid Gesture, please confirm again!";
+        }
+
+
+        
     }
 
 
@@ -94,15 +104,13 @@ public class AvatarFaceOffMngr : MonoBehaviour
             prompt.enabled = true;
             prompt.text = "Time Out!";
             prompt.faceColor = Color.red;
-            //disable confirm button
-            //confirmGestureBtn.SetActive(false);
 
         }
         else
         {
             timer.text = remainingTime.ToString("F2");
         }
-    }//TODO: save the text color and re-assign
+    }
 
 
     //display the gameResult canvas and make sure it's visible
@@ -186,7 +194,7 @@ public class AvatarFaceOffMngr : MonoBehaviour
 
     private string getPlayerChoice()
     {
-        return RPSDetection.text;
+            return RPSDetection.text;  
     }
 
     private int generateAiResult()
@@ -426,4 +434,13 @@ public class AvatarFaceOffMngr : MonoBehaviour
             SceneManager.LoadScene("Hub");
         }
     }
+
+    private bool isValidGesture() {
+        if(RPSDetection.text == "Rock" || RPSDetection.text == "Paper" || RPSDetection.text == "Scissors")
+        {
+            return true;
+        }
+        return false;
+    }
+
 }
