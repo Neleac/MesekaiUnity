@@ -18,7 +18,6 @@ public class AvatarFaceOffMngr : MonoBehaviour
     public Button confirmGestureBtn;                  //to ask for the player to confirm the result
     public GameObject exitButton1;
 
-
     public GameObject resultCanvas;
     public TextMeshProUGUI resultField;                 //to show the result of this round
     public TextMeshProUGUI finalResult;                 //to show the final game result--win/lose
@@ -61,7 +60,6 @@ public class AvatarFaceOffMngr : MonoBehaviour
         //isOpponentReady(); //call this func when network is done
     }
 
-
     public void onClickConfirmGesture()
     {
         if (isValidGesture())
@@ -91,7 +89,6 @@ public class AvatarFaceOffMngr : MonoBehaviour
         
     }
 
-
     private void startCountdown()
     {
         remainingTime -= 1 * Time.deltaTime;
@@ -106,21 +103,21 @@ public class AvatarFaceOffMngr : MonoBehaviour
         {
             timer.faceColor = timerColor;
         }
-
         if (remainingTime <= 0)
         {
-            //so far, no punishment
-            timer.text = "0.00";
-            //update prompt
-            prompt.enabled = true;
-            prompt.text = "Time Out! You lose.";
-            prompt.faceColor = Color.red;
+            // //so far, no punishment
+            // timer.text = "0.00";
+            // //update prompt
+            // prompt.enabled = true;
+            // prompt.text = "Time Out! You lose.";
+            // prompt.faceColor = Color.red;
 
-            //disable confirm
-            confirmGestureBtn.GetComponent<Button>().interactable = false;
-            //display exit button
-            exitButton1.SetActive(true);
-
+            // //disable confirm
+            // confirmGestureBtn.GetComponent<Button>().interactable = false;
+            // //display exit button
+            // exitButton1.SetActive(true);
+            remainingTime = 10f; // might be bug
+            onClickConfirmGesture();
         }
         else
         {
@@ -216,6 +213,7 @@ public class AvatarFaceOffMngr : MonoBehaviour
     private int generateAiResult()
     //not so random so far
     {
+        return 2; // always paper
         int aiResult = 0;
         var rnd = new System.Random();
         aiResult = rnd.Next(1, 3);
