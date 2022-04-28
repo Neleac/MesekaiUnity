@@ -21,8 +21,7 @@ public class NetworkPlayer : MonoBehaviour
 
     void Update()
     {
-        // TODO bug: jump land not synced
-        // only send transforms when moving, or when new player joins
+        // TODO: send animator state while moving, send transforms when idle
         if (input.move.magnitude > 0 || !controller.Grounded || networkManager.otherJoined)
         {
             bool connected = networkManager.SendMoveRequest(networkManager.playerName, transform);

@@ -56,7 +56,7 @@ public class PlayerManager : MonoBehaviour
         avatarTf.position = args.position;
         avatarTf.eulerAngles = args.rotation;
 
-        Transform spine = avatarTf.Find("Armature/Hips/Spine");
+        Transform spine = avatarTf.Find("Armature/Hips");
         int finalIdx = setJointAngles(spine, args.jointAngles, 0);
         Debug.Assert(finalIdx == args.jointAngles.Length);
     }

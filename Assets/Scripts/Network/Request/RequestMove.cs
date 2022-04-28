@@ -24,7 +24,7 @@ public class RequestMove : NetworkRequest
 
 		// armature joints rotations
 		ArrayList jointRots = new ArrayList();
-		Transform spine = avatarTf.Find("Armature/Hips/Spine");
+		Transform spine = avatarTf.Find("Armature/Hips");
 		getJointAngles(spine, jointRots);
 
 		packet.addInt32(jointRots.Count * 3);
