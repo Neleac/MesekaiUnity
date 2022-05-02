@@ -66,22 +66,17 @@ public class AvatarFaceOffMngr : MonoBehaviour
         //USAGE: "enter" triggers "confirm"; "space" triggers "exit" & "next round"
         if (Input.GetKeyUp(KeyCode.Return) && confirmGestureBtn.IsActive())
         {
-            Debug.Log("ENTER released");
-            Debug.Log("confrim gesture");
             onClickConfirmGesture();
         }
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            Debug.Log("SPACE released");
             if (nextRoundButton.GetComponent<Button>().IsActive())
             {
-                Debug.Log("next round");
                 onClickNextRound();
             }
             else if (exitButton.GetComponent<Button>().IsActive() || exitButton1.GetComponent<Button>().IsActive())
             {
-                Debug.Log("exit to hub");
                 onClickExitButton();
             }
         }
@@ -94,6 +89,7 @@ public class AvatarFaceOffMngr : MonoBehaviour
         {
             if (isOpponentReady())
             {
+                Debug.Log("confrim gesture");
                 exitButton.SetActive(false);
                 showGameCanvas(false);
 
@@ -121,8 +117,6 @@ public class AvatarFaceOffMngr : MonoBehaviour
     {
         remainingTime -= 1 * Time.deltaTime;
 
-        //Debug.Log("timerColor: " + timerColor);
-
         if (remainingTime < 4)
         {
             timer.faceColor = Color.red;
@@ -131,6 +125,7 @@ public class AvatarFaceOffMngr : MonoBehaviour
         {
             timer.faceColor = timerColor;
         }
+
         if (remainingTime <= 0)
         {
             // //so far, no punishment
@@ -144,7 +139,7 @@ public class AvatarFaceOffMngr : MonoBehaviour
             // confirmGestureBtn.GetComponent<Button>().interactable = false;
             // //display exit button
             // exitButton1.SetActive(true);
-            remainingTime = 10f; // might be bug
+            remainingTime = 10f; // might be bug//TODO: invalid gesture + time-out = win/lose?
             onClickConfirmGesture();
         }
         else
@@ -153,12 +148,33 @@ public class AvatarFaceOffMngr : MonoBehaviour
         }
     }
 
+    // update the time before curRound # is updated 
+    private void setTimer(int preUpdateRound)
+    {
+ 
+        if (preUpdateRound <= 3)
+        {
+            int denominator = (int)Math.Pow(2, preUpdateRound);
+            remainingTime = (float)Math.Round(10f / denominator);
+        }
+        else
+        {
+            remainingTime = 1f;
+        }
+
+        timer.enabled = true;
+        //timer.text = remainingTime.ToString("F2");
+    }
+
 
     //display the gameResult canvas and make sure it's visible
     private void showGameResultCanvas(bool toShow)
     {
         resultCanvas.SetActive(toShow);
-        resultCanvas.GetComponent<Canvas>().sortingOrder = gameCanvasLayer + 1;
+        if (toShow)
+        {
+            resultCanvas.GetComponent<Canvas>().sortingOrder = gameCanvasLayer + 1;
+        }
     }
 
     //display the game canvas and set correspondent settings
@@ -169,9 +185,7 @@ public class AvatarFaceOffMngr : MonoBehaviour
         if (toShow)
         {
             //refresh the timer
-            remainingTime = 10f;
-            timer.enabled = true;
-            timer.text = remainingTime.ToString("F2");
+            setTimer(currentRound);
             //diable the prompt, gameHistory and final result
             prompt.enabled = false;
             finalResult.enabled = false;
@@ -184,7 +198,7 @@ public class AvatarFaceOffMngr : MonoBehaviour
 
     public void updateResultCanvasInfo()
     {
-        Debug.Log("Game Starts");
+        Debug.Log("Game Starts, Round: " +  currentRound);
 
         //get player and Ai choice
         string playerChoice = getPlayerChoice();
@@ -229,6 +243,7 @@ public class AvatarFaceOffMngr : MonoBehaviour
 
     public void onClickNextRound()
     {
+        Debug.Log("next round");
         showGameResultCanvas(false);
         showGameCanvas(true);
     }
@@ -471,7 +486,8 @@ public class AvatarFaceOffMngr : MonoBehaviour
     //PS: immatural function, hub world has error msg.
     public void onClickExitButton()
     {
-        if(SceneManager.GetActiveScene().name == "Arena")
+        Debug.Log("exiting to hub");
+        if (SceneManager.GetActiveScene().name == "Arena")
         {
             SceneManager.LoadScene("Hub");
         }
