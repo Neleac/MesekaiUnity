@@ -58,6 +58,34 @@ public class AvatarFaceOffMngr : MonoBehaviour
     {
         startCountdown();
         //isOpponentReady(); //call this func when network is done
+
+
+        //to allow mouse-less interation
+        //CAUTION: in the play-focused mode, mouse click to focus the screen is needed before first-pressed key
+        //while in the play-maximize mode, keyboard inputs works fine
+        //USAGE: "enter" triggers "confirm"; "space" triggers "exit" & "next round"
+        if (Input.GetKeyUp(KeyCode.Return) && confirmGestureBtn.IsActive())
+        {
+            Debug.Log("ENTER released");
+            Debug.Log("confrim gesture");
+            onClickConfirmGesture();
+        }
+
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            Debug.Log("SPACE released");
+            if (nextRoundButton.GetComponent<Button>().IsActive())
+            {
+                Debug.Log("next round");
+                onClickNextRound();
+            }
+            else if (exitButton.GetComponent<Button>().IsActive() || exitButton1.GetComponent<Button>().IsActive())
+            {
+                Debug.Log("exit to hub");
+                onClickExitButton();
+            }
+        }
+
     }
 
     public void onClickConfirmGesture()
