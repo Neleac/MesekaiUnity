@@ -10,27 +10,28 @@ public class AvatarFaceOffMngr : MonoBehaviour
 {
     //gameCanvas Components
     public GameObject gameCanvas;
-    private TextMeshProUGUI detection;                            //to show the captured gesture/facial
-    public Button confirmBtn;                                     //to ask for the player to confirm the result
-    public TextMeshProUGUI timer;                                 //to show the count down timer
-    public TextMeshProUGUI prompt;                                //to show assistant info: timeout, network waiting, invalid player result, etc
-    public TextMeshProUGUI roundField;                            //to show the round #
-    public TextMeshProUGUI gameHistory;                           //to show the history result                
+    private TextMeshProUGUI detection;                            // to show the captured gesture/facial
+    public Button confirmBtn;                                     // to ask for the player to confirm the result
+    public TextMeshProUGUI timer;                                 // to show the count down timer
+    public TextMeshProUGUI prompt;                                // to show assistant info: timeout, network waiting, invalid player result, etc
+    public TextMeshProUGUI roundField;                            // to show the round #
+    public TextMeshProUGUI gameHistory;                           // to show the history result                
 
     //resultCanvas components
     public GameObject resultCanvas;
-    public TextMeshProUGUI resultField;                           //to show the result of this round
-    public TextMeshProUGUI finalResult;                           //to show the final game result--win/lose
-    public GameObject nextRoundButton;                            //to navigate to the next round
+    public TextMeshProUGUI resultField;                           // to show the result of this round
+    public TextMeshProUGUI finalResult;                           // to show the final game result--win/lose
+    public GameObject nextRoundButton;                            // to navigate to the next round
     public GameObject exitButton;
+    public TextMeshProUGUI gameRecap;                             // to show the final recap when game ends
 
     //canvas info fields
     private float remainingTime = 10f;
     private const int TOTALROUNDS = 3;
     private int currentRound = 0;
-    private int[] historyResults = new int[TOTALROUNDS];          //to store all the round results of the first 3 rounds
-    private string gameHistoryText = "";                          //to show history on board
-
+    private int[] historyResults = new int[TOTALROUNDS];          // to store all the round results of the first 3 rounds
+    private string gameHistoryText = "";                          // to show history on board
+    private bool isFinalRound = false;                            // to indicate if it's the final round for final display
 
     private int gameCanvasLayer;
     private Color timerColor;
@@ -104,11 +105,13 @@ public class AvatarFaceOffMngr : MonoBehaviour
         if (toShow)
         {
             setTimer(currentRound);
-            //disable the prompt, gameHistory and final result
-            prompt.enabled = false;
-            finalResult.enabled = false;
+            
             //update rounds
             updateRoundField();
+
+            //disable the prompt, and gameHistory conditionally
+            prompt.enabled = false;
+            gameHistory.enabled = (currentRound != 1);
         }
     }
 
@@ -119,7 +122,20 @@ public class AvatarFaceOffMngr : MonoBehaviour
         if (toShow)
         {
             resultCanvas.GetComponent<Canvas>().sortingOrder = gameCanvasLayer + 1;
-            exitButton.SetActive(false);
+
+
+            if (isFinalRound)
+            {
+                finalResult.enabled = true;
+                displayGameRecap();
+                exitButton.SetActive(true);
+            }
+            else
+            {
+                exitButton.SetActive(false);
+                finalResult.enabled = false;
+                gameRecap.enabled = false;
+            }
         }
         else
         {
@@ -229,9 +245,8 @@ public class AvatarFaceOffMngr : MonoBehaviour
             {
                 //disable the button
                 nextRoundButton.SetActive(false);
-
-                displayFinalResult(roundResultInt);
-                exitButton.SetActive(true);
+                getFinalResult(roundResultInt);
+                isFinalRound = true;
             }
         }
     }
@@ -315,12 +330,17 @@ public class AvatarFaceOffMngr : MonoBehaviour
     }
 
     //displays the final result in finalResult field
-    private void displayFinalResult(int roundResultInt)
+    private void getFinalResult(int roundResultInt)
     {
-        //show final result
         finalResult.text = "You " + decodeToResultText(getFinalResultInt(roundResultInt));
-        finalResult.enabled = true;
         Debug.Log(finalResult.text);
+    }
+
+    //displays the game history in gameRecap field
+    private void displayGameRecap()
+    {
+        gameRecap.enabled = true;
+        gameRecap.text = gameHistoryText;
     }
     /**************************************************************************/
 
@@ -370,7 +390,6 @@ public class AvatarFaceOffMngr : MonoBehaviour
     /**********************ADDITIONAL ROUND FUNCTIONS**************************/
     private bool needAdditionalRound(int resultInt)
     {
-        Debug.Log("Testing for additional round. currentRount:" + currentRound + ".");
         if (currentRound == 3)
         {
             if (get3RoundsSum() != 0)
