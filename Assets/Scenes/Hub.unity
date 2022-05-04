@@ -21444,8 +21444,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d46bedace2feb44b835a3168301aee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  guiObject: {fileID: 0}
-  StartSc: 
+  guiObject: {fileID: 829749441}
+  StartSc: Arena
 --- !u!65 &1826345453
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -21466,7 +21466,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1826345451}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -21517,8 +21517,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1826345451}
   m_LocalRotation: {x: 0, y: -0.3374238, z: 0, w: 0.94135284}
-  m_LocalPosition: {x: 66.18, y: 23.6, z: 64.4}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalPosition: {x: 66.28, y: 23.33, z: 64.28}
+  m_LocalScale: {x: 2, y: 3.53, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
