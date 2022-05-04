@@ -8,35 +8,70 @@ using System;
 
 public class AvatarFaceOffMngr : MonoBehaviour
 {
-    
+    //gameCanvas Components
     public GameObject gameCanvas;
-    public TextMeshProUGUI timer;                      //to show the count down timer
-    public TextMeshProUGUI prompt;                     //to show assistant info: timeout, network waiting, invalid player result, etc
-    public TextMeshProUGUI RPSDetection;               //to show the captured hand gesture
-    public TextMeshProUGUI roundField;                 //to show the round #
-    public TextMeshProUGUI gameHistory;                //to show the history result
-    public Button confirmGestureBtn;                   //to ask for the player to confirm the result
+    private TextMeshProUGUI detection;                            //to show the captured gesture/facial
+    public Button confirmBtn;                                     //to ask for the player to confirm the result
+    public TextMeshProUGUI timer;                                 //to show the count down timer
+    public TextMeshProUGUI prompt;                                //to show assistant info: timeout, network waiting, invalid player result, etc
+    public TextMeshProUGUI roundField;                            //to show the round #
+    public TextMeshProUGUI gameHistory;                           //to show the history result                
 
+    //resultCanvas components
     public GameObject resultCanvas;
-    public TextMeshProUGUI resultField;                 //to show the result of this round
-    public TextMeshProUGUI finalResult;                 //to show the final game result--win/lose
-    public GameObject nextRoundButton;                  //to navigate to the next round
+    public TextMeshProUGUI resultField;                           //to show the result of this round
+    public TextMeshProUGUI finalResult;                           //to show the final game result--win/lose
+    public GameObject nextRoundButton;                            //to navigate to the next round
     public GameObject exitButton;
 
+    //canvas info fields
     private float remainingTime = 10f;
     private const int TOTALROUNDS = 3;
     private int currentRound = 0;
-    private int[] historyResults = new int[TOTALROUNDS]; //to store all the round results of the first 3 rounds
-    private string gameHistoryText = "";                 //to show history on board
+    private int[] historyResults = new int[TOTALROUNDS];          //to store all the round results of the first 3 rounds
+    private string gameHistoryText = "";                          //to show history on board
+
+
     private int gameCanvasLayer;
     private Color timerColor;
-    private bool timeOut = false;                        // to avoid repeated time-out action
+    private bool timeOut = false;                                 // to avoid repeated time-out action
+    private string scene = "";                                    // to store the scene name for choosing game accordingly
+    const string ARENA = "Arena";
+    const string HAPPYSADWOW = "HappySadWow";
+    //public enum DetectionFeature { Gesture, Emotion }
+    private enum FaceOffChoices { Rock, Paper, Scissors, Invalid }
+    private enum HSWChoices { Happy, Wow, Sad, Invalid}
+    const int INVALID = 3;
+    const int GAMENUM = 2;                                        // 2 minigames so far, not used
+    const int GAMECHOICE = 4;                                     // 4 player choices: 3 valid + 1 invalid
+    private string[] userChoice = new string[GAMECHOICE];         // to store the valid player choices string in each game type 
+
+
+    //decide which game is playing
+    private void Awake()
+    {
+        scene = SceneManager.GetActiveScene().name;
+        if (scene == ARENA)
+        {
+            detection = GameObject.Find("gestureDetection").GetComponent<TextMeshProUGUI>();
+            userChoice = Enum.GetNames(typeof(FaceOffChoices));
+        } else if (scene == HAPPYSADWOW)
+        {
+            detection = GameObject.Find("emotionDetection").GetComponent<TextMeshProUGUI>();
+            userChoice = Enum.GetNames(typeof(HSWChoices));
+        } else
+        {
+            //TODO: consider throw an error
+            Debug.Log("Error! Scene: " + scene + " not recognized by the script");
+        }
+    }
+
 
 
     // 1. save global varibale; 2. hide result canvas; 3. show game canvas
     void Start()
     {
-        Debug.Log("Arena Scene Starts");
+        Debug.Log(scene + " Scene Starts");
 
         //save the global variables for future use
         timerColor = timer.faceColor;
@@ -99,17 +134,18 @@ public class AvatarFaceOffMngr : MonoBehaviour
 
     /*************************BUTTON EVENT LISTENER****************************/
     //plays game if gesture valid
-    public void onClickConfirmGesture()
+    public void onClickConfirm()
     {
-        //if there's more time and invalid gesture
-        if (!timer.text.Equals("0.00") && !isValidGesture())
+        Debug.Log("Game Starts, Round: " + currentRound);
+        //if there's more time to get a valid choice
+        if (!timer.text.Equals("0.00") && !isValidChoice())
         {
             prompt.enabled = true;
-            prompt.text = "Invalid Gesture, please confirm again!";
+            prompt.text = "Invalid Choice, please confirm again!";
             
-        } else //it's time's up
+        } else //it's time's up, pass in whatever choice it is 
         {
-            Debug.Log("gesture confirmed");
+            Debug.Log("choice confirmed: " +detection.text);
             if (isOpponentReady())
             {
                 showGameCanvas(false);
@@ -123,14 +159,14 @@ public class AvatarFaceOffMngr : MonoBehaviour
                 prompt.enabled = true;
                 prompt.text = "waiting for another player...";
             }
-        }//TODO if not valid & timeout = lose
+        }
    
     }
 
     //starts the next round
     public void onClickNextRound()
     {
-        Debug.Log("next round");
+        Debug.Log("Current round: " + currentRound + " ends. Next round starts. ");
         showGameResultCanvas(false);
         showGameCanvas(true);
     }
@@ -139,10 +175,8 @@ public class AvatarFaceOffMngr : MonoBehaviour
     public void onClickExitButton()
     {
         Debug.Log("exiting to hub");
-        if (SceneManager.GetActiveScene().name == "Arena")
-        {
-            SceneManager.LoadScene("Hub");
-        }
+        SceneManager.LoadScene("Hub");
+
     }
     /**************************************************************************/
 
@@ -159,7 +193,7 @@ public class AvatarFaceOffMngr : MonoBehaviour
     //5. get and update final game result
     public void updateResultCanvasInfo()
     {
-        Debug.Log("Game Starts, Round: " + currentRound);
+        //Debug.Log("Game Starts, Round: " + currentRound);
 
         //get player and Ai choice
         string playerChoice = getPlayerChoice();
@@ -204,13 +238,13 @@ public class AvatarFaceOffMngr : MonoBehaviour
 
     private string getPlayerChoice()
     {
-        return RPSDetection.text;
+        return detection.text;
     }
 
     //TEST FUNCTION
     private int generateAiResult()
     {
-        return -1; // always paper
+        return 1; // always paper
         int aiResult = 0;
         var rnd = new System.Random();
         aiResult = rnd.Next(1, 3);
@@ -220,11 +254,11 @@ public class AvatarFaceOffMngr : MonoBehaviour
     //returns REAL round result: win/lose/tie
     private int playGame(int playerInt, int aiInt)
     {
-        //decode table: 1 == Rock; 2 == Paper; 3 == Scissors; -1 == INVALID
-        bool playerWins = (playerInt == 1 && aiInt == 3)
+        //decode table: 0 == Rock/Happy; 1 == Paper/Sad; 2 == Scissors/Wow; 3 == INVALID
+        bool playerWins = (playerInt == 0 && aiInt == 2)
+                          || (playerInt == 1 && aiInt == 0)
                           || (playerInt == 2 && aiInt == 1)
-                          || (playerInt == 3 && aiInt == 2)
-                          || (playerInt > 0 && aiInt == -1);
+                          || (playerInt != INVALID && aiInt == INVALID);
 
         if (aiInt == playerInt) 
         {
@@ -286,6 +320,7 @@ public class AvatarFaceOffMngr : MonoBehaviour
         //show final result
         finalResult.text = "You " + decodeToResultText(getFinalResultInt(roundResultInt));
         finalResult.enabled = true;
+        Debug.Log(finalResult.text);
     }
     /**************************************************************************/
 
@@ -377,7 +412,8 @@ public class AvatarFaceOffMngr : MonoBehaviour
 
 
     /*********************GAME CANVAS DEFAULT FUNCTIONS************************/
-    // update the time before curRound # is updated 
+    // update the time before curRound# is updated
+    // timer is set to be half of the previous round
     private void setTimer(int preUpdateRound)
     {
         timeOut = false;
@@ -392,7 +428,6 @@ public class AvatarFaceOffMngr : MonoBehaviour
         }
 
         timer.enabled = true;
-        //timer.text = remainingTime.ToString("F2");
     }
 
     //increments the currentRound and controls roundField Display
@@ -415,54 +450,26 @@ public class AvatarFaceOffMngr : MonoBehaviour
 
 
     /**********************DECODING/ENCODING FUNCTIONS*************************/
-    private string decodeToChoice(int aiInt)
+    private string decodeToChoice(int playerInt)
     {
-        string aiResultString = "";
-
-        if (aiInt == 1)
-        {
-            aiResultString = "Rock";
-        }
-        else if (aiInt == 2)
-        {
-            aiResultString = "Paper";
-        }
-        else if (aiInt == 3)
-        {
-            aiResultString = "Scissors";
-        }
-        else
-        {
-            aiResultString = "Invalid";
-            //Debug.Log("Error, non-recognized ai result: " + aiInt);
-        }
-
-        return aiResultString;
+        return userChoice[playerInt];
     }
 
-    //invalid results -> -1
+    //invalid results -> 3
     private int choiceEncode(string playerText)
     {
-        int playerResult = 0;
-        if (playerText.Equals("Rock"))
+        
+        for(int i = 0; i < GAMECHOICE - 1; i++)
         {
-            playerResult = 1;
-        }
-        else if (playerText.Equals("Paper"))
-        {
-            playerResult = 2;
-        }
-        else if (playerText.Equals("Scissors"))
-        {
-            playerResult = 3;
-        }
-        else
-        {
-            playerResult = -1;
-            //Debug.Log("Error, non-recognized player choice: " + playerText);
+            if (userChoice[i].Equals(playerText))
+            {
+                return i;
+            }
         }
 
-        return playerResult;
+        Debug.Log("Error! un-recognized player choice: " + playerText);
+        return INVALID;
+
     }
 
     private string decodeToResultText(int resultInt)
@@ -495,13 +502,19 @@ public class AvatarFaceOffMngr : MonoBehaviour
 
 
     /**************************VALIDATION FUNCTIONS****************************/
-    private bool isValidGesture()
+    private bool isValidChoice()
     {
-        if (RPSDetection.text == "Rock" || RPSDetection.text == "Paper" || RPSDetection.text == "Scissors")
+        if (choiceEncode(detection.text) == INVALID)
         {
-            return true;
+            return false;
         }
-        return false;
+        return true;
+
+        //if (RPSDetection.text == "Rock" || RPSDetection.text == "Paper" || RPSDetection.text == "Scissors")
+        //{
+        //    return true;
+        //}
+        //return false;
     }
 
     private bool isOpponentReady()
@@ -531,13 +544,13 @@ public class AvatarFaceOffMngr : MonoBehaviour
         }
 
         //display content
-        if (remainingTime <= 0)
+        if (remainingTime <= 0 && gameCanvas.activeInHierarchy)
         {
             if (!timeOut)
             {
                 timeOut = true;
                 timer.text = "0.00";
-                onClickConfirmGesture();
+                confirmBtn.onClick.Invoke();
             }
             //do nothing, timer would be reset every time game canvas is shown, aka game is playing
         }
@@ -554,9 +567,9 @@ public class AvatarFaceOffMngr : MonoBehaviour
         //while in the play-maximize mode, keyboard inputs works fine
 
         //USAGE: "enter" triggers "confirm"; "space" triggers "exit" & "next round"
-        if (Input.GetKeyUp(KeyCode.Return) && confirmGestureBtn.IsActive())
+        if (Input.GetKeyUp(KeyCode.Return) && confirmBtn.IsActive())
         {
-            onClickConfirmGesture();
+            confirmBtn.onClick.Invoke();
         }
 
         if (Input.GetKeyUp(KeyCode.Space))
