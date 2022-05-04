@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mediapipe;
+using TMPro;
+
 
 public class FaceSolver : MonoBehaviour
 {
@@ -26,6 +28,13 @@ public class FaceSolver : MonoBehaviour
     [SerializeField] private bool emotionDetection;
 
     private NormalizedLandmarkList faceLandmarks;
+
+    private TextMeshProUGUI emotionDetectionField;
+
+    private void Awake()
+    {
+        emotionDetectionField = GameObject.Find("emotionDetection").GetComponent<TextMeshProUGUI>();
+    }
 
     void Start()
     {
@@ -217,8 +226,7 @@ public class FaceSolver : MonoBehaviour
             else if (happy) emotion = "Happy";
             else if (sad) emotion = "Sad";
             
-            GameObject obj = GameObject.Find("Emotion");
-            obj.GetComponent<TMPro.TextMeshProUGUI>().text = emotion;
+            emotionDetectionField.text = emotion;
         }
     }
 

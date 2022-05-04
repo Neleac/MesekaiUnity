@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Start.unity
     guid: 65e1d7fec3bf8ce4287cc48b585f727a
   - enabled: 1
+    path: Assets/Scenes/HappySadWow.unity
+    guid: 1267a2f89fff94e6286d452a897b1829
+  - enabled: 1
     path: Assets/Scenes/Arena.unity
     guid: 33dbdf725dd89594ba64ca1b3fbc9191
   - enabled: 1
@@ -17,8 +20,5 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Avatar.unity
     guid: a096fdd19331a4b55ab8bdcf5575af42
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7, type: 2}
