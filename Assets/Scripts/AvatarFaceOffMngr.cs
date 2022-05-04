@@ -8,71 +8,67 @@ using System;
 
 public class AvatarFaceOffMngr : MonoBehaviour
 {
+    //avatar position and rotation
+    public GameObject avatar;
+    private Vector3 playerPosition = new Vector3(0, -0.15f, 11);   //avatar position remain the same 
+    private Vector3 faceOffPlayerRot = new Vector3(0, 180, 0);     //avatar rotate in different games
+    private Vector3 hswPlayerRot = new Vector3(0, -20, 0);
+
+    // camera position and rotation
+    private Camera cam;
+    private Vector3 CameraRotation = new Vector3(0, 180, 0);       //camera rotation remains the same 
+    private Vector3 faceoffCamPos = new Vector3(-0.5f, 1, 11.65f); //camera pose in different places in each game
+    private Vector3 hswCamPos = new Vector3(-0.3f, 1.55f, 11.6f);
+
     //gameCanvas Components
     public GameObject gameCanvas;
-    private TextMeshProUGUI detection;                            // to show the captured gesture/facial
-    public Button confirmBtn;                                     // to ask for the player to confirm the result
-    public TextMeshProUGUI timer;                                 // to show the count down timer
-    public TextMeshProUGUI prompt;                                // to show assistant info: timeout, network waiting, invalid player result, etc
-    public TextMeshProUGUI roundField;                            // to show the round #
-    public TextMeshProUGUI gameHistory;                           // to show the history result                
+    private TextMeshProUGUI detection;                             // to show the captured gesture/facial
+    public Button confirmBtn;                                      // to ask for the player to confirm the result
+    public TextMeshProUGUI timer;                                  // to show the count down timer
+    public TextMeshProUGUI prompt;                                 // to show assistant info: timeout, network waiting, invalid player result, etc
+    public TextMeshProUGUI roundField;                             // to show the round #
+    public TextMeshProUGUI gameHistory;                            // to show the history result                
 
     //resultCanvas components
     public GameObject resultCanvas;
-    public TextMeshProUGUI resultField;                           // to show the result of this round
-    public TextMeshProUGUI finalResult;                           // to show the final game result--win/lose
-    public GameObject nextRoundButton;                            // to navigate to the next round
+    public TextMeshProUGUI resultField;                            // to show the result of this round
+    public TextMeshProUGUI finalResult;                            // to show the final game result--win/lose
+    public GameObject nextRoundButton;                             // to navigate to the next round
     public GameObject exitButton;
-    public TextMeshProUGUI gameRecap;                             // to show the final recap when game ends
+    public TextMeshProUGUI gameRecap;                              // to show the final recap when game ends
 
     //canvas info fields
     private float remainingTime = 10f;
     private const int TOTALROUNDS = 3;
     private int currentRound = 0;
-    private int[] historyResults = new int[TOTALROUNDS];          // to store all the round results of the first 3 rounds
-    private string gameHistoryText = "";                          // to show history on board
-    private bool isFinalRound = false;                            // to indicate if it's the final round for final display
+    private int[] historyResults = new int[TOTALROUNDS];           // to store all the round results of the first 3 rounds
+    private string gameHistoryText = "";                           // to show history on board
+    private bool isFinalRound = false;                             // to indicate if it's the final round for final display
 
     private int gameCanvasLayer;
     private Color timerColor;
-    private bool timeOut = false;                                 // to avoid repeated time-out action
-    private string scene = "";                                    // to store the scene name for choosing game accordingly
-    const string ARENA = "Arena";
-    const string HAPPYSADWOW = "HappySadWow";
-    //public enum DetectionFeature { Gesture, Emotion }
+    private bool timeOut = false;                                  // to avoid repeated time-out action
+    public enum MiniGame { FaceOff, HSW }
     private enum FaceOffChoices { Rock, Paper, Scissors, Invalid }
     private enum HSWChoices { Happy, Wow, Sad, Invalid}
+    private MiniGame miniGame;                                     // to store the game name for choosing game accordingly TODO: need decision logic
     const int INVALID = 3;
-    const int GAMENUM = 2;                                        // 2 minigames so far, not used
-    const int GAMECHOICE = 4;                                     // 4 player choices: 3 valid + 1 invalid
-    private string[] userChoice = new string[GAMECHOICE];         // to store the valid player choices string in each game type 
+    const int GAMENUM = 2;                                         // 2 minigames so far, not used
+    const int GAMECHOICE = 4;                                      // 4 player choices: 3 valid + 1 invalid
+    private string[] userChoice = new string[GAMECHOICE];          // to store the valid player choices string in each game type 
 
 
     //decide which game is playing
     private void Awake()
     {
-        scene = SceneManager.GetActiveScene().name;
-        if (scene == ARENA)
-        {
-            detection = GameObject.Find("gestureDetection").GetComponent<TextMeshProUGUI>();
-            userChoice = Enum.GetNames(typeof(FaceOffChoices));
-        } else if (scene == HAPPYSADWOW)
-        {
-            detection = GameObject.Find("emotionDetection").GetComponent<TextMeshProUGUI>();
-            userChoice = Enum.GetNames(typeof(HSWChoices));
-        } else
-        {
-            //TODO: consider throw an error
-            Debug.Log("Error! Scene: " + scene + " not recognized by the script");
-        }
+        miniGame = MiniGame.FaceOff;// may need a global variable to pass in
+        setGame(miniGame);
     }
-
-
 
     // 1. save global varibale; 2. hide result canvas; 3. show game canvas
     void Start()
     {
-        Debug.Log(scene + " Scene Starts");
+        Debug.Log(miniGame + " Scene Starts");
 
         //save the global variables for future use
         timerColor = timer.faceColor;
@@ -604,5 +600,79 @@ public class AvatarFaceOffMngr : MonoBehaviour
         }
     }
     /**************************************************************************/
+
+
+
+
+
+    /************************GAME SETTING FUNCTIONS****************************/
+    private void setGame(MiniGame gameName)
+    {
+        if(gameName == MiniGame.FaceOff)
+        {
+            setAvatarPosition(MiniGame.FaceOff);
+            setCamPosition(MiniGame.FaceOff);
+            avatar.GetComponent<HandSolver>().enabled = true;
+            avatar.GetComponent<FaceSolver>().enabled = false;
+
+            detection = GameObject.Find("gestureDetection").GetComponent<TextMeshProUGUI>();
+            GameObject.Find("emotionDetection").SetActive(false);
+            userChoice = Enum.GetNames(typeof(FaceOffChoices));
+        }
+        else if (gameName == MiniGame.HSW)
+        {
+            setAvatarPosition(MiniGame.HSW);
+            setCamPosition(MiniGame.HSW);
+            avatar.GetComponent<HandSolver>().enabled = false;
+            avatar.GetComponent<FaceSolver>().enabled = true;
+
+            detection = GameObject.Find("emotionDetection").GetComponent<TextMeshProUGUI>();
+            GameObject.Find("gestureDetection").SetActive(false);
+            userChoice = Enum.GetNames(typeof(HSWChoices));
+        }
+        else
+        {
+            //TODO: consider throw an error
+            Debug.Log("Error! Setting game view for un-recognized mini game" + gameName);
+        }
+        
+    }
+
+    private void setAvatarPosition(MiniGame gameName)
+    {
+        avatar.transform.position = playerPosition;
+        if (gameName == MiniGame.FaceOff)
+        {
+            avatar.transform.eulerAngles = faceOffPlayerRot;
+        }
+        else if (gameName == MiniGame.HSW)
+        {
+            avatar.transform.eulerAngles = hswPlayerRot;
+        }
+        else
+        {
+            Debug.Log("Error! Setting player pos for un-recognized mini game" + gameName);
+        }
+    }
+
+    private void setCamPosition(MiniGame gameName)
+    {
+        cam = Camera.main;
+        cam.transform.eulerAngles = CameraRotation;
+        if (gameName == MiniGame.FaceOff)
+        {
+            cam.transform.position = faceoffCamPos;
+        }
+        else if (gameName == MiniGame.HSW)
+        {
+            cam.transform.position = hswCamPos;
+        }
+        else
+        {
+            Debug.Log("Error! Setting camera pos for un-recognized mini game" + gameName);
+        }
+    }
+    /**************************************************************************/
+
 
 }
