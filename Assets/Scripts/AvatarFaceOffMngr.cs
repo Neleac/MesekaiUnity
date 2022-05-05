@@ -8,6 +8,9 @@ using System;
 
 public class AvatarFaceOffMngr : MonoBehaviour
 {
+    [Range(0, 1)]
+    public int UIgameSelector;                                     //to switch from games for test from UI easily
+
     //avatar position and rotation
     public GameObject avatar;
     private Vector3 playerPosition = new Vector3(0, -0.15f, 11);   //avatar position remain the same 
@@ -61,7 +64,7 @@ public class AvatarFaceOffMngr : MonoBehaviour
     //decide which game is playing
     private void Awake()
     {
-        miniGame = MiniGame.FaceOff;// may need a global variable to pass in
+        miniGame = (MiniGame)UIgameSelector;// may need a global variable to pass in
         setGame(miniGame);
     }
 

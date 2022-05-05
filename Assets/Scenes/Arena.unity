@@ -52562,6 +52562,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39eb4f705bfd64f1d9d62d41a0148a8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UIgameSelector: 1
   avatar: {fileID: 557723274}
   gameCanvas: {fileID: 169591163}
   confirmBtn: {fileID: 1010503405}

@@ -215,7 +215,11 @@ public class FaceSolver : MonoBehaviour
             float frownLeft = faceMesh.GetBlendShapeWeight(index);
             index = faceMesh.sharedMesh.GetBlendShapeIndex("mouthFrownRight");
             float frownRight = faceMesh.GetBlendShapeWeight(index);
-            bool sad = frownLeft > 60 && frownRight > 60;
+            index = faceMesh.sharedMesh.GetBlendShapeIndex("browInnerUp");
+            float browInnerUp = faceMesh.GetBlendShapeWeight(index);
+            Debug.Log("frownLeft: " + frownLeft + "; frownRight: " + frownRight);
+            bool sad = frownLeft < 10 || frownRight < 10;
+            
 
             index = faceMesh.sharedMesh.GetBlendShapeIndex("jawOpen");
             float jawOpen = faceMesh.GetBlendShapeWeight(index);
