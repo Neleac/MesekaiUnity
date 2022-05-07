@@ -70,22 +70,23 @@ public class MainMenu : MonoBehaviour
             if (args.success)
             {
                 // instantiate avatar for players joined AFTER client
-                GameObject avatar = GameObject.Find(networkManager.playerName + " Avatar");
-                GameObject newAvatar = Instantiate(avatar, startPos, startRot);
-                newAvatar.name = args.playerName + " Avatar";
+                GameObject avatar = GameObject.Find("Player Manager").GetComponent<PlayerManager>().avatar;
+                GameObject otherAvatar = Instantiate(avatar, startPos, startRot);
+                otherAvatar.name = args.playerName + " Avatar";
                 
                 // disable client control components
-                //newAvatar.GetComponent<Animator>().enabled = false;
-                newAvatar.GetComponent<CharacterController>().enabled = false;
-                newAvatar.GetComponent<PlayerInput>().enabled = false;
-                //newAvatar.GetComponent<ThirdPersonController>().enabled = false;
-                newAvatar.GetComponent<BasicRigidBodyPush>().enabled = false;
-                newAvatar.GetComponent<StarterAssetsInputs>().enabled = false;
-                newAvatar.GetComponent<PoseSolver>().enabled = false;
-                newAvatar.GetComponent<HandSolver>().enabled = false;
-                newAvatar.GetComponent<FaceSolver>().enabled = false;
-                newAvatar.GetComponent<MotionToggle>().enabled = false;
-                newAvatar.GetComponent<NetworkPlayer>().enabled = false;
+                otherAvatar.transform.Find("PlayerFollowCamera").gameObject.SetActive(false);
+                //otherAvatar.GetComponent<Animator>().enabled = false;
+                otherAvatar.GetComponent<CharacterController>().enabled = false;
+                otherAvatar.GetComponent<PlayerInput>().enabled = false;
+                //otherAvatar.GetComponent<ThirdPersonController>().enabled = false;
+                otherAvatar.GetComponent<BasicRigidBodyPush>().enabled = false;
+                otherAvatar.GetComponent<StarterAssetsInputs>().enabled = false;
+                otherAvatar.GetComponent<PoseSolver>().enabled = false;
+                otherAvatar.GetComponent<HandSolver>().enabled = false;
+                otherAvatar.GetComponent<FaceSolver>().enabled = false;
+                otherAvatar.GetComponent<MotionToggle>().enabled = false;
+                otherAvatar.GetComponent<NetworkPlayer>().enabled = false;
             }
         }
     }

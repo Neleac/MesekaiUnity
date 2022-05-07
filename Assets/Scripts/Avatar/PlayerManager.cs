@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using StarterAssets;
+using Mediapipe.Unity.Holistic;
 
 public class PlayerManager : MonoBehaviour
 {
     private NetworkManager networkManager;
     private MessageQueue msgQueue;
 
-    [SerializeField] GameObject avatar;
+    [SerializeField] public GameObject avatar;
+    [SerializeField] private GameObject mediapipeSolution;
 
     void Awake()
     {
@@ -19,27 +21,32 @@ public class PlayerManager : MonoBehaviour
         msgQueue.AddCallback(Constants.SMSG_MOVE, OnResponseMove);
         msgQueue.AddCallback(Constants.SMSG_ANIMATE, OnResponseAnimate);
 
-        // set client avatar name
-        avatar.name = networkManager.playerName + " Avatar";
+        // instantiate avatar for this client
+        GameObject myAvatar = Instantiate(avatar);
+        myAvatar.name = networkManager.playerName + " Avatar";
+        mediapipeSolution.GetComponent<HolisticTrackingSolution>().faceSolver = myAvatar.GetComponent<FaceSolver>();
+        mediapipeSolution.GetComponent<HolisticTrackingSolution>().poseSolver = myAvatar.GetComponent<PoseSolver>();
+        mediapipeSolution.GetComponent<HolisticTrackingSolution>().handSolver = myAvatar.GetComponent<HandSolver>();
 
         // instantiate avatar for players joined BEFORE client
         foreach (string otherName in networkManager.otherPlayers)
         {
-            GameObject newAvatar = Instantiate(avatar);
-            newAvatar.name = otherName + " Avatar";
+            GameObject otherAvatar = Instantiate(avatar);
+            otherAvatar.name = otherName + " Avatar";
             
             // disable client control components
-            //newAvatar.GetComponent<Animator>().enabled = false;
-            newAvatar.GetComponent<CharacterController>().enabled = false;
-            newAvatar.GetComponent<PlayerInput>().enabled = false;
-            //newAvatar.GetComponent<ThirdPersonController>().enabled = false;
-            newAvatar.GetComponent<BasicRigidBodyPush>().enabled = false;
-            newAvatar.GetComponent<StarterAssetsInputs>().enabled = false;
-            newAvatar.GetComponent<PoseSolver>().enabled = false;
-            newAvatar.GetComponent<HandSolver>().enabled = false;
-            newAvatar.GetComponent<FaceSolver>().enabled = false;
-            newAvatar.GetComponent<MotionToggle>().enabled = false;
-            newAvatar.GetComponent<NetworkPlayer>().enabled = false;
+            otherAvatar.transform.Find("PlayerFollowCamera").gameObject.SetActive(false);
+            //otherAvatar.GetComponent<Animator>().enabled = false;
+            otherAvatar.GetComponent<CharacterController>().enabled = false;
+            otherAvatar.GetComponent<PlayerInput>().enabled = false;
+            //otherAvatar.GetComponent<ThirdPersonController>().enabled = false;
+            otherAvatar.GetComponent<BasicRigidBodyPush>().enabled = false;
+            otherAvatar.GetComponent<StarterAssetsInputs>().enabled = false;
+            otherAvatar.GetComponent<PoseSolver>().enabled = false;
+            otherAvatar.GetComponent<HandSolver>().enabled = false;
+            otherAvatar.GetComponent<FaceSolver>().enabled = false;
+            otherAvatar.GetComponent<MotionToggle>().enabled = false;
+            otherAvatar.GetComponent<NetworkPlayer>().enabled = false;
         }
     }
 
@@ -78,8 +85,6 @@ public class PlayerManager : MonoBehaviour
     private void OnResponseAnimate(ExtendedEventArgs eventArgs)
     {
         ResponseAnimateEventArgs args = eventArgs as ResponseAnimateEventArgs;
-
-        Debug.LogWarning(args.playerName);
 
         GameObject.Find(args.playerName + " Avatar").GetComponent<ThirdPersonController>().setAnimParams(args.animStateDict, args.animValDict);
     }
