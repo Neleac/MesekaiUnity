@@ -12,6 +12,8 @@ public class Constants
 	public static readonly short SMSG_LEAVE = 202;
 	public static readonly short CMSG_MOVE = 103;
 	public static readonly short SMSG_MOVE = 203;
+	public static readonly short CMSG_ANIMATE = 104;
+	public static readonly short SMSG_ANIMATE = 204;
 
 	public static readonly short CMSG_HEARTBEAT = 111;
 

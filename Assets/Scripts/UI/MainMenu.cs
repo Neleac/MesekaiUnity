@@ -75,10 +75,10 @@ public class MainMenu : MonoBehaviour
                 newAvatar.name = args.playerName + " Avatar";
                 
                 // disable client control components
-                newAvatar.GetComponent<Animator>().enabled = false;
+                //newAvatar.GetComponent<Animator>().enabled = false;
                 newAvatar.GetComponent<CharacterController>().enabled = false;
                 newAvatar.GetComponent<PlayerInput>().enabled = false;
-                newAvatar.GetComponent<ThirdPersonController>().enabled = false;
+                //newAvatar.GetComponent<ThirdPersonController>().enabled = false;
                 newAvatar.GetComponent<BasicRigidBodyPush>().enabled = false;
                 newAvatar.GetComponent<StarterAssetsInputs>().enabled = false;
                 newAvatar.GetComponent<PoseSolver>().enabled = false;
@@ -86,8 +86,6 @@ public class MainMenu : MonoBehaviour
                 newAvatar.GetComponent<FaceSolver>().enabled = false;
                 newAvatar.GetComponent<MotionToggle>().enabled = false;
                 newAvatar.GetComponent<NetworkPlayer>().enabled = false;
-
-                networkManager.otherJoined = true;
             }
         }
     }

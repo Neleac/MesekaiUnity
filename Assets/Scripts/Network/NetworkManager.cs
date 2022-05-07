@@ -9,7 +9,6 @@ public class NetworkManager : MonoBehaviour
 
 	public string playerName;		// name of this client
 	public string[] otherPlayers;	// name of players joined BEFORE client
-	public bool otherJoined;		// flag for client to send transform to new joined player
 
 	void Awake()
 	{
@@ -30,8 +29,6 @@ public class NetworkManager : MonoBehaviour
 			cManager.setupSocket();
 			StartCoroutine(RequestHeartbeat(0.1f));
 		}
-
-		otherJoined = false;
 	}
 
 	public bool SendJoinRequest(string playerName)
@@ -64,6 +61,18 @@ public class NetworkManager : MonoBehaviour
 		{
 			RequestMove request = new RequestMove();
 			request.send(playerName, avatarTF);
+			cManager.send(request);
+			return true;
+		}
+		return false;
+	}
+
+	public bool SendAnimateRequest(string playerName, Dictionary<string, bool> animStateDict, Dictionary<string, float> animValDict)
+	{
+		if (cManager && cManager.IsConnected())
+		{
+			RequestAnimate request = new RequestAnimate();
+			request.send(playerName, animStateDict, animValDict);
 			cManager.send(request);
 			return true;
 		}

@@ -17,6 +17,7 @@ public class PlayerManager : MonoBehaviour
         
         msgQueue = networkManager.GetComponent<MessageQueue>();
         msgQueue.AddCallback(Constants.SMSG_MOVE, OnResponseMove);
+        msgQueue.AddCallback(Constants.SMSG_ANIMATE, OnResponseAnimate);
 
         // set client avatar name
         avatar.name = networkManager.playerName + " Avatar";
@@ -28,10 +29,10 @@ public class PlayerManager : MonoBehaviour
             newAvatar.name = otherName + " Avatar";
             
             // disable client control components
-            newAvatar.GetComponent<Animator>().enabled = false;
+            //newAvatar.GetComponent<Animator>().enabled = false;
             newAvatar.GetComponent<CharacterController>().enabled = false;
             newAvatar.GetComponent<PlayerInput>().enabled = false;
-            newAvatar.GetComponent<ThirdPersonController>().enabled = false;
+            //newAvatar.GetComponent<ThirdPersonController>().enabled = false;
             newAvatar.GetComponent<BasicRigidBodyPush>().enabled = false;
             newAvatar.GetComponent<StarterAssetsInputs>().enabled = false;
             newAvatar.GetComponent<PoseSolver>().enabled = false;
@@ -56,9 +57,9 @@ public class PlayerManager : MonoBehaviour
         avatarTf.position = args.position;
         avatarTf.eulerAngles = args.rotation;
 
-        Transform spine = avatarTf.Find("Armature/Hips");
-        int finalIdx = setJointAngles(spine, args.jointAngles, 0);
-        Debug.Assert(finalIdx == args.jointAngles.Length);
+        // Transform spine = avatarTf.Find("Armature/Hips");
+        // int finalIdx = setJointAngles(spine, args.jointAngles, 0);
+        // Debug.Assert(finalIdx == args.jointAngles.Length);
     }
 
     private int setJointAngles(Transform jointTf, float[] angles, int idx)
@@ -72,5 +73,14 @@ public class PlayerManager : MonoBehaviour
         }
 
         return idx;
+    }
+
+    private void OnResponseAnimate(ExtendedEventArgs eventArgs)
+    {
+        ResponseAnimateEventArgs args = eventArgs as ResponseAnimateEventArgs;
+
+        Debug.LogWarning(args.playerName);
+
+        GameObject.Find(args.playerName + " Avatar").GetComponent<ThirdPersonController>().setAnimParams(args.animStateDict, args.animValDict);
     }
 }

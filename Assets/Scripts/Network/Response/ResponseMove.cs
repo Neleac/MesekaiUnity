@@ -36,12 +36,12 @@ public class ResponseMove : NetworkResponse
         yRot = DataReader.ReadFloat(dataStream);
         zRot = DataReader.ReadFloat(dataStream);
 
-		int nAngles = DataReader.ReadInt(dataStream);
-		jointAngles = new float[nAngles];
-		for (int i = 0; i < jointAngles.Length; i++)
-		{
-			jointAngles[i] = DataReader.ReadFloat(dataStream);
-		}
+		// int nAngles = DataReader.ReadInt(dataStream);
+		// jointAngles = new float[nAngles];
+		// for (int i = 0; i < jointAngles.Length; i++)
+		// {
+		// 	jointAngles[i] = DataReader.ReadFloat(dataStream);
+		// }
 	}
 
 	public override ExtendedEventArgs process()
@@ -51,7 +51,7 @@ public class ResponseMove : NetworkResponse
 			playerName = playerName,
             position = new Vector3(xPos, yPos, zPos),
 			rotation = new Vector3(xRot, yRot, zRot),
-			jointAngles = jointAngles
+			//jointAngles = jointAngles
 		};
 
 		return args;

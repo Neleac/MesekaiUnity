@@ -13,6 +13,7 @@ public class NetworkResponseTable
 		add(Constants.SMSG_JOIN, "ResponseJoin");
 		add(Constants.SMSG_LEAVE, "ResponseLeave");
 		add(Constants.SMSG_MOVE, "ResponseMove");
+		add(Constants.SMSG_ANIMATE, "ResponseAnimate");
 	}
 
 	public static void add(short response_id, string name)

@@ -13,6 +13,7 @@ public class NetworkRequestTable
 		add(Constants.CMSG_JOIN, "RequestJoin");
 		add(Constants.CMSG_LEAVE, "RequestLeave");
 		add(Constants.CMSG_MOVE, "RequestMove");
+		add(Constants.CMSG_ANIMATE, "RequestAnimate");
 	}
 
 	public static void add(short request_id, string name)
