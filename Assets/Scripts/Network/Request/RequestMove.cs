@@ -9,7 +9,7 @@ public class RequestMove : NetworkRequest
 		request_id = Constants.CMSG_MOVE;
 	}
 
-	public void send(string playerName, Transform avatarTf)
+	public void send(string playerName, Transform avatarTf, bool motionTracking)
 	{
 		packet = new GamePacket(request_id);
         packet.addString(playerName);
@@ -22,18 +22,22 @@ public class RequestMove : NetworkRequest
         packet.addFloat32(avatarTf.eulerAngles.y);
         packet.addFloat32(avatarTf.eulerAngles.z);
 
-		// // armature joints rotations
-		// ArrayList jointRots = new ArrayList();
-		// Transform spine = avatarTf.Find("Armature/Hips");
-		// getJointAngles(spine, jointRots);
+		// armature joints rotations
+		packet.addBool(motionTracking);
+		if (motionTracking)
+		{
+			ArrayList jointRots = new ArrayList();
+			Transform spine = avatarTf.Find("Armature/Hips/Spine");
+			getJointAngles(spine, jointRots);
 
-		// packet.addInt32(jointRots.Count * 3);
-		// foreach (Vector3 rot in jointRots)
-		// {
-		// 	packet.addFloat32(rot.x);
-		// 	packet.addFloat32(rot.y);
-		// 	packet.addFloat32(rot.z);
-		// }
+			packet.addInt32(jointRots.Count * 3);
+			foreach (Vector3 rot in jointRots)
+			{
+				packet.addFloat32(rot.x);
+				packet.addFloat32(rot.y);
+				packet.addFloat32(rot.z);
+			}
+		}
 	}
 
 	private void getJointAngles(Transform jointTf, ArrayList jointRots)

@@ -60,13 +60,25 @@ public class PlayerManager : MonoBehaviour
     {
         ResponseMoveEventArgs args = eventArgs as ResponseMoveEventArgs;
 
-        Transform avatarTf = GameObject.Find(args.playerName + " Avatar").transform;
+        GameObject avatar = GameObject.Find(args.playerName + " Avatar");
+        Transform avatarTf = avatar.transform;
         avatarTf.position = args.position;
         avatarTf.eulerAngles = args.rotation;
 
-        // Transform spine = avatarTf.Find("Armature/Hips");
-        // int finalIdx = setJointAngles(spine, args.jointAngles, 0);
-        // Debug.Assert(finalIdx == args.jointAngles.Length);
+        if (args.jointAngles != null)
+        {
+            avatar.GetComponent<Animator>().enabled = false;
+            avatar.GetComponent<ThirdPersonController>().enabled = false;
+            
+            Transform spine = avatarTf.Find("Armature/Hips/Spine");
+            int finalIdx = setJointAngles(spine, args.jointAngles, 0);
+            Debug.Assert(finalIdx == args.jointAngles.Length);
+        }
+        else
+        {
+            avatar.GetComponent<Animator>().enabled = true;
+            avatar.GetComponent<ThirdPersonController>().enabled = true;
+        }
     }
 
     private int setJointAngles(Transform jointTf, float[] angles, int idx)

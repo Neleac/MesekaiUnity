@@ -29,6 +29,8 @@ public class ResponseMove : NetworkResponse
 	public override void parse()
 	{
 		playerName = DataReader.ReadString(dataStream);
+
+		// avatar root transform
         xPos = DataReader.ReadFloat(dataStream);
         yPos = DataReader.ReadFloat(dataStream);
         zPos = DataReader.ReadFloat(dataStream);
@@ -36,12 +38,17 @@ public class ResponseMove : NetworkResponse
         yRot = DataReader.ReadFloat(dataStream);
         zRot = DataReader.ReadFloat(dataStream);
 
-		// int nAngles = DataReader.ReadInt(dataStream);
-		// jointAngles = new float[nAngles];
-		// for (int i = 0; i < jointAngles.Length; i++)
-		// {
-		// 	jointAngles[i] = DataReader.ReadFloat(dataStream);
-		// }
+		// armature joints rotations
+		bool motionTracking = DataReader.ReadBool(dataStream);
+		if (motionTracking)
+		{
+			int nAngles = DataReader.ReadInt(dataStream);
+			jointAngles = new float[nAngles];
+			for (int i = 0; i < jointAngles.Length; i++)
+			{
+				jointAngles[i] = DataReader.ReadFloat(dataStream);
+			}
+		}
 	}
 
 	public override ExtendedEventArgs process()
@@ -51,7 +58,7 @@ public class ResponseMove : NetworkResponse
 			playerName = playerName,
             position = new Vector3(xPos, yPos, zPos),
 			rotation = new Vector3(xRot, yRot, zRot),
-			//jointAngles = jointAngles
+			jointAngles = jointAngles
 		};
 
 		return args;

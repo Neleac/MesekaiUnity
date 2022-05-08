@@ -87,6 +87,8 @@ public class MainMenu : MonoBehaviour
                 otherAvatar.GetComponent<FaceSolver>().enabled = false;
                 otherAvatar.GetComponent<MotionToggle>().enabled = false;
                 otherAvatar.GetComponent<NetworkPlayer>().enabled = false;
+
+                networkManager.otherJoined = true;
             }
         }
     }
