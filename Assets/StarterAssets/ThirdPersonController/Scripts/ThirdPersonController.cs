@@ -99,6 +99,7 @@ namespace StarterAssets
 
 		private Dictionary<string, bool> animStateDict;
 		private Dictionary<string, float> animValDict;
+		const float ANIM_SENSITIVITY_THRESH = 0.01f;	// lower = higher request frequency
 
 		private void Awake()
 		{
@@ -138,12 +139,32 @@ namespace StarterAssets
 			_hasAnimator = TryGetComponent(out _animator);
 
 			if (gameObject.name.Split(" ")[0].Equals(networkManager.playerName)) {
+				Dictionary<string, bool> prevAnimStateDict = new Dictionary<string, bool>(animStateDict);
+				Dictionary<string, float> prevAnimValDict = new Dictionary<string, float>(animValDict);
+
 				JumpAndGravity();
 				GroundedCheck();
 				Move();
 
-				bool connected = networkManager.SendAnimateRequest(networkManager.playerName, animStateDict, animValDict);
-				if (!connected) Debug.LogWarning("SendAnimateRequest failed.");
+				bool change = false;
+				foreach (var pair in animStateDict)
+				{
+					if (pair.Value != prevAnimStateDict[pair.Key]) change = true;
+				}
+
+				foreach (var pair in animValDict)
+				{
+					if (Math.Abs(pair.Value - prevAnimValDict[pair.Key]) > ANIM_SENSITIVITY_THRESH) 
+					{
+						change = true;
+					}
+				}
+
+				if (change)
+				{
+					bool connected = networkManager.SendAnimateRequest(networkManager.playerName, animStateDict, animValDict);
+					if (!connected) Debug.LogWarning("SendAnimateRequest failed.");
+				}
 			}
 		}
 
