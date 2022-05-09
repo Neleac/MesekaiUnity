@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mediapipe;
+using TMPro;
+
 
 public class FaceSolver : MonoBehaviour
 {
@@ -26,6 +28,13 @@ public class FaceSolver : MonoBehaviour
     [SerializeField] private bool emotionDetection;
 
     private NormalizedLandmarkList faceLandmarks;
+
+    private TextMeshProUGUI emotionDetectionField;
+
+    private void Awake()
+    {
+        emotionDetectionField = GameObject.Find("emotionDetection").GetComponent<TextMeshProUGUI>();
+    }
 
     void Start()
     {
@@ -206,7 +215,11 @@ public class FaceSolver : MonoBehaviour
             float frownLeft = faceMesh.GetBlendShapeWeight(index);
             index = faceMesh.sharedMesh.GetBlendShapeIndex("mouthFrownRight");
             float frownRight = faceMesh.GetBlendShapeWeight(index);
-            bool sad = frownLeft > 60 && frownRight > 60;
+            index = faceMesh.sharedMesh.GetBlendShapeIndex("browInnerUp");
+            float browInnerUp = faceMesh.GetBlendShapeWeight(index);
+            Debug.Log("frownLeft: " + frownLeft + "; frownRight: " + frownRight);
+            bool sad = frownLeft < 10 || frownRight < 10;
+            
 
             index = faceMesh.sharedMesh.GetBlendShapeIndex("jawOpen");
             float jawOpen = faceMesh.GetBlendShapeWeight(index);
@@ -217,8 +230,7 @@ public class FaceSolver : MonoBehaviour
             else if (happy) emotion = "Happy";
             else if (sad) emotion = "Sad";
             
-            GameObject obj = GameObject.Find("Emotion");
-            obj.GetComponent<TMPro.TextMeshProUGUI>().text = emotion;
+            emotionDetectionField.text = emotion;
         }
     }
 

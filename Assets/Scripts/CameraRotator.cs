@@ -11,20 +11,22 @@ public class CameraRotator : MonoBehaviour
 
     private float _timer = 0.0f;
 
-    // Update is called once per frame
+    ///Update is called once per frame
     void Update()
-        {
+    {
         _timer = _timer + 1 * Time.deltaTime;
         // Debug.Log(_timer);
 
         if (_timer >= 30.0f)
-            {
+        {
             virtualCamera.m_Follow = follow;
-            }
-        else
-            {
-            transform.Rotate(0, speed * Time.deltaTime, 0);
-            }
-
         }
+        else
+        {
+            transform.Rotate(0, speed * Time.deltaTime, 0);
+        }
+
     }
+
+
+}
