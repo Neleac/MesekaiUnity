@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 #endif
@@ -94,13 +91,6 @@ namespace StarterAssets
 
 		private bool _hasAnimator;
 
-		// hub world networking
-		private NetworkManager networkManager;
-
-		private Dictionary<string, bool> animStateDict;
-		private Dictionary<string, float> animValDict;
-		const float ANIM_SENSITIVITY_THRESH = 0.01f;	// lower = higher request frequency
-
 		private void Awake()
 		{
 			// get a reference to our main camera
@@ -108,8 +98,6 @@ namespace StarterAssets
 			{
 				_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
 			}
-
-        	networkManager = GameObject.Find("Network Manager").GetComponent<NetworkManager>();
 		}
 
 		private void Start()
@@ -123,64 +111,20 @@ namespace StarterAssets
 			// reset our timeouts on start
 			_jumpTimeoutDelta = JumpTimeout;
 			_fallTimeoutDelta = FallTimeout;
-
-			animStateDict = new Dictionary<string, bool>();
-			animStateDict.Add("grounded", true);
-			animStateDict.Add("jump", false);
-			animStateDict.Add("freeFall", false);
-
-			animValDict = new Dictionary<string, float>();
-			animValDict.Add("animationBlend", 0);
-			animValDict.Add("inputMagnitude", 0);
 		}
 
 		private void Update()
 		{
 			_hasAnimator = TryGetComponent(out _animator);
-
-			if (gameObject.name.Split(" ")[0].Equals(networkManager.playerName)) {
-				Dictionary<string, bool> prevAnimStateDict = new Dictionary<string, bool>(animStateDict);
-				Dictionary<string, float> prevAnimValDict = new Dictionary<string, float>(animValDict);
-
-				JumpAndGravity();
-				GroundedCheck();
-				Move();
-
-				bool change = false;
-				foreach (var pair in animStateDict)
-				{
-					if (pair.Value != prevAnimStateDict[pair.Key]) change = true;
-				}
-
-				foreach (var pair in animValDict)
-				{
-					if (Math.Abs(pair.Value - prevAnimValDict[pair.Key]) > ANIM_SENSITIVITY_THRESH) 
-					{
-						change = true;
-					}
-				}
-
-				if (change)
-				{
-					bool connected = networkManager.SendAnimateRequest(networkManager.playerName, animStateDict, animValDict);
-					if (!connected) Debug.LogWarning("SendAnimateRequest failed.");
-				}
-			}
+			
+			JumpAndGravity();
+			GroundedCheck();
+			Move();
 		}
 
 		private void LateUpdate()
 		{
 			CameraRotation();
-		}
-
-		// called in PlayerManager.cs
-		public void setAnimParams(Dictionary<string, bool> animStateDict, Dictionary<string, float> animValDict)
-		{
-			_animator.SetBool(_animIDGrounded, animStateDict["grounded"]);
-            _animator.SetBool(_animIDJump, animStateDict["jump"]);
-            _animator.SetBool(_animIDFreeFall, animStateDict["freeFall"]);
-            _animator.SetFloat(_animIDSpeed, animValDict["animationBlend"]);
-            _animator.SetFloat(_animIDMotionSpeed, animValDict["inputMagnitude"]);
 		}
 
 		private void AssignAnimationIDs()
@@ -202,8 +146,6 @@ namespace StarterAssets
 			if (_hasAnimator)
 			{
 				_animator.SetBool(_animIDGrounded, Grounded);
-
-				animStateDict["grounded"] = Grounded;
 			}
 		}
 
@@ -282,9 +224,6 @@ namespace StarterAssets
 			{
 				_animator.SetFloat(_animIDSpeed, _animationBlend);
 				_animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
-
-				animValDict["animationBlend"] = _animationBlend;
-				animValDict["inputMagnitude"] = inputMagnitude;
 			}
 		}
 
@@ -300,9 +239,6 @@ namespace StarterAssets
 				{
 					_animator.SetBool(_animIDJump, false);
 					_animator.SetBool(_animIDFreeFall, false);
-
-					animStateDict["jump"] = false;
-					animStateDict["freeFall"] = false;
 				}
 
 				// stop our velocity dropping infinitely when grounded
@@ -321,8 +257,6 @@ namespace StarterAssets
 					if (_hasAnimator)
 					{
 						_animator.SetBool(_animIDJump, true);
-
-						animStateDict["jump"] = true;
 					}
 				}
 
@@ -348,8 +282,6 @@ namespace StarterAssets
 					if (_hasAnimator)
 					{
 						_animator.SetBool(_animIDFreeFall, true);
-
-						animStateDict["freeFall"] = true;
 					}
 				}
 

@@ -36,8 +36,8 @@ public class MotionToggle : MonoBehaviour
         if (idleTime >= secondsToMotion) animator.enabled = false;
     }
 
-    public void OnMove(InputValue value)
-    {
-        animator.enabled = true;
-    }
+    // public void OnMove(InputValue value)
+    // {
+    //     animator.enabled = true;
+    // }
 }
