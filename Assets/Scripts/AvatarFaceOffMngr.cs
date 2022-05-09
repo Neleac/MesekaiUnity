@@ -80,16 +80,6 @@ public class AvatarFaceOffMngr : MonoBehaviour
         gameCanvasLayer = gameCanvas.GetComponent<Canvas>().sortingOrder;
 
         StartCoroutine(waitForCamRotate());
-
-        //Debug.Log(miniGame + " Scene Starts");
-
-        ////save the global variables for future use
-        //timerColor = timer.faceColor;
-        //gameCanvasLayer = gameCanvas.GetComponent<Canvas>().sortingOrder;
-
-        //showGameResultCanvas(false);
-        //showGameCanvas(true);
-
     }
 
     // Updates: 1. count-down; 2. keyboard input
@@ -709,6 +699,7 @@ public class AvatarFaceOffMngr : MonoBehaviour
         Debug.Log(miniGame + " Scene Starts");
 
         showGameResultCanvas(false);
+        yield return new WaitForSeconds(0.5f);
         showGameCanvas(true);
     }
 }
