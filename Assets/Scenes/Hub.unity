@@ -6487,9 +6487,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d9e764565b732749a9bea605fd508f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  avatar: {fileID: 5808524203938997438, guid: d2ae0b27c5e67df4abbd265dda9a71eb, type: 3}
+  avatarPrefab: {fileID: 5808524203938997438, guid: d2ae0b27c5e67df4abbd265dda9a71eb, type: 3}
   mediapipeSolution: {fileID: 312243065}
-  playerFollowCam: {fileID: 0}
 --- !u!4 &694077678
 Transform:
   m_ObjectHideFlags: 0
@@ -9474,15 +9473,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 65.2
+      value: 65.57592
       objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 23.675
+      value: 23.67495
       objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 39
+      value: 39.066483
       objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f, type: 3}
       propertyPath: m_LocalRotation.w

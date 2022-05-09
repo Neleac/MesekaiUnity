@@ -16,6 +16,7 @@ public class NetworkPlayer : MonoBehaviourPun
         {
             playerFollowCam.SetActive(false);
 
+            //GetComponent<Animator>().enabled = false;
             GetComponent<CharacterController>().enabled = false;
             GetComponent<PlayerInput>().enabled = false;
             GetComponent<ThirdPersonController>().enabled = false;
@@ -24,7 +25,7 @@ public class NetworkPlayer : MonoBehaviourPun
             GetComponent<PoseSolver>().enabled = false;
             GetComponent<HandSolver>().enabled = false;
             GetComponent<FaceSolver>().enabled = false;
-            GetComponent<MotionToggle>().enabled = false;
+            //GetComponent<MotionToggle>().enabled = false;
         }
     }
 
