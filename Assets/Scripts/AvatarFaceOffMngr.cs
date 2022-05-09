@@ -13,7 +13,7 @@ public class AvatarFaceOffMngr : MonoBehaviour
 
     //avatar position and rotation
     public GameObject avatar;
-    private Vector3 playerPosition = new Vector3(0, -0.15f, 11);   //avatar position remain the same 
+    private Vector3 playerPosition = new Vector3(0, -0.15f, 10.7f);   //avatar position remain the same 
     private Vector3 faceOffPlayerRot = new Vector3(0, 180, 0);     //avatar rotate in different games
     private Vector3 hswPlayerRot = new Vector3(0, -20, 0);
 
@@ -677,5 +677,5 @@ public class AvatarFaceOffMngr : MonoBehaviour
     }
     /**************************************************************************/
 
-
+    
 }
