@@ -11,6 +11,9 @@ public class AvatarFaceOffMngr : MonoBehaviour
     public GameObject cameraRotator;
     public GameObject surroundingCam;
 
+    public GameObject rpsRule;
+    public GameObject emoRule;
+
     [Range(0, 1)]
     public int UIgameSelector;                                     //to switch from games for test from UI easily
 
@@ -621,6 +624,8 @@ public class AvatarFaceOffMngr : MonoBehaviour
             detection = GameObject.Find("gestureDetection").GetComponent<TextMeshProUGUI>();
             GameObject.Find("emotionDetection").SetActive(false);
             userChoice = Enum.GetNames(typeof(FaceOffChoices));
+            rpsRule.SetActive(true);
+            emoRule.SetActive(false);
         }
         else if (gameName == MiniGame.HSW)
         {
@@ -632,6 +637,8 @@ public class AvatarFaceOffMngr : MonoBehaviour
             detection = GameObject.Find("emotionDetection").GetComponent<TextMeshProUGUI>();
             GameObject.Find("gestureDetection").SetActive(false);
             userChoice = Enum.GetNames(typeof(HSWChoices));
+            rpsRule.SetActive(false);
+            emoRule.SetActive(true);
         }
         else
         {

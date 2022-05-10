@@ -9,17 +9,17 @@ EditorBuildSettings:
     path: Assets/Scenes/Start.unity
     guid: 65e1d7fec3bf8ce4287cc48b585f727a
   - enabled: 1
-    path: Assets/Scenes/Hub.unity
-    guid: 8d5c874aeed9b7642be8e0279aee6b84
-  - enabled: 1
     path: Assets/Scenes/Arena.unity
     guid: 51619aca704a24e5bab8cb65cdd26b7a
+  - enabled: 1
+    path: Assets/Scenes/Hub.unity
+    guid: 8d5c874aeed9b7642be8e0279aee6b84
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 0
-    path: Assets/Scenes/faceOffPrototype.unity
-    guid: 11875374adead4b229bf306531ab8700
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/ArenaAudience.unity
     guid: 33dbdf725dd89594ba64ca1b3fbc9191
