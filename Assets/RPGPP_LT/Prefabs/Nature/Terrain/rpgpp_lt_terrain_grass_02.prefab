@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -1951961027240526891}
   m_Layer: 0
   m_Name: rpgpp_lt_terrain_grass_02
-  m_TagString: Untagged
+  m_TagString: Grass
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

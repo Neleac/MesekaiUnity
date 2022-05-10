@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 427096607182952265}
   m_Layer: 0
   m_Name: rpgpp_lt_terrain_path_01a
-  m_TagString: Untagged
+  m_TagString: Sand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

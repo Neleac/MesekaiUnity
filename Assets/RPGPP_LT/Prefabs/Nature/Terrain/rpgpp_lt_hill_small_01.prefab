@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -3389674377075651776}
   m_Layer: 0
   m_Name: rpgpp_lt_hill_small_01
-  m_TagString: Untagged
+  m_TagString: Grass
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
