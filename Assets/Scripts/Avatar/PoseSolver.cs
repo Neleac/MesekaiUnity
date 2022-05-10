@@ -5,10 +5,6 @@ using Mediapipe;
 
 public class PoseSolver : MonoBehaviour
 {
-    // TODO: replace magic numbers with input dimensions from Start/Image Source/Web Cam Source
-    const int WIDTH = 640;
-    const int HEIGHT = 480;
-
     const float SMOOTHING = 0.1f;   // lower value = smoother, but less responsive
 
     // landmark indices
@@ -80,8 +76,8 @@ public class PoseSolver : MonoBehaviour
             v_ denotes vector
         */
 
-        Vector3 lShoulderLm = new Vector3(-poseLandmarks.Landmark[LEFTSHOULDER].X * WIDTH, -poseLandmarks.Landmark[LEFTSHOULDER].Y * HEIGHT, poseLandmarks.Landmark[LEFTSHOULDER].Z * WIDTH);
-        Vector3 rShoulderLm = new Vector3(-poseLandmarks.Landmark[RIGHTSHOULDER].X * WIDTH, -poseLandmarks.Landmark[RIGHTSHOULDER].Y * HEIGHT, poseLandmarks.Landmark[RIGHTSHOULDER].Z * WIDTH);
+        Vector3 lShoulderLm = new Vector3(-poseLandmarks.Landmark[LEFTSHOULDER].X, -poseLandmarks.Landmark[LEFTSHOULDER].Y, poseLandmarks.Landmark[LEFTSHOULDER].Z);
+        Vector3 rShoulderLm = new Vector3(-poseLandmarks.Landmark[RIGHTSHOULDER].X, -poseLandmarks.Landmark[RIGHTSHOULDER].Y, poseLandmarks.Landmark[RIGHTSHOULDER].Z);
         if (!mirrorMode)
         {
             lShoulderLm.z *= -1;
@@ -102,7 +98,7 @@ public class PoseSolver : MonoBehaviour
                y-axis: bottom to top
                z-axis: into the screen
             */
-            landmarks[i] = new Vector3(-poseLandmarks.Landmark[i].X * WIDTH, -poseLandmarks.Landmark[i].Y * HEIGHT, poseLandmarks.Landmark[i].Z * WIDTH);
+            landmarks[i] = new Vector3(-poseLandmarks.Landmark[i].X, -poseLandmarks.Landmark[i].Y, poseLandmarks.Landmark[i].Z);
             if (!mirrorMode) landmarks[i].z *= -1;
 
             landmarks[i] = rot * landmarks[i];

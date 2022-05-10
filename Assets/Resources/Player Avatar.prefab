@@ -1509,9 +1509,6 @@ GameObject:
   - component: {fileID: 5808524203938997435}
   - component: {fileID: 5808524203938997434}
   - component: {fileID: 5808524203938997433}
-  - component: {fileID: 5808524203938997431}
-  - component: {fileID: 5808524203938997430}
-  - component: {fileID: 5808524203938997424}
   - component: {fileID: 5808524203938997425}
   - component: {fileID: 5373777909575459171}
   - component: {fileID: 8249456216730049295}
@@ -1688,51 +1685,6 @@ MonoBehaviour:
   analogMovement: 0
   cursorLocked: 0
   cursorInputForLook: 0
---- !u!114 &5808524203938997431
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5808524203938997438}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32d10cbac36fe634194c346ec3de347d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hips: {fileID: 5808524203953429411}
-  mirrorMode: 0
---- !u!114 &5808524203938997430
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5808524203938997438}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1da1628c6d4a914e8dea98cdf27f868, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hips: {fileID: 5808524203953429411}
-  mirrorMode: 0
-  rockPaperScissors: 0
---- !u!114 &5808524203938997424
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5808524203938997438}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e02ee2b302b6a54ea6688f4534bac44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  headBone: {fileID: 5808524205489180801}
-  faceMesh: {fileID: 5808524204538992132}
-  mirrorMode: 0
-  emotionDetection: 0
 --- !u!114 &5808524203938997425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1746,6 +1698,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   secondsToMotion: 1
+  playerSpine: {fileID: 5808524203815263277}
 --- !u!114 &5373777909575459171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6066,7 +6019,7 @@ PrefabInstance:
       objectReference: {fileID: 5808524204749369319}
     - target: {fileID: 2070925441746177913, guid: a1a802ecaf6775746bb2a929fb554ad8, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.7774067
+      value: 1.7774059
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a1a802ecaf6775746bb2a929fb554ad8, type: 3}
