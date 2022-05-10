@@ -3040,7 +3040,7 @@ MonoBehaviour:
   _poseRoiAnnotationController: {fileID: 764919897}
   _graphRunner: {fileID: 312243068}
   _textureFramePool: {fileID: 312243067}
-  faceSolver: {fileID: 1446939312}
+  faceSolver: {fileID: 0}
   poseSolver: {fileID: 1446939309}
   handSolver: {fileID: 1446939313}
   runningMode: 0
@@ -6488,6 +6488,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   avatarPrefab: {fileID: 5808524203938997438, guid: d2ae0b27c5e67df4abbd265dda9a71eb, type: 3}
+  mediapipeSolution: {fileID: 312243065}
 --- !u!4 &694077678
 Transform:
   m_ObjectHideFlags: 0
@@ -14652,32 +14653,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hips: {fileID: 1446939308}
   mirrorMode: 0
---- !u!137 &1446939310 stripped
-SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -5917833677200859816, guid: 2df63c7bcf555694f925948c93103339, type: 3}
-  m_PrefabInstance: {fileID: 1446939306}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1446939311 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3538397326732518781, guid: 2df63c7bcf555694f925948c93103339, type: 3}
-  m_PrefabInstance: {fileID: 1446939306}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1446939312
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1446939307}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e02ee2b302b6a54ea6688f4534bac44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  headBone: {fileID: 1446939311}
-  faceMesh: {fileID: 1446939310}
-  mirrorMode: 0
-  emotionDetection: 0
 --- !u!114 &1446939313
 MonoBehaviour:
   m_ObjectHideFlags: 0
