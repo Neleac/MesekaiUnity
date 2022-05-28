@@ -28,6 +28,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        SceneManager.LoadScene("Avatar");
+        SceneManager.LoadScene("Hub");
     }
 }
