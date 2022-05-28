@@ -1,0 +1,3 @@
+[submodule "Assets/MediaPipeUnityPlugin"]
+	path = Assets/MediaPipeUnityPlugin
+	url = git@github.com:Neleac/MediaPipeUnityPlugin.git
