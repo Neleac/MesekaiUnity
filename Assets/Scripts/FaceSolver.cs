@@ -23,7 +23,6 @@ public class FaceSolver : MonoBehaviour
     [SerializeField] private Transform headBone;
     [SerializeField] private SkinnedMeshRenderer faceMesh;
     [SerializeField] private bool mirrorMode;
-    [SerializeField] private bool emotionDetection;
 
     private NormalizedLandmarkList faceLandmarks;
 
@@ -187,39 +186,6 @@ public class FaceSolver : MonoBehaviour
         // Vector3 noseL = landmarks[294];
         // SetBlendshape("noseSneerLeft", noseR.y, -0.027f, -0.022f);
         // SetBlendshape("noseSneerRight", noseL.y, -0.027f, -0.022f);
-
-        if (emotionDetection)
-        {
-            // bool oShapeMouth = Math.Abs(mouthT.y - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) > 0.18;
-            // bool vShapeMouth = !oShapeMouth && Math.Abs((mouthR.y + mouthL.y) / 2 - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) > 0.08;
-            // print(Math.Abs(mouthT.y - mouthB.y) / Math.Abs(mouthR.x - mouthL.x) + "," + Math.Abs((mouthR.y + mouthL.y) / 2 - mouthB.y) / Math.Abs(mouthR.x - mouthL.x));
-
-            // TODO: factor in eyes
-
-            int index = faceMesh.sharedMesh.GetBlendShapeIndex("mouthSmileLeft");
-            float smileLeft = faceMesh.GetBlendShapeWeight(index);
-            index = faceMesh.sharedMesh.GetBlendShapeIndex("mouthSmileRight");
-            float smileRight = faceMesh.GetBlendShapeWeight(index);
-            bool happy = smileLeft > 25 && smileRight > 25;
-
-            index = faceMesh.sharedMesh.GetBlendShapeIndex("mouthFrownLeft");
-            float frownLeft = faceMesh.GetBlendShapeWeight(index);
-            index = faceMesh.sharedMesh.GetBlendShapeIndex("mouthFrownRight");
-            float frownRight = faceMesh.GetBlendShapeWeight(index);
-            bool sad = frownLeft > 60 && frownRight > 60;
-
-            index = faceMesh.sharedMesh.GetBlendShapeIndex("jawOpen");
-            float jawOpen = faceMesh.GetBlendShapeWeight(index);
-            bool wow = jawOpen > 75;
-
-            string emotion = "Neutral";
-            if (wow) emotion = "Wow";
-            else if (happy) emotion = "Happy";
-            else if (sad) emotion = "Sad";
-            
-            GameObject obj = GameObject.Find("Emotion");
-            obj.GetComponent<TMPro.TextMeshProUGUI>().text = emotion;
-        }
     }
 
     private void SetBlendshape(string name, float value, float low, float high)

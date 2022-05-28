@@ -334,7 +334,7 @@ MonoBehaviour:
   _screen: {fileID: 941420919}
   _consolePrefab: {fileID: 3481718972971892304, guid: 3bd1ffa1267fbef6fbdd99b4a8e699ff, type: 3}
   _defaultImageSource: 0
-  _preferableInferenceMode: 0
+  _preferableInferenceMode: 1
   _assetLoaderType: 0
   _enableGlog: 1
 --- !u!4 &542027324
@@ -434,7 +434,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 498146e99d4934673bd948c8be11227e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _preferableDefaultWidth: 1280
+  _preferableDefaultWidth: 640
   _defaultAvailableResolutions:
   - width: 640
     height: 480

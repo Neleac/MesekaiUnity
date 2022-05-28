@@ -35,7 +35,6 @@ public class HandSolver : MonoBehaviour
 
     [SerializeField] private Transform hips;
     [SerializeField] private bool mirrorMode;
-    [SerializeField] private bool rockPaperScissors;
 
     void Start()
     {
@@ -72,8 +71,6 @@ public class HandSolver : MonoBehaviour
     {
         if (leftHandLandmarks != null) SolveHand("left");
         if (rightHandLandmarks != null) SolveHand("right");
-
-        if (rockPaperScissors && leftHandLandmarks != null) RockPaperScissors();
     }
 
     // called from HolisticTrackingSolution.cs
@@ -198,56 +195,5 @@ public class HandSolver : MonoBehaviour
                 parentLmIdx++;
             }
         }
-    }
-
-    private void RockPaperScissors()
-    {
-        //for now, the result is shown in the console --YT Mar 29, 2022
-        NormalizedLandmark wrist = leftHandLandmarks.Landmark[0];
-        NormalizedLandmark indexTip = leftHandLandmarks.Landmark[8];
-        NormalizedLandmark indexMCP = leftHandLandmarks.Landmark[5];
-        // a closed finger tip is placed between the center of the palm and the wrist
-        // y value is used when the hand is upright, x value is used when hand is horizontal
-        bool indexClosed = (wrist.X - indexTip.X) * (indexMCP.X - indexTip.X) < -0.001 || (wrist.Y - indexTip.Y) * (indexMCP.Y - indexTip.Y) < -0.001;
-
-        NormalizedLandmark middleTip = leftHandLandmarks.Landmark[12];
-        NormalizedLandmark middleMCP = leftHandLandmarks.Landmark[9];
-        bool middleClosed = (wrist.X - middleTip.X) * (middleMCP.X - middleTip.X) < -0.001 || (wrist.Y - middleTip.Y) * (middleMCP.Y - middleTip.Y) < -0.001;
-
-        NormalizedLandmark ringTip = leftHandLandmarks.Landmark[16];
-        NormalizedLandmark ringMCP = leftHandLandmarks.Landmark[13];
-        bool ringClosed = (wrist.X - ringTip.X) * (ringMCP.X - ringTip.X) < -0.001 || (wrist.Y - ringTip.Y) * (ringMCP.Y - ringTip.Y) < -0.001;
-        //print((wrist.X - ringTip.X) * (ringMCP.X - ringTip.X));
-        //print((wrist.Y - ringTip.Y) * (ringMCP.Y - ringTip.Y));
-
-        NormalizedLandmark pinkyTip = leftHandLandmarks.Landmark[20];
-        NormalizedLandmark pinkyMCP = leftHandLandmarks.Landmark[17];
-        bool pinkyClosed = (wrist.X - pinkyTip.X) * (pinkyMCP.X - pinkyTip.X) < -0.001 || (wrist.Y - pinkyTip.Y) * (pinkyMCP.Y - pinkyTip.Y) < -0.001;
-
-
-        // print(indexClosed + ", " + indexTip + ", " + indexMCP + ", " + wrist);
-
-        string result = "N/A";
-        //print(indexClosed + ", " + middleClosed  + ", " + ringClosed + ", " + pinkyClosed);
-        if (indexClosed && middleClosed && ringClosed && pinkyClosed)
-        {
-            //print("rock");
-            result = "Rock";
-        } else if (!indexClosed && !middleClosed && ringClosed && pinkyClosed)
-        {
-            //print("scissor");
-            result = "Scissor";
-        } else if (!indexClosed && !middleClosed && !ringClosed && !pinkyClosed)
-        {
-            //print("paper");
-            result = "Paper";
-        } else
-        {
-            //print("N/A");
-            result = "Hand";
-        }
-
-        GameObject obj = GameObject.Find("LeftHandResult");
-        obj.GetComponent<TMPro.TextMeshProUGUI>().text = result;
     }
 }

@@ -19,8 +19,11 @@ GameObject:
   - component: {fileID: 1867505457840908407}
   - component: {fileID: 2666425734999225158}
   - component: {fileID: 7159317095085121176}
+  - component: {fileID: 1816577124130184271}
+  - component: {fileID: 2150279704201940845}
+  - component: {fileID: 5351967091107329281}
   m_Layer: 8
-  m_Name: PlayerAvatar
+  m_Name: Player Avatar
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -355,6 +358,49 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerFollowCam: {fileID: 923787679666442115}
+--- !u!114 &1816577124130184271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1719964674429192377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be6c3590159d0b44bacbf91ca111a6bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hips: {fileID: 3067681545223236634}
+  mirrorMode: 1
+--- !u!114 &2150279704201940845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1719964674429192377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92e832bf0f920be4aba40f37ddae7d81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hips: {fileID: 3067681545223236634}
+  mirrorMode: 1
+--- !u!114 &5351967091107329281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1719964674429192377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a471c5ba557ee74fab61b2a42d6eb23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  headBone: {fileID: 3067681545650488054}
+  faceMesh: {fileID: 3067681545185218935}
+  mirrorMode: 1
 --- !u!1 &3067681544374719496
 GameObject:
   m_ObjectHideFlags: 0
