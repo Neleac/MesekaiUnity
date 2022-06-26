@@ -20,19 +20,21 @@ public class FaceSolver : MonoBehaviour
 
     const float SMOOTHING = 0.1f;   // lower value = smoother, but less responsive
 
+    private NormalizedLandmarkList faceLandmarks;
+    private Quaternion prevHeadRot;
+
     [SerializeField] private Transform headBone;
     [SerializeField] private SkinnedMeshRenderer faceMesh;
     [SerializeField] private bool mirrorMode;
 
-    private NormalizedLandmarkList faceLandmarks;
-
     void Start()
     {
         faceLandmarks = null;
+        prevHeadRot = headBone.localRotation;
     }
 
-    void Update()
-    {
+    void LateUpdate()
+    {        
         if (faceLandmarks != null) SolveFace();
     }
 
@@ -111,9 +113,9 @@ public class FaceSolver : MonoBehaviour
         float zDeg = (float)(180 / Math.PI * zRad);
         if (!mirrorMode) zDeg *= -1;
 
-        Quaternion oldRot = headBone.localRotation;
-        Quaternion newRot = Quaternion.Euler(xDeg, yDeg, zDeg);
-        headBone.localRotation = Quaternion.Slerp(oldRot, newRot, SMOOTHING);
+        Quaternion headRot = Quaternion.Euler(xDeg, yDeg, zDeg);
+        headBone.localRotation = Quaternion.Slerp(prevHeadRot, headRot, SMOOTHING);
+        prevHeadRot = headBone.localRotation;
 
         ///////////////////////////
         // CALCULATE BLENDSHAPES //

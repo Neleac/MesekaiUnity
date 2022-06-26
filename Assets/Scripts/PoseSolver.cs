@@ -26,7 +26,11 @@ public class PoseSolver : MonoBehaviour
     private Transform rWristTf;
     private Transform rFingerTf;
 
+    private (Transform, Transform)[] transformPairs;
+    private (int, int)[] landmarkIdxPairs;
+
     private LandmarkList poseLandmarks;
+    private Quaternion[] prevRots;
 
     [SerializeField] private Transform hips;
     [SerializeField] private bool mirrorMode;
@@ -53,10 +57,21 @@ public class PoseSolver : MonoBehaviour
             (lFingerTf, rFingerTf) = (rFingerTf, lFingerTf);
         }
 
+        transformPairs = new (Transform, Transform)[]{ (rShoulderTf, rElbowTf), (rElbowTf, rWristTf), (rWristTf, rFingerTf),
+                                                       (lShoulderTf, lElbowTf), (lElbowTf, lWristTf), (lWristTf, lFingerTf) };
+        landmarkIdxPairs = new (int, int)[]{ (LEFTSHOULDER, LEFTELBOW), (LEFTELBOW, LEFTWRIST), (LEFTWRIST, LEFTFINGER),
+                                             (RIGHTSHOULDER, RIGHTELBOW), (RIGHTELBOW, RIGHTWRIST), (RIGHTWRIST, RIGHTFINGER) };
+
         poseLandmarks = null;
+
+        prevRots = new Quaternion[transformPairs.Length];
+        for (int i = 0; i < prevRots.Length; i++)
+        {
+            prevRots[i] = transformPairs[i].Item1.localRotation;
+        }
     }
 
-    void Update()
+    void LateUpdate()
     {
         if (poseLandmarks != null) SolvePose();
     }
@@ -104,13 +119,6 @@ public class PoseSolver : MonoBehaviour
             landmarks[i] = rot * landmarks[i];
         }
 
-        // limbs
-        (Transform, Transform)[] transformPairs = { (rShoulderTf, rElbowTf), (rElbowTf, rWristTf), (rWristTf, rFingerTf),
-                                                    (lShoulderTf, lElbowTf), (lElbowTf, lWristTf), (lWristTf, lFingerTf) };
-        (int, int)[] landmarkIdxPairs = { (LEFTSHOULDER, LEFTELBOW), (LEFTELBOW, LEFTWRIST), (LEFTWRIST, LEFTFINGER),
-                                          (RIGHTSHOULDER, RIGHTELBOW), (RIGHTELBOW, RIGHTWRIST), (RIGHTWRIST, RIGHTFINGER) };
-        Debug.Assert(transformPairs.Length == landmarkIdxPairs.Length);
-
         // solve rotations
         for (int i = 0; i < transformPairs.Length; i++)
         {
@@ -125,10 +133,11 @@ public class PoseSolver : MonoBehaviour
             Vector3 vNew = (landmarks[childLmIdx] - landmarks[parentLmIdx]).normalized;
             vNew = parentTf.InverseTransformDirection(vNew);
 
-            // smooth, interpolated rotation
-            Quaternion rotOld = parentTf.localRotation;
-            Quaternion rotNew = rotOld * Quaternion.FromToRotation(vOld, vNew);
+            // smooth, interpolated rotation           
+            Quaternion rotOld = prevRots[i];
+            Quaternion rotNew = parentTf.localRotation * Quaternion.FromToRotation(vOld, vNew).normalized;
             parentTf.localRotation = Quaternion.Slerp(rotOld, rotNew, SMOOTHING);
+            prevRots[i] = parentTf.localRotation;
         }
     }
 }

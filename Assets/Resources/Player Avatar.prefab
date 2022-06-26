@@ -371,7 +371,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hips: {fileID: 3067681545223236634}
-  mirrorMode: 1
+  mirrorMode: 0
 --- !u!114 &2150279704201940845
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,7 +385,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hips: {fileID: 3067681545223236634}
-  mirrorMode: 1
+  mirrorMode: 0
 --- !u!114 &5351967091107329281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,7 +400,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   headBone: {fileID: 3067681545650488054}
   faceMesh: {fileID: 3067681545185218935}
-  mirrorMode: 1
+  mirrorMode: 0
 --- !u!1 &3067681544374719496
 GameObject:
   m_ObjectHideFlags: 0

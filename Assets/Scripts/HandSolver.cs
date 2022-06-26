@@ -18,6 +18,8 @@ public class HandSolver : MonoBehaviour
     const int MIDDLE = 9;
     const int RING = 13;
     const int PINKY = 17;
+    private int[] landmarkIdxs;
+    const int JointsPerFinger = 3;
 
     private Transform rThumbTf;
     private Transform rIndexTf;
@@ -30,22 +32,23 @@ public class HandSolver : MonoBehaviour
     private Transform lRingTf;
     private Transform lPinkyTf;
 
+    private Transform[] lFingerRootTfs;
+    private Transform[] rFingerRootTfs;
+
     private NormalizedLandmarkList leftHandLandmarks;
     private NormalizedLandmarkList rightHandLandmarks;
+
+    private Quaternion[,] prevLeftRots;
+    private Quaternion[,] prevRightRots;
 
     [SerializeField] private Transform hips;
     [SerializeField] private bool mirrorMode;
 
     void Start()
     {
+        landmarkIdxs = new int[]{ THUMB, INDEX, MIDDLE, RING, PINKY };
+
         Transform spine2 = hips.Find("Spine").Find("Spine1").Find("Spine2");
-        
-        Transform rHand = spine2.Find("RightShoulder").Find("RightArm").Find("RightForeArm").Find("RightHand");
-        rThumbTf = rHand.Find("RightHandThumb1");
-        rIndexTf = rHand.Find("RightHandIndex1");
-        rMiddleTf = rHand.Find("RightHandMiddle1");
-        rRingTf = rHand.Find("RightHandRing1");
-        rPinkyTf = rHand.Find("RightHandPinky1");
 
         Transform lHand = spine2.Find("LeftShoulder").Find("LeftArm").Find("LeftForeArm").Find("LeftHand");
         lThumbTf = lHand.Find("LeftHandThumb1");
@@ -53,21 +56,43 @@ public class HandSolver : MonoBehaviour
         lMiddleTf = lHand.Find("LeftHandMiddle1");
         lRingTf = lHand.Find("LeftHandRing1");
         lPinkyTf = lHand.Find("LeftHandPinky1");
+        lFingerRootTfs = new Transform[]{ lThumbTf, lIndexTf, lMiddleTf, lRingTf, lPinkyTf };
+
+        Transform rHand = spine2.Find("RightShoulder").Find("RightArm").Find("RightForeArm").Find("RightHand");
+        rThumbTf = rHand.Find("RightHandThumb1");
+        rIndexTf = rHand.Find("RightHandIndex1");
+        rMiddleTf = rHand.Find("RightHandMiddle1");
+        rRingTf = rHand.Find("RightHandRing1");
+        rPinkyTf = rHand.Find("RightHandPinky1");
+        rFingerRootTfs = new Transform[]{ rThumbTf, rIndexTf, rMiddleTf, rRingTf, rPinkyTf };
 
         if (!mirrorMode)
         {
-            (lThumbTf, rThumbTf) = (rThumbTf, lThumbTf);
-            (lIndexTf, rIndexTf) = (rIndexTf, lIndexTf);
-            (lMiddleTf, rMiddleTf) = (rMiddleTf, lMiddleTf);
-            (lRingTf, rRingTf) = (rRingTf, lRingTf);
-            (lPinkyTf, rPinkyTf) = (rPinkyTf, lPinkyTf);
+            (lFingerRootTfs, rFingerRootTfs) = (rFingerRootTfs, lFingerRootTfs);
         }
 
         leftHandLandmarks = null;
         rightHandLandmarks = null;
+
+        prevLeftRots = new Quaternion[lFingerRootTfs.Length, JointsPerFinger];
+        prevRightRots = new Quaternion[rFingerRootTfs.Length, JointsPerFinger];
+        for (int i = 0; i < prevLeftRots.GetLength(0); i++)
+        {
+            Transform lJointTf = lFingerRootTfs[i];
+            Transform rJointTf = rFingerRootTfs[i];
+            
+            for (int j = 0; j < prevLeftRots.GetLength(1); j++)
+            {
+                prevLeftRots[i, j] = lJointTf.localRotation;
+                prevRightRots[i, j] = rJointTf.localRotation;
+
+                lJointTf = lJointTf.GetChild(0);
+                rJointTf = rJointTf.GetChild(0);
+            }
+        }
     }
 
-    void Update()
+    void LateUpdate()
     {
         if (leftHandLandmarks != null) SolveHand("left");
         if (rightHandLandmarks != null) SolveHand("right");
@@ -92,14 +117,9 @@ public class HandSolver : MonoBehaviour
             Tf denotes Transform
             v_ denotes vector
         */
-
+        Transform[] fingerRootTfs = (hand.Equals("left")) ? rFingerRootTfs : lFingerRootTfs;
+        Quaternion[,] prevRots = (hand.Equals("left")) ? prevRightRots : prevLeftRots;
         NormalizedLandmarkList handLandmarks = (hand.Equals("left")) ? leftHandLandmarks : rightHandLandmarks;
-
-        Transform thumbTf = (hand.Equals("left")) ? rThumbTf : lThumbTf;
-        Transform indexTf = (hand.Equals("left")) ? rIndexTf : lIndexTf;
-        Transform middleTf = (hand.Equals("left")) ? rMiddleTf : lMiddleTf;
-        Transform ringTf = (hand.Equals("left")) ? rRingTf : lRingTf;
-        Transform pinkyTf = (hand.Equals("left")) ? rPinkyTf : lPinkyTf;
 
         Vector3 indexLm = new Vector3(-handLandmarks.Landmark[INDEX].X * WIDTH, -handLandmarks.Landmark[INDEX].Y * HEIGHT, handLandmarks.Landmark[INDEX].Z * WIDTH);
         Vector3 pinkyLm = new Vector3(-handLandmarks.Landmark[PINKY].X * WIDTH, -handLandmarks.Landmark[PINKY].Y * HEIGHT, handLandmarks.Landmark[PINKY].Z * WIDTH);
@@ -110,7 +130,7 @@ public class HandSolver : MonoBehaviour
         }
 
         Vector3 v_handLm = (indexLm - pinkyLm).normalized;
-        Vector3 v_handTf = (indexTf.position - pinkyTf.position).normalized;
+        Vector3 v_handTf = (fingerRootTfs[1].position - fingerRootTfs[4].position).normalized;
         Quaternion rot = Quaternion.FromToRotation(v_handLm, v_handTf);
 
         // convert Landmarks to Vector3s, with hand aligned with avatar
@@ -127,69 +147,74 @@ public class HandSolver : MonoBehaviour
             if (!mirrorMode) landmarks[i].z *= -1;
 
             landmarks[i] = rot * landmarks[i];
-        }
-
-        // fingers
-        Transform[] fingerTfs = { thumbTf, indexTf, middleTf, ringTf, pinkyTf };
-        int[] landmarkIdxs = { THUMB, INDEX, MIDDLE, RING, PINKY };
+        }        
 
         // solve rotations for each finger
-        for (int i = 0; i < fingerTfs.Length; i++)
+        for (int i = 0; i < fingerRootTfs.Length; i++)
         {
-            Transform parentTf = fingerTfs[i];
+            Transform parentTf = fingerRootTfs[i];
             int parentLmIdx = landmarkIdxs[i];
 
             // solve rotations for each joint
-            for (int n = 0; n < 3; n++)
+            for (int j = 0; j < JointsPerFinger; j++)
             {
                 Transform childTf = parentTf.GetChild(0);
                 int childLmIdx = parentLmIdx + 1;
 
                 // current avatar phalange direction, in joint Transform's local space
-                Vector3 vOld = childTf.localPosition.normalized;
+                Vector3 vOld = (childTf.position - parentTf.position).normalized;
+                vOld = parentTf.InverseTransformDirection(vOld);
 
                 // current player phalange direction, in joint Transform's local space
                 Vector3 vNew = (landmarks[childLmIdx] - landmarks[parentLmIdx]).normalized;
                 vNew = parentTf.InverseTransformDirection(vNew);
 
                 // smooth, interpolated rotation
-                Quaternion rotOld = parentTf.localRotation;
-                Quaternion rotNew = rotOld * Quaternion.FromToRotation(vOld, vNew);
+                Quaternion rotOld = prevRots[i, j];
+                Quaternion rotNew = parentTf.localRotation * Quaternion.FromToRotation(vOld, vNew).normalized;
                 Quaternion rotSmooth = Quaternion.Slerp(rotOld, rotNew, SMOOTHING);
 
                 // rotation constraint
                 Vector3 angles = rotSmooth.eulerAngles;
                 if (i == 0) // thumb
                 {
-                    if (n ==1 || n == 2)
+                    if (j == 1 || j == 2)
                     {
-                        float z = angles.z;
+                        angles.x = 0;
+                        angles.y = 0;
 
-                        // spaghetti code lmao
-                        if (z > 180) z -= 360;
-                        else if (z < -180) z += 360;
+                        while (angles.z > 180) angles.z -= 360;
+                        while (angles.z < -180) angles.z += 360;
 
-                        if (mirrorMode) z = (hand.Equals("left")) ? Math.Clamp(z, -90, 0) : Math.Clamp(z, 0, 90);
-                        else z = (hand.Equals("right")) ? Math.Clamp(z, -90, 0) : Math.Clamp(z, 0, 90);
+                        if (mirrorMode) angles.z = (hand.Equals("left")) ? Math.Clamp(angles.z, -90, 0) : Math.Clamp(angles.z, 0, 90);
+                        else angles.z = (hand.Equals("right")) ? Math.Clamp(angles.z, -90, 0) : Math.Clamp(angles.z, 0, 90);
 
-                        parentTf.localRotation = Quaternion.Euler(0, 0, z);
+                        parentTf.localRotation = Quaternion.Euler(angles.x, angles.y, angles.z);
                     }
                 }
                 else // index, middle, ring, pinky
                 {
-                    float x = angles.x;
-                    float z = angles.z;
+                    while (angles.x > 180) angles.x -= 360;
+                    while (angles.x < -180) angles.x += 360;
+                    angles.x = Math.Clamp(angles.x, 0, 90);
 
-                    // spaghetti code lmao
-                    if (x > 180) x -= 360;
-                    else if (x < -180) x += 360;
-                    if (z > 180) z -= 360;
-                    else if (z < -180) z += 360;
+                    angles.y = 0;
 
-                    x = Math.Clamp(x, 0, 90);
-                    z = Math.Clamp(z, -10, 10);
-                    parentTf.localRotation = Quaternion.Euler(x, 0, z);
+                    if (j == 0)
+                    {
+                        while (angles.z > 180) angles.z -= 360;
+                        while (angles.z < -180) angles.z += 360;
+                        angles.z = Math.Clamp(angles.z, -10, 10);
+                    }
+                    else
+                    {
+                        angles.z = 0;
+                    }
+
+                    parentTf.localRotation = Quaternion.Euler(angles.x, angles.y, angles.z);
                 }
+
+                prevRots[i, j] = parentTf.localRotation;
                 
                 parentTf = childTf;
                 parentLmIdx++;
