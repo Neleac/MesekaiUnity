@@ -215,6 +215,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2150279704201940845, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2150279704201940845, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
       propertyPath: mirrorMode
       value: 1
       objectReference: {fileID: 0}
@@ -232,7 +236,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5365325073028679801, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6424545362356695522, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
       propertyPath: m_IsActive
@@ -242,7 +246,20 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8767249008861334057, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+      propertyPath: mirrorMode
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 1719964674429192370, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+    - {fileID: 1719964674429192371, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+    - {fileID: 8880787967999304265, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+    - {fileID: 3130236963492484293, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+    - {fileID: 1719964674429192373, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+    - {fileID: 4487439752197382514, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+    - {fileID: 1867505457840908407, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+    - {fileID: 2666425734999225158, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+    - {fileID: 7159317095085121176, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
 --- !u!114 &536109739 stripped
 MonoBehaviour:
@@ -572,11 +589,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7943646960064280165, guid: 967935514b6227e449e67130ea264486, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -667.0001
+      value: -667.0002
       objectReference: {fileID: 0}
     - target: {fileID: 7943646960064280165, guid: 967935514b6227e449e67130ea264486, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -275.00003
+      value: -275
       objectReference: {fileID: 0}
     - target: {fileID: 7943646960292845770, guid: 967935514b6227e449e67130ea264486, type: 3}
       propertyPath: m_Camera

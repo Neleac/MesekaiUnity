@@ -386,6 +386,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hips: {fileID: 3067681545223236634}
   mirrorMode: 0
+  leftDetected: 0
+  rightDetected: 0
 --- !u!114 &5351967091107329281
 MonoBehaviour:
   m_ObjectHideFlags: 0

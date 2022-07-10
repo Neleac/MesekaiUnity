@@ -71,6 +71,15 @@ public class PoseSolver : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        for (int i = 0; i < transformPairs.Length; i++)
+        {
+            (Transform parentTf, Transform childTf) = transformPairs[i];
+            parentTf.localRotation = Quaternion.identity;
+        }
+    }
+
     void LateUpdate()
     {
         if (poseLandmarks != null) SolvePose();
