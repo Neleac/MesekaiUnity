@@ -78,10 +78,7 @@ public class PoseSolver : MonoBehaviour
             (Transform parentTf, Transform childTf) = transformPairs[i];
             parentTf.localRotation = Quaternion.identity;
         }
-    }
 
-    void LateUpdate()
-    {
         if (poseLandmarks != null) SolvePose();
     }
 

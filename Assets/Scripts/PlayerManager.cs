@@ -11,10 +11,6 @@ public class PlayerManager : MonoBehaviour
     void Awake()
     {
         GameObject avatar = PhotonNetwork.Instantiate(avatarPrefab.name, new Vector3(65f, 22.175f, 43f), Quaternion.identity);
-        avatar.GetComponent<FaceSolver>().enabled = false;
-        avatar.GetComponent<PoseSolver>().enabled = false;
-        avatar.GetComponent<HandSolver>().enabled = false;
-
         GameObject.Find("Template Avatar").GetComponent<MotionTransfer>().playerAvatar = avatar;
     }
 }
