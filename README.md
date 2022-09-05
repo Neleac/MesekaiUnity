@@ -1,2 +1,2 @@
-# MeseCHI
-Mesekai CHI PLAY 2022
+# Mesekai Unity
+Mesekai is a real-time motion tracking virtual avatar application. Use your physical body through webcam video to control the avatar's arms, fingers, head, and facial expressions. Additionally, the motion tracking feature is applied to a 3rd person online multiplayer game for more immersive social interactions.
