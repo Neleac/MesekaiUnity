@@ -7,9 +7,10 @@ using Photon.Realtime;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
-    void Start()
+    void Awake()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
+        PhotonNetwork.SerializationRate = 60;
     }
 
     public void OnStartClick()

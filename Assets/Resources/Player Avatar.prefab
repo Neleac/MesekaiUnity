@@ -364,6 +364,8 @@ MonoBehaviour:
   rArmTf: {fileID: 3067681544515623022}
   headTf: {fileID: 3067681545650488054}
   headRot: {x: 0, y: 0, z: 0, w: 0}
+  lArmMotion: 0
+  rArmMotion: 0
 --- !u!114 &1816577124130184271
 MonoBehaviour:
   m_ObjectHideFlags: 0

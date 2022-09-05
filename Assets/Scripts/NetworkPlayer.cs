@@ -13,6 +13,8 @@ public class NetworkPlayer : MonoBehaviourPun, IPunObservable
     [SerializeField] private Transform lArmTf, rArmTf, headTf;
 
     [HideInInspector] public Quaternion headRot;
+    [HideInInspector] public bool lArmMotion, rArmMotion;
+    [HideInInspector] public ArrayList lRots, rRots;
 
     void Start()
     {
@@ -20,7 +22,6 @@ public class NetworkPlayer : MonoBehaviourPun, IPunObservable
         {
             playerFollowCam.SetActive(false);
 
-            //GetComponent<Animator>().enabled = false;
             GetComponent<CharacterController>().enabled = false;
             GetComponent<PlayerInput>().enabled = false;
             GetComponent<ThirdPersonController>().enabled = false;
@@ -29,11 +30,20 @@ public class NetworkPlayer : MonoBehaviourPun, IPunObservable
         }
 
         headRot = headTf.localRotation;
+        lArmMotion = false;
+        rArmMotion = false;
+        lRots = new ArrayList();
+        rRots = new ArrayList();
     }
 
     void LateUpdate()
     {
-        if (!photonView.IsMine) headTf.localRotation = headRot;
+        if (!photonView.IsMine) 
+        {
+            headTf.localRotation = headRot;
+            if (lArmMotion) setJointRotations(lArmTf, lRots, 0);
+            if (rArmMotion) setJointRotations(rArmTf, rRots, 0);
+        }
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -46,21 +56,68 @@ public class NetworkPlayer : MonoBehaviourPun, IPunObservable
             else faceMesh.SetBlendShapeWeight(i, (float)stream.ReceiveNext());
         }
 
-        // head turn
+        // head
+        if (stream.IsWriting) stream.SendNext(headRot);
+        else headRot = (Quaternion)stream.ReceiveNext();
+
+        // arms
         if (stream.IsWriting)
         {
-            stream.SendNext(headRot.x);
-            stream.SendNext(headRot.y);
-            stream.SendNext(headRot.z);
-            stream.SendNext(headRot.w);
+            if (lArmMotion)
+            {
+                stream.SendNext(lRots.Count);
+                foreach (Quaternion rot in lRots) stream.SendNext(rot);
+            }
+            else
+            {
+                stream.SendNext(0);
+            }
+
+            if (rArmMotion)
+            {
+                stream.SendNext(rRots.Count);
+                foreach (Quaternion rot in rRots) stream.SendNext(rot);
+            }
+            else
+            {
+                stream.SendNext(0);
+            }
         }
         else
         {
-            float x = (float)stream.ReceiveNext();
-            float y = (float)stream.ReceiveNext();
-            float z = (float)stream.ReceiveNext();
-            float w = (float)stream.ReceiveNext();
-            headRot = new Quaternion(x, y, z, w);
+            int jointCount = (int)stream.ReceiveNext();
+            if (jointCount > 0)
+            {
+                lRots.Clear();
+                for (int i = 0; i < jointCount; i++) lRots.Add((Quaternion)stream.ReceiveNext());
+                lArmMotion = true;
+            }
+            else
+            {
+                lArmMotion = false;
+            }
+
+            jointCount = (int)stream.ReceiveNext();
+            if (jointCount > 0)
+            {
+                rRots.Clear();
+                for (int i = 0; i < jointCount; i++) rRots.Add((Quaternion)stream.ReceiveNext());
+                rArmMotion = true;
+            }
+            else
+            {
+                rArmMotion = false;
+            }
         }
+    }
+
+    private int setJointRotations(Transform joint, ArrayList rots, int idx)
+    {
+        joint.localRotation = (Quaternion)rots[idx++];
+        foreach (Transform child in joint) 
+        {
+            idx = setJointRotations(child, rots, idx);
+        }
+        return idx;
     }
 }
