@@ -9,7 +9,7 @@ using StarterAssets;
 public class NetworkPlayer : MonoBehaviourPun, IPunObservable
 {
     [SerializeField] private GameObject playerFollowCam;
-    [SerializeField] private SkinnedMeshRenderer faceMesh;
+    [SerializeField] private SkinnedMeshRenderer faceMesh, teethMesh;
     [SerializeField] private Transform lArmTf, rArmTf, headTf;
 
     [HideInInspector] public Quaternion headRot;
@@ -52,8 +52,19 @@ public class NetworkPlayer : MonoBehaviourPun, IPunObservable
         int nBlendshapes = faceMesh.sharedMesh.blendShapeCount;
         for (int i = 0; i < nBlendshapes; i++)
         {
-            if (stream.IsWriting) stream.SendNext(faceMesh.GetBlendShapeWeight(i));
-            else faceMesh.SetBlendShapeWeight(i, (float)stream.ReceiveNext());
+            if (stream.IsWriting)
+            {
+                stream.SendNext(faceMesh.GetBlendShapeWeight(i));
+            }
+            else
+            {
+                float weight = (float)stream.ReceiveNext();
+                faceMesh.SetBlendShapeWeight(i, weight);
+                if (faceMesh.sharedMesh.GetBlendShapeName(i) == "jawOpen")
+                {
+                    teethMesh.SetBlendShapeWeight(i, weight);
+                }
+            }
         }
 
         // head

@@ -9,7 +9,7 @@ public class MotionTransfer : MonoBehaviour
 
     [HideInInspector] public GameObject playerAvatar;
     private Transform lArmPlayer, rArmPlayer, headPlayer;
-    private SkinnedMeshRenderer faceMeshPlayer;
+    private SkinnedMeshRenderer faceMeshPlayer, teethMeshPlayer;
 
     void Start()
     {
@@ -18,6 +18,7 @@ public class MotionTransfer : MonoBehaviour
         rArmPlayer = spine2Player.Find("RightShoulder/RightArm");
         headPlayer = spine2Player.Find("Neck/Head");
         faceMeshPlayer = playerAvatar.transform.Find("Avatar_Renderer_Head").GetComponent<SkinnedMeshRenderer>();
+        teethMeshPlayer = playerAvatar.transform.Find("Avatar_Renderer_Teeth").GetComponent<SkinnedMeshRenderer>();
     }
 
     void LateUpdate()
@@ -53,6 +54,11 @@ public class MotionTransfer : MonoBehaviour
         {
             float weight = faceMeshTemplate.GetBlendShapeWeight(i);
             faceMeshPlayer.SetBlendShapeWeight(i, weight);
+
+            if (faceMeshTemplate.sharedMesh.GetBlendShapeName(i) == "jawOpen")
+            {
+                teethMeshPlayer.SetBlendShapeWeight(i, weight);
+            }
         }
     }
 

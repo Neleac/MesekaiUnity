@@ -21,7 +21,7 @@ public class FaceSolver : MonoBehaviour
     const float SMOOTHING = 0.1f;   // lower value = smoother, but less responsive
 
     [SerializeField] private Transform headBone;
-    [SerializeField] private SkinnedMeshRenderer faceMesh;
+    [SerializeField] private SkinnedMeshRenderer faceMesh, teethMesh;
     [SerializeField] private bool mirrorMode;
 
     private NormalizedLandmarkList faceLandmarks;
@@ -174,6 +174,7 @@ public class FaceSolver : MonoBehaviour
         if (!mirrorMode) (mouthR, mouthL) = (mouthL, mouthR);
 
         SetBlendshape("jawOpen", mouthT.y - mouthB.y, 0.01f, 0.20f);
+        SetBlendshape("jawOpen", mouthT.y - mouthB.y, 0.01f, 0.20f, true);
 
         SetBlendshape("mouthSmileLeft", mouthR.y, -0.22f, -0.2f);
         SetBlendshape("mouthSmileRight", mouthL.y, -0.22f, -0.2f);
@@ -188,7 +189,7 @@ public class FaceSolver : MonoBehaviour
         // SetBlendshape("noseSneerRight", noseL.y, -0.027f, -0.022f);
     }
 
-    private void SetBlendshape(string name, float value, float low, float high)
+    private void SetBlendshape(string name, float value, float low, float high, bool teeth=false)
     {   
         // linear interpolate
         float newWeight = (value - low) / (high - low);
@@ -199,6 +200,8 @@ public class FaceSolver : MonoBehaviour
         // interpolate with previous weight for smoother animation
         int index = faceMesh.sharedMesh.GetBlendShapeIndex(name);
         float oldWeight = faceMesh.GetBlendShapeWeight(index);
-        faceMesh.SetBlendShapeWeight(index, (1 - SMOOTHING) * oldWeight + SMOOTHING * newWeight);
+
+        if (teeth) teethMesh.SetBlendShapeWeight(index, (1 - SMOOTHING) * oldWeight + SMOOTHING * newWeight);
+        else faceMesh.SetBlendShapeWeight(index, (1 - SMOOTHING) * oldWeight + SMOOTHING * newWeight);
     }
 }
