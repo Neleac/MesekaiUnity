@@ -9068,6 +9068,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f14635e3698b0654bb60ca264759a3cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inHubWorld: 1
   lArmTemplate: {fileID: 368617485}
   rArmTemplate: {fileID: 368617484}
   headTemplate: {fileID: 1470267718}

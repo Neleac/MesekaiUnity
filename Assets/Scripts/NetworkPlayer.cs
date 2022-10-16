@@ -29,6 +29,8 @@ public class NetworkPlayer : MonoBehaviourPun, IPunObservable
             GetComponent<StarterAssetsInputs>().enabled = false;
         }
 
+        // this client uses these to send info over network
+        // other clients uses these to receive info and overwrite animator
         headRot = headTf.localRotation;
         lArmMotion = false;
         rArmMotion = false;

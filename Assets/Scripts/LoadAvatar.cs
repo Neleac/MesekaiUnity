@@ -28,7 +28,11 @@ namespace ReadyPlayerMe
         {
             Debug.Log($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n{metaData}");
 
-            
+            avatar.GetComponent<Animator>().enabled = false;
+
+            avatar.transform.position = new Vector3(0, -120, 90);
+            avatar.transform.eulerAngles = new Vector3(0, 180, 0);
+            avatar.transform.localScale = new Vector3(90, 90, 90);
         }
     }
 }
