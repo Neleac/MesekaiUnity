@@ -6,23 +6,16 @@ using UnityEngine.SceneManagement;
 public class MotionTransfer : MonoBehaviour
 {
     public GameObject playerAvatar;
+    public Transform lArmPlayer, rArmPlayer, headPlayer;
+    public SkinnedMeshRenderer faceMeshPlayer, teethMeshPlayer;
 
     [SerializeField] private Transform lArmTemplate, rArmTemplate, headTemplate;
     [SerializeField] private SkinnedMeshRenderer faceMeshTemplate;
-    
-    private Transform lArmPlayer, rArmPlayer, headPlayer;
-    private SkinnedMeshRenderer faceMeshPlayer, teethMeshPlayer;
+
     private string sceneName;
 
     void Start()
     {
-        Transform spine2Player = playerAvatar.transform.Find("Armature/Hips/Spine/Spine1/Spine2");
-        lArmPlayer = spine2Player.Find("LeftShoulder/LeftArm");
-        rArmPlayer = spine2Player.Find("RightShoulder/RightArm");
-        headPlayer = spine2Player.Find("Neck/Head");
-        faceMeshPlayer = playerAvatar.transform.Find("Avatar_Renderer_Head").GetComponent<SkinnedMeshRenderer>();
-        teethMeshPlayer = playerAvatar.transform.Find("Avatar_Renderer_Teeth").GetComponent<SkinnedMeshRenderer>();
-
         sceneName = SceneManager.GetActiveScene().name;
     }
 
@@ -39,11 +32,14 @@ public class MotionTransfer : MonoBehaviour
             for (int i = 0; i < faceMeshTemplate.sharedMesh.blendShapeCount; i++)
             {
                 float weight = faceMeshTemplate.GetBlendShapeWeight(i);
-                faceMeshPlayer.SetBlendShapeWeight(i, weight);
+                string name = faceMeshTemplate.sharedMesh.GetBlendShapeName(i);
 
-                if (faceMeshTemplate.sharedMesh.GetBlendShapeName(i) == "jawOpen")
+                int idx = faceMeshPlayer.sharedMesh.GetBlendShapeIndex(name);
+                if (idx != -1) faceMeshPlayer.SetBlendShapeWeight(idx, weight);
+
+                if (name == "jawOpen")
                 {
-                    teethMeshPlayer.SetBlendShapeWeight(i, weight);
+                    teethMeshPlayer.SetBlendShapeWeight(idx, weight);
                 }
             }
         }

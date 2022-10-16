@@ -232,7 +232,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2059651836023067139, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 38.9
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 2059651836023067139, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
       propertyPath: m_LocalPosition.y
@@ -491,6 +491,31 @@ PrefabInstance:
 --- !u!1 &536109739 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1719964674429192377, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+  m_PrefabInstance: {fileID: 536109738}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &536109740 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3067681544492478459, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+  m_PrefabInstance: {fileID: 536109738}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &536109741 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3067681545185218935, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+  m_PrefabInstance: {fileID: 536109738}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &536109742 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3067681545650488054, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+  m_PrefabInstance: {fileID: 536109738}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &536109743 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3067681544515623022, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+  m_PrefabInstance: {fileID: 536109738}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &536109744 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3067681545207222879, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
   m_PrefabInstance: {fileID: 536109738}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &638479256
@@ -1165,6 +1190,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerAvatar: {fileID: 536109739}
+  lArmPlayer: {fileID: 536109744}
+  rArmPlayer: {fileID: 536109743}
+  headPlayer: {fileID: 536109742}
+  faceMeshPlayer: {fileID: 536109741}
+  teethMeshPlayer: {fileID: 536109740}
   lArmTemplate: {fileID: 979711482}
   rArmTemplate: {fileID: 979711481}
   headTemplate: {fileID: 979711480}
@@ -1450,6 +1480,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68542cd93e105714a970aafc673eacd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerAvatar: {fileID: 536109739}
+  templateAvatar: {fileID: 979711478}
 --- !u!4 &1735839673
 Transform:
   m_ObjectHideFlags: 0
@@ -1486,7 +1518,7 @@ PrefabInstance:
       objectReference: {fileID: 1216512957}
     - target: {fileID: 1787669741510438445, guid: 967935514b6227e449e67130ea264486, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1787669741510438447, guid: 967935514b6227e449e67130ea264486, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target

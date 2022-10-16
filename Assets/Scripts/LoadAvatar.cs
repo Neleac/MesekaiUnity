@@ -6,17 +6,28 @@ namespace ReadyPlayerMe
 {
     public class LoadAvatar : MonoBehaviour
     {
+        [SerializeField] private GameObject playerAvatar;
+        [SerializeField] private GameObject templateAvatar;
+
         private AvatarLoader avatarLoader;
+        private MotionTransfer motionTransfer;
+        private string avatarURL;
 
         void Start()
         {
             avatarLoader = new AvatarLoader();
+            motionTransfer = templateAvatar.GetComponent<MotionTransfer>();
+            avatarURL = null;
         }
 
         public void OnStartClick()
         {
-            string avatarURL = "https://api.readyplayer.me/v1/avatars/6230ecd2cc9780a069f9852c.glb";
-            avatarLoader.LoadAvatar(avatarURL, OnAvatarImported, OnAvatarLoaded);
+            string url = "https://api.readyplayer.me/v1/avatars/6230ecd2cc9780a069f9852c.glb";
+            if (url != avatarURL)
+            {
+                avatarLoader.LoadAvatar(url, OnAvatarImported, OnAvatarLoaded);
+                avatarURL = url;
+            }
         }
 
         private void OnAvatarImported(GameObject avatar)
@@ -28,11 +39,24 @@ namespace ReadyPlayerMe
         {
             Debug.Log($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n{metaData}");
 
-            avatar.GetComponent<Animator>().enabled = false;
+            Vector3 pos = playerAvatar.transform.position;
+            Vector3 rot = playerAvatar.transform.eulerAngles;
+            Vector3 scale = playerAvatar.transform.localScale;
+            Destroy(playerAvatar);
+            playerAvatar = avatar;
 
-            avatar.transform.position = new Vector3(0, -120, 90);
-            avatar.transform.eulerAngles = new Vector3(0, 180, 0);
-            avatar.transform.localScale = new Vector3(90, 90, 90);
+            playerAvatar.GetComponent<Animator>().enabled = false;
+            playerAvatar.transform.position = pos;
+            playerAvatar.transform.eulerAngles = rot;
+            playerAvatar.transform.localScale = scale;
+
+            motionTransfer.playerAvatar = playerAvatar;
+            Transform spine2Player = playerAvatar.transform.Find("Armature/Hips/Spine/Spine1/Spine2");
+            motionTransfer.lArmPlayer = spine2Player.Find("LeftShoulder/LeftArm");
+            motionTransfer.rArmPlayer = spine2Player.Find("RightShoulder/RightArm");
+            motionTransfer.headPlayer = spine2Player.Find("Neck/Head");
+            motionTransfer.faceMeshPlayer = playerAvatar.transform.Find("Avatar_Renderer_Head").GetComponent<SkinnedMeshRenderer>();
+            motionTransfer.teethMeshPlayer = playerAvatar.transform.Find("Avatar_Renderer_Teeth").GetComponent<SkinnedMeshRenderer>();
         }
     }
 }
