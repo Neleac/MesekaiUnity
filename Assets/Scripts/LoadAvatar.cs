@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 namespace ReadyPlayerMe
 {
@@ -11,23 +13,16 @@ namespace ReadyPlayerMe
 
         private AvatarLoader avatarLoader;
         private MotionTransfer motionTransfer;
-        private string avatarURL;
 
         void Start()
         {
             avatarLoader = new AvatarLoader();
             motionTransfer = templateAvatar.GetComponent<MotionTransfer>();
-            avatarURL = null;
         }
 
-        public void OnStartClick()
+        public void OnLoadClick()
         {
-            string url = "https://api.readyplayer.me/v1/avatars/6230ecd2cc9780a069f9852c.glb";
-            if (url != avatarURL)
-            {
-                avatarLoader.LoadAvatar(url, OnAvatarImported, OnAvatarLoaded);
-                avatarURL = url;
-            }
+            avatarLoader.LoadAvatar(GetComponent<TMP_InputField>().text, OnAvatarImported, OnAvatarLoaded);
         }
 
         private void OnAvatarImported(GameObject avatar)
