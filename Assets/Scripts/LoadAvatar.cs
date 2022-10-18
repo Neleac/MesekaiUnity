@@ -25,6 +25,11 @@ namespace ReadyPlayerMe
             avatarLoader.LoadAvatar(GetComponent<TMP_InputField>().text, OnAvatarImported, OnAvatarLoaded);
         }
 
+        public void OnClearClick()
+        {
+            GetComponent<TMP_InputField>().text = "";
+        }
+
         private void OnAvatarImported(GameObject avatar)
         {
             Debug.Log($"Avatar imported. [{Time.timeSinceLevelLoad:F2}]");
@@ -34,17 +39,16 @@ namespace ReadyPlayerMe
         {
             Debug.Log($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n{metaData}");
 
+            print(avatar.transform.position);
+
             Vector3 pos = playerAvatar.transform.position;
             Vector3 rot = playerAvatar.transform.eulerAngles;
             Vector3 scale = playerAvatar.transform.localScale;
             Destroy(playerAvatar);
+            
             playerAvatar = avatar;
-
             playerAvatar.GetComponent<Animator>().enabled = false;
-            playerAvatar.transform.position = pos;
-            playerAvatar.transform.eulerAngles = rot;
-            playerAvatar.transform.localScale = scale;
-
+    
             motionTransfer.playerAvatar = playerAvatar;
             Transform spine2Player = playerAvatar.transform.Find("Armature/Hips/Spine/Spine1/Spine2");
             motionTransfer.lArmPlayer = spine2Player.Find("LeftShoulder/LeftArm");
@@ -52,6 +56,10 @@ namespace ReadyPlayerMe
             motionTransfer.headPlayer = spine2Player.Find("Neck/Head");
             motionTransfer.faceMeshPlayer = playerAvatar.transform.Find("Avatar_Renderer_Head").GetComponent<SkinnedMeshRenderer>();
             motionTransfer.teethMeshPlayer = playerAvatar.transform.Find("Avatar_Renderer_Teeth").GetComponent<SkinnedMeshRenderer>();
+
+            playerAvatar.transform.position = pos;
+            playerAvatar.transform.eulerAngles = rot;
+            playerAvatar.transform.localScale = scale;
         }
     }
 }
