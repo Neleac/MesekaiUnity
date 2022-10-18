@@ -7,6 +7,7 @@ public class PreviewPanel : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI buttonText;
     [SerializeField] private GameObject camera;
+    [SerializeField] private GameObject webcamView;
     private RectTransform panel;
 
     private Vector3 camShowPos;
@@ -25,7 +26,7 @@ public class PreviewPanel : MonoBehaviour
         panel = GetComponent<RectTransform>();
 
         camShowPos = camera.transform.position;
-        camHidePos = new Vector3(40, camShowPos.y, camShowPos.z);
+        camHidePos = new Vector3(30, camShowPos.y, camShowPos.z);
         camGoalPos = camera.transform.position;
         camAnimSpeed = Vector3.Distance(camShowPos, camHidePos) / animTime;
         
@@ -58,12 +59,14 @@ public class PreviewPanel : MonoBehaviour
             camGoalPos = camHidePos;
             panelGoalPos = panelHidePos;
             buttonText.text = "Show Panel";
+            webcamView.SetActive(false);
         }
         else
         {
             camGoalPos = camShowPos;
             panelGoalPos = panelShowPos;
             buttonText.text = "Hide Panel";
+            webcamView.SetActive(true);
         }
     }
 }
