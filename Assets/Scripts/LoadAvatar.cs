@@ -16,9 +16,7 @@ namespace ReadyPlayerMe
         private MotionTransfer motionTransfer;
         private TMP_InputField urlInput;
 
-        private Vector3 avatarPos;
-        private Vector3 avatarRot;
-        private Vector3 avatarScl;
+        private Vector3 avatarPos, avatarRot, avatarScl;
 
         void Start()
         {
@@ -57,10 +55,14 @@ namespace ReadyPlayerMe
             avatar.GetComponent<Animator>().enabled = false;
     
             motionTransfer.playerAvatar = avatar;
-            Transform spine2Player = avatar.transform.Find("Armature/Hips/Spine/Spine1/Spine2");
-            motionTransfer.lArmPlayer = spine2Player.Find("LeftShoulder/LeftArm");
-            motionTransfer.rArmPlayer = spine2Player.Find("RightShoulder/RightArm");
-            motionTransfer.headPlayer = spine2Player.Find("Neck/Head");
+                        
+            motionTransfer.spinePlayer = avatar.transform.Find("Armature/Hips/Spine");
+            motionTransfer.spine1Player = motionTransfer.spinePlayer.Find("Spine1");
+            motionTransfer.spine2Player = motionTransfer.spine1Player.Find("Spine2");
+
+            motionTransfer.lArmPlayer = motionTransfer.spine2Player.Find("LeftShoulder/LeftArm");
+            motionTransfer.rArmPlayer = motionTransfer.spine2Player.Find("RightShoulder/RightArm");
+            motionTransfer.headPlayer = motionTransfer.spine2Player.Find("Neck/Head");
             motionTransfer.faceMeshPlayer = avatar.transform.Find("Avatar_Renderer_Head").GetComponent<SkinnedMeshRenderer>();
             motionTransfer.teethMeshPlayer = avatar.transform.Find("Avatar_Renderer_Teeth").GetComponent<SkinnedMeshRenderer>();
 

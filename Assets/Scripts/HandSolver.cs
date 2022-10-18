@@ -19,38 +19,27 @@ public class HandSolver : MonoBehaviour
     const int RING = 13;
     const int PINKY = 17;
 
-    private Transform rThumbTf;
-    private Transform rIndexTf;
-    private Transform rMiddleTf;
-    private Transform rRingTf;
-    private Transform rPinkyTf;
-    private Transform lThumbTf;
-    private Transform lIndexTf;
-    private Transform lMiddleTf;
-    private Transform lRingTf;
-    private Transform lPinkyTf;
+    private Transform rThumbTf, rIndexTf, rMiddleTf, rRingTf, rPinkyTf;
+    private Transform lThumbTf, lIndexTf, lMiddleTf, lRingTf, lPinkyTf;
 
-    private NormalizedLandmarkList leftHandLandmarks;
-    private NormalizedLandmarkList rightHandLandmarks;
+    private NormalizedLandmarkList leftHandLandmarks, rightHandLandmarks;
+    [HideInInspector] public bool leftDetected, rightDetected;
 
     [SerializeField] private Transform hips;
     [SerializeField] private bool mirrorMode;
 
-    [HideInInspector] public bool leftDetected;
-    [HideInInspector] public bool rightDetected;
-
     void Start()
     {
-        Transform spine2 = hips.Find("Spine").Find("Spine1").Find("Spine2");
+        Transform spine2 = hips.Find("Spine/Spine1/Spine2");
         
-        Transform rHand = spine2.Find("RightShoulder").Find("RightArm").Find("RightForeArm").Find("RightHand");
+        Transform rHand = spine2.Find("RightShoulder/RightArm/RightForeArm/RightHand");
         rThumbTf = rHand.Find("RightHandThumb1");
         rIndexTf = rHand.Find("RightHandIndex1");
         rMiddleTf = rHand.Find("RightHandMiddle1");
         rRingTf = rHand.Find("RightHandRing1");
         rPinkyTf = rHand.Find("RightHandPinky1");
 
-        Transform lHand = spine2.Find("LeftShoulder").Find("LeftArm").Find("LeftForeArm").Find("LeftHand");
+        Transform lHand = spine2.Find("LeftShoulder/LeftArm/LeftForeArm/LeftHand");
         lThumbTf = lHand.Find("LeftHandThumb1");
         lIndexTf = lHand.Find("LeftHandIndex1");
         lMiddleTf = lHand.Find("LeftHandMiddle1");

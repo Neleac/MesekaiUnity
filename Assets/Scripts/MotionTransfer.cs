@@ -7,9 +7,10 @@ public class MotionTransfer : MonoBehaviour
 {
     public GameObject playerAvatar;
     public Transform lArmPlayer, rArmPlayer, headPlayer;
+    public Transform spinePlayer, spine1Player, spine2Player;
     public SkinnedMeshRenderer faceMeshPlayer, teethMeshPlayer;
 
-    [SerializeField] private Transform lArmTemplate, rArmTemplate, headTemplate;
+    [SerializeField] private Transform lArmTemplate, rArmTemplate, headTemplate, spineTemplate;
     [SerializeField] private SkinnedMeshRenderer faceMeshTemplate;
 
     private string sceneName;
@@ -28,6 +29,9 @@ public class MotionTransfer : MonoBehaviour
             mapJointRotation(rArmPlayer, rArmTemplate, null);
 
             headPlayer.localRotation = headTemplate.localRotation;
+            spinePlayer.localRotation = spineTemplate.localRotation;
+            spine1Player.localRotation = spineTemplate.localRotation;
+            spine2Player.localRotation = spineTemplate.localRotation;
 
             for (int i = 0; i < faceMeshTemplate.sharedMesh.blendShapeCount; i++)
             {

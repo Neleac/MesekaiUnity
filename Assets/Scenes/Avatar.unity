@@ -637,6 +637,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 173192577}
   m_CullTransparentMesh: 1
+--- !u!4 &194555157 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3067681545485155536, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+  m_PrefabInstance: {fileID: 536109738}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &194555158 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3067681546327773940, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+  m_PrefabInstance: {fileID: 536109738}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &194555159 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3067681546370924211, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+  m_PrefabInstance: {fileID: 536109738}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &217304833
 GameObject:
   m_ObjectHideFlags: 0
@@ -1640,6 +1655,10 @@ PrefabInstance:
     - target: {fileID: 1719964674429192377, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
       propertyPath: m_Name
       value: Default Avatar
+      objectReference: {fileID: 0}
+    - target: {fileID: 1719964674429192377, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1816577124130184271, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
       propertyPath: m_Enabled
@@ -2908,6 +2927,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Template Avatar
       objectReference: {fileID: 0}
+    - target: {fileID: 1719964674429192377, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1816577124130184271, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -2938,7 +2961,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2059651836023067139, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 38.9
+      value: -40
       objectReference: {fileID: 0}
     - target: {fileID: 2059651836023067139, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3232,11 +3255,15 @@ MonoBehaviour:
   lArmPlayer: {fileID: 536109744}
   rArmPlayer: {fileID: 536109743}
   headPlayer: {fileID: 536109742}
+  spinePlayer: {fileID: 194555159}
+  spine1Player: {fileID: 194555158}
+  spine2Player: {fileID: 194555157}
   faceMeshPlayer: {fileID: 536109741}
   teethMeshPlayer: {fileID: 536109740}
   lArmTemplate: {fileID: 979711482}
   rArmTemplate: {fileID: 979711481}
   headTemplate: {fileID: 979711480}
+  spineTemplate: {fileID: 1650739314}
   faceMeshTemplate: {fileID: 979711479}
 --- !u!1 &1003603495
 GameObject:
@@ -4429,6 +4456,11 @@ MonoBehaviour:
   camera: {fileID: 1264297878}
   webcamView: {fileID: 8571076843288239503}
   animTime: 0.2
+--- !u!4 &1650739314 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3067681546370924211, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+  m_PrefabInstance: {fileID: 979711477}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1741892411
 GameObject:
   m_ObjectHideFlags: 0

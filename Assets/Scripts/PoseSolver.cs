@@ -17,14 +17,9 @@ public class PoseSolver : MonoBehaviour
     const int LEFTFINGER = 19;
     const int RIGHTFINGER = 20;
 
-    private Transform lShoulderTf;
-    private Transform lElbowTf;
-    private Transform lWristTf;
-    private Transform lFingerTf;
-    private Transform rShoulderTf;
-    private Transform rElbowTf;
-    private Transform rWristTf;
-    private Transform rFingerTf;
+    private Transform spine, spine1, spine2;
+    private Transform lShoulderTf, lElbowTf, lWristTf, lFingerTf;
+    private Transform rShoulderTf, rElbowTf, rWristTf, rFingerTf;
 
     private (Transform, Transform)[] transformPairs;
     private (int, int)[] landmarkIdxPairs;
@@ -37,14 +32,16 @@ public class PoseSolver : MonoBehaviour
 
     void Start()
     {
-        Transform spine2 = hips.Find("Spine").Find("Spine1").Find("Spine2");
+        spine = hips.Find("Spine");
+        spine1 = spine.Find("Spine1");
+        spine2 = spine1.Find("Spine2");
 
-        lShoulderTf = spine2.Find("LeftShoulder").Find("LeftArm");
+        lShoulderTf = spine2.Find("LeftShoulder/LeftArm");
         lElbowTf = lShoulderTf.Find("LeftForeArm");
         lWristTf = lElbowTf.Find("LeftHand");
         lFingerTf = lWristTf.Find("LeftHandIndex1");
 
-        rShoulderTf = spine2.Find("RightShoulder").Find("RightArm");
+        rShoulderTf = spine2.Find("RightShoulder/RightArm");
         rElbowTf = rShoulderTf.Find("RightForeArm");
         rWristTf = rElbowTf.Find("RightHand");
         rFingerTf = rWristTf.Find("RightHandIndex1");
@@ -78,6 +75,9 @@ public class PoseSolver : MonoBehaviour
             (Transform parentTf, Transform childTf) = transformPairs[i];
             parentTf.localRotation = Quaternion.identity;
         }
+        spine.localRotation = Quaternion.identity;
+        spine1.localRotation = Quaternion.identity;
+        spine2.localRotation = Quaternion.identity;
 
         if (poseLandmarks != null) SolvePose();
     }
@@ -108,7 +108,12 @@ public class PoseSolver : MonoBehaviour
         Vector3 v_ShoulderLm = (rShoulderLm - lShoulderLm).normalized;
         Vector3 v_ShoulderTf = (lShoulderTf.position - rShoulderTf.position).normalized;
         Quaternion rot = Quaternion.FromToRotation(v_ShoulderLm, v_ShoulderTf);
+        Quaternion rotInv = Quaternion.Inverse(rot);
 
+        spine.localRotation = Quaternion.Slerp(spine.localRotation, spine.localRotation * rotInv, SMOOTHING);
+        spine1.localRotation = Quaternion.Slerp(spine1.localRotation, spine1.localRotation * rotInv, SMOOTHING);
+        spine2.localRotation = Quaternion.Slerp(spine2.localRotation, spine2.localRotation * rotInv, SMOOTHING);
+        
         // convert Landmarks to Vector3s, with shoulders aligned with avatar
         Vector3[] landmarks = new Vector3[poseLandmarks.Landmark.Count];
         for (int i = 0; i < landmarks.Length; i++)
