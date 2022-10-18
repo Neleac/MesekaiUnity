@@ -10,14 +10,25 @@ namespace ReadyPlayerMe
     {
         [SerializeField] private GameObject playerAvatar;
         [SerializeField] private GameObject templateAvatar;
+        private GameObject defaultAvatar;
 
         private AvatarLoader avatarLoader;
         private MotionTransfer motionTransfer;
+        private TMP_InputField urlInput;
+
+        private Vector3 avatarPos;
+        private Vector3 avatarRot;
+        private Vector3 avatarScl;
 
         void Start()
         {
             avatarLoader = new AvatarLoader();
             motionTransfer = templateAvatar.GetComponent<MotionTransfer>();
+            
+            defaultAvatar = playerAvatar;
+            avatarPos = playerAvatar.transform.position;
+            avatarRot = playerAvatar.transform.eulerAngles;
+            avatarScl = playerAvatar.transform.localScale;
         }
 
         public void OnLoadClick()
@@ -25,9 +36,10 @@ namespace ReadyPlayerMe
             avatarLoader.LoadAvatar(GetComponent<TMP_InputField>().text, OnAvatarImported, OnAvatarLoaded);
         }
 
-        public void OnClearClick()
+        public void OnResetClick()
         {
             GetComponent<TMP_InputField>().text = "";
+            if (playerAvatar.name != defaultAvatar.name) OnAvatarLoaded(defaultAvatar, null);
         }
 
         private void OnAvatarImported(GameObject avatar)
@@ -38,28 +50,25 @@ namespace ReadyPlayerMe
         private void OnAvatarLoaded(GameObject avatar, AvatarMetaData metaData)
         {
             Debug.Log($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n{metaData}");
-
-            print(avatar.transform.position);
-
-            Vector3 pos = playerAvatar.transform.position;
-            Vector3 rot = playerAvatar.transform.eulerAngles;
-            Vector3 scale = playerAvatar.transform.localScale;
-            Destroy(playerAvatar);
             
-            playerAvatar = avatar;
-            playerAvatar.GetComponent<Animator>().enabled = false;
+            if (playerAvatar == defaultAvatar) playerAvatar.transform.position = new Vector3(0, -999, 0);
+            else Destroy(playerAvatar); // TODO: avatar caching
+            
+            avatar.GetComponent<Animator>().enabled = false;
     
-            motionTransfer.playerAvatar = playerAvatar;
-            Transform spine2Player = playerAvatar.transform.Find("Armature/Hips/Spine/Spine1/Spine2");
+            motionTransfer.playerAvatar = avatar;
+            Transform spine2Player = avatar.transform.Find("Armature/Hips/Spine/Spine1/Spine2");
             motionTransfer.lArmPlayer = spine2Player.Find("LeftShoulder/LeftArm");
             motionTransfer.rArmPlayer = spine2Player.Find("RightShoulder/RightArm");
             motionTransfer.headPlayer = spine2Player.Find("Neck/Head");
-            motionTransfer.faceMeshPlayer = playerAvatar.transform.Find("Avatar_Renderer_Head").GetComponent<SkinnedMeshRenderer>();
-            motionTransfer.teethMeshPlayer = playerAvatar.transform.Find("Avatar_Renderer_Teeth").GetComponent<SkinnedMeshRenderer>();
+            motionTransfer.faceMeshPlayer = avatar.transform.Find("Avatar_Renderer_Head").GetComponent<SkinnedMeshRenderer>();
+            motionTransfer.teethMeshPlayer = avatar.transform.Find("Avatar_Renderer_Teeth").GetComponent<SkinnedMeshRenderer>();
 
-            playerAvatar.transform.position = pos;
-            playerAvatar.transform.eulerAngles = rot;
-            playerAvatar.transform.localScale = scale;
+            avatar.transform.position = avatarPos;
+            avatar.transform.eulerAngles = avatarRot;
+            avatar.transform.localScale = avatarScl;
+
+            playerAvatar = avatar;
         }
     }
 }
