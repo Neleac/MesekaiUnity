@@ -12,21 +12,16 @@ namespace ReadyPlayerMe
         [SerializeField] private GameObject templateAvatar;
         private GameObject defaultAvatar;
 
+        [SerializeField] private FullBodyView fullBodyView;
         private AvatarLoader avatarLoader;
         private MotionTransfer motionTransfer;
         private TMP_InputField urlInput;
-
-        private Vector3 avatarPos, avatarRot, avatarScl;
 
         void Start()
         {
             avatarLoader = new AvatarLoader();
             motionTransfer = templateAvatar.GetComponent<MotionTransfer>();
-            
             defaultAvatar = playerAvatar;
-            avatarPos = playerAvatar.transform.position;
-            avatarRot = playerAvatar.transform.eulerAngles;
-            avatarScl = playerAvatar.transform.localScale;
         }
 
         public void OnLoadClick()
@@ -48,12 +43,20 @@ namespace ReadyPlayerMe
         private void OnAvatarLoaded(GameObject avatar, AvatarMetaData metaData)
         {
             Debug.Log($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n{metaData}");
+
+            avatar.transform.position = playerAvatar.transform.position;
+            avatar.transform.eulerAngles = playerAvatar.transform.eulerAngles;
+            avatar.transform.localScale = playerAvatar.transform.localScale;
             
             if (playerAvatar == defaultAvatar) playerAvatar.transform.position = new Vector3(0, -999, 0);
             else Destroy(playerAvatar); // TODO: avatar caching
             
             avatar.GetComponent<Animator>().enabled = false;
+
+            // half/full body button modify loaded avatar
+            fullBodyView.avatar = avatar;
     
+            // map template avatar to loaded avatar
             motionTransfer.playerAvatar = avatar;
                         
             motionTransfer.spinePlayer = avatar.transform.Find("Armature/Hips/Spine");
@@ -65,10 +68,6 @@ namespace ReadyPlayerMe
             motionTransfer.headPlayer = motionTransfer.spine2Player.Find("Neck/Head");
             motionTransfer.faceMeshPlayer = avatar.transform.Find("Avatar_Renderer_Head").GetComponent<SkinnedMeshRenderer>();
             motionTransfer.teethMeshPlayer = avatar.transform.Find("Avatar_Renderer_Teeth").GetComponent<SkinnedMeshRenderer>();
-
-            avatar.transform.position = avatarPos;
-            avatar.transform.eulerAngles = avatarRot;
-            avatar.transform.localScale = avatarScl;
 
             playerAvatar = avatar;
         }
