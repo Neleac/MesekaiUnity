@@ -255,9 +255,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 498146e99d4934673bd948c8be11227e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _preferableDefaultWidth: 640
+  _preferableDefaultWidth: 853
   _defaultAvailableResolutions:
-  - width: 640
+  - width: 853
     height: 480
     frameRate: 30
   - width: 1280

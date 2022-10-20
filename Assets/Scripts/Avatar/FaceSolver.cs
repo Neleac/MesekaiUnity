@@ -7,7 +7,7 @@ using Mediapipe;
 public class FaceSolver : MonoBehaviour
 {
     // TODO: replace magic numbers with input dimensions from Start/Image Source/Web Cam Source
-    const int WIDTH = 640;
+    const int WIDTH = 853;
     const int HEIGHT = 480;
     
     // landmark indices
