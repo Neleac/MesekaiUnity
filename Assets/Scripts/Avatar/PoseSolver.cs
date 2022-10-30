@@ -28,7 +28,7 @@ public class PoseSolver : MonoBehaviour
     private Quaternion[] prevRots;
 
     [SerializeField] private Transform hips;
-    [SerializeField] private bool mirrorMode;
+    public bool mirrorMode;
 
     void Start()
     {

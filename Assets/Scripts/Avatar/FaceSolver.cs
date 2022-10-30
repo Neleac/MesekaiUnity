@@ -22,7 +22,7 @@ public class FaceSolver : MonoBehaviour
 
     [SerializeField] private Transform headBone;
     [SerializeField] private SkinnedMeshRenderer faceMesh, teethMesh;
-    [SerializeField] private bool mirrorMode;
+    public bool mirrorMode;
 
     private NormalizedLandmarkList faceLandmarks;
 

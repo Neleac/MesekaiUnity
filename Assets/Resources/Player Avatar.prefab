@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 1816577124130184271}
   - component: {fileID: 2150279704201940845}
   - component: {fileID: 5351967091107329281}
+  - component: {fileID: 1730537073091273473}
   m_Layer: 8
   m_Name: Player Avatar
   m_TagString: Player
@@ -393,10 +394,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92e832bf0f920be4aba40f37ddae7d81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hips: {fileID: 3067681545223236634}
-  mirrorMode: 0
   leftDetected: 0
   rightDetected: 0
+  hips: {fileID: 3067681545223236634}
+  mirrorMode: 0
 --- !u!114 &5351967091107329281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -413,6 +414,24 @@ MonoBehaviour:
   faceMesh: {fileID: 3067681545185218935}
   teethMesh: {fileID: 3067681544492478459}
   mirrorMode: 0
+--- !u!114 &1730537073091273473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1719964674429192377}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f14635e3698b0654bb60ca264759a3cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  srcJoints:
+  - {fileID: 3067681546370924211}
+  tgtJoints: []
+  srcFace: {fileID: 3067681545185218935}
+  tgtFace: {fileID: 0}
+  tgtTeeth: {fileID: 0}
 --- !u!1 &3067681544374719496
 GameObject:
   m_ObjectHideFlags: 0
@@ -5795,7 +5814,7 @@ PrefabInstance:
       objectReference: {fileID: 6424545362356695525}
     - target: {fileID: 2070925441746177913, guid: a1a802ecaf6775746bb2a929fb554ad8, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.7780116
+      value: 1.7776911
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a1a802ecaf6775746bb2a929fb554ad8, type: 3}

@@ -16,7 +16,7 @@ namespace ReadyPlayerMe
         private MotionTransfer motionTransfer;
         private TMP_InputField urlInput;
 
-        private Vector3 avatarPos, avatarRot, avatarScl;
+        private Vector3 defaultPos, defaultRot, defaultScl;
 
         void Start()
         {
@@ -24,9 +24,9 @@ namespace ReadyPlayerMe
             motionTransfer = templateAvatar.GetComponent<MotionTransfer>();
             
             defaultAvatar = playerAvatar;
-            avatarPos = playerAvatar.transform.position;
-            avatarRot = playerAvatar.transform.eulerAngles;
-            avatarScl = playerAvatar.transform.localScale;
+            defaultPos = playerAvatar.transform.position;
+            defaultRot = playerAvatar.transform.eulerAngles;
+            defaultScl = playerAvatar.transform.localScale;
         }
 
         public void OnLoadClick()
@@ -37,7 +37,7 @@ namespace ReadyPlayerMe
         public void OnResetClick()
         {
             GetComponent<TMP_InputField>().text = "";
-            if (playerAvatar.name != defaultAvatar.name) OnAvatarLoaded(defaultAvatar, null);
+            if (playerAvatar != defaultAvatar) OnAvatarLoaded(defaultAvatar, null);
         }
 
         private void OnAvatarImported(GameObject avatar)
@@ -50,27 +50,21 @@ namespace ReadyPlayerMe
             Debug.Log($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n{metaData}");
             
             if (playerAvatar == defaultAvatar) playerAvatar.transform.position = new Vector3(0, -999, 0);
-            else Destroy(playerAvatar); // TODO: avatar caching
+            else Destroy(playerAvatar);
             
             avatar.GetComponent<Animator>().enabled = false;
-    
-            motionTransfer.playerAvatar = avatar;
-                        
-            motionTransfer.spinePlayer = avatar.transform.Find("Armature/Hips/Spine");
-            motionTransfer.spine1Player = motionTransfer.spinePlayer.Find("Spine1");
-            motionTransfer.spine2Player = motionTransfer.spine1Player.Find("Spine2");
 
-            motionTransfer.lArmPlayer = motionTransfer.spine2Player.Find("LeftShoulder/LeftArm");
-            motionTransfer.rArmPlayer = motionTransfer.spine2Player.Find("RightShoulder/RightArm");
-            motionTransfer.headPlayer = motionTransfer.spine2Player.Find("Neck/Head");
-            motionTransfer.faceMeshPlayer = avatar.transform.Find("Avatar_Renderer_Head").GetComponent<SkinnedMeshRenderer>();
-            motionTransfer.teethMeshPlayer = avatar.transform.Find("Avatar_Renderer_Teeth").GetComponent<SkinnedMeshRenderer>();
+            // set avatar as motion transfer target
+            motionTransfer.tgtJoints = new Transform[] {avatar.transform.Find("Armature/Hips/Spine")};
+            motionTransfer.tgtFace = avatar.transform.Find("Avatar_Renderer_Head").GetComponent<SkinnedMeshRenderer>();
+            motionTransfer.tgtTeeth = avatar.transform.Find("Avatar_Renderer_Teeth").GetComponent<SkinnedMeshRenderer>();
 
-            avatar.transform.position = avatarPos;
-            avatar.transform.eulerAngles = avatarRot;
-            avatar.transform.localScale = avatarScl;
-
+            avatar.transform.position = defaultPos;
+            avatar.transform.eulerAngles = defaultRot;
+            avatar.transform.localScale = defaultScl;
+            
             playerAvatar = avatar;
+            if (playerAvatar != defaultAvatar) DontDestroyOnLoad(playerAvatar);
         }
     }
 }

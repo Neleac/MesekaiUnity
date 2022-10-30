@@ -26,7 +26,7 @@ public class HandSolver : MonoBehaviour
     [HideInInspector] public bool leftDetected, rightDetected;
 
     [SerializeField] private Transform hips;
-    [SerializeField] private bool mirrorMode;
+    public bool mirrorMode;
 
     void Start()
     {
