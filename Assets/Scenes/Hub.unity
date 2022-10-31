@@ -3453,6 +3453,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   avatarPrefab: {fileID: 1719964674429192377, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+  animController: {fileID: 9100000, guid: 40db3173a05ae3242b1c182a09b0a183, type: 2}
 --- !u!1001 &491241008
 PrefabInstance:
   m_ObjectHideFlags: 0

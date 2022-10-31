@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using StarterAssets;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -27,6 +28,10 @@ public class PlayerManager : MonoBehaviour
         else
         {
             // custom avatar
+            Animator animator = customAvatar.GetComponent<Animator>();
+            animator.runtimeAnimatorController = defaultAvatar.GetComponent<Animator>().runtimeAnimatorController;
+            animator.enabled = true;
+            defaultAvatar.GetComponent<ThirdPersonController>().transferAnimator = animator;
 
             // set motion transfer targets
             motionTransfer.tgtJoints = new Transform[] {customAvatar.transform.Find("Armature/Hips/Spine")};
