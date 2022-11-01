@@ -1955,6 +1955,21 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3067681546370924211, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
   m_PrefabInstance: {fileID: 536109738}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &536109743 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3067681545650488054, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+  m_PrefabInstance: {fileID: 536109738}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &536109744 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3067681544515623022, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+  m_PrefabInstance: {fileID: 536109738}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &536109745 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3067681545207222879, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+  m_PrefabInstance: {fileID: 536109738}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &598076905
 GameObject:
   m_ObjectHideFlags: 0
@@ -2914,6 +2929,18 @@ PrefabInstance:
       propertyPath: tgtFace
       value: 
       objectReference: {fileID: 536109741}
+    - target: {fileID: 1730537073091273473, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+      propertyPath: tgtHead
+      value: 
+      objectReference: {fileID: 536109743}
+    - target: {fileID: 1730537073091273473, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+      propertyPath: tgtLArm
+      value: 
+      objectReference: {fileID: 536109745}
+    - target: {fileID: 1730537073091273473, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+      propertyPath: tgtRArm
+      value: 
+      objectReference: {fileID: 536109744}
     - target: {fileID: 1730537073091273473, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
       propertyPath: tgtTeeth
       value: 

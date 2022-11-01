@@ -139,6 +139,7 @@ MonoBehaviour:
   BottomClamp: -30
   CameraAngleOverride: 0
   LockCameraPosition: 0
+  transferAnimator: {fileID: 0}
 --- !u!114 &8880787967999304265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -426,9 +427,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f14635e3698b0654bb60ca264759a3cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  srcJoints:
-  - {fileID: 3067681546370924211}
-  tgtJoints: []
+  srcLArm: {fileID: 3067681545207222879}
+  srcRArm: {fileID: 3067681544515623022}
+  srcHead: {fileID: 3067681545650488054}
+  tgtLArm: {fileID: 0}
+  tgtRArm: {fileID: 0}
+  tgtHead: {fileID: 0}
   srcFace: {fileID: 3067681545185218935}
   tgtFace: {fileID: 0}
   tgtTeeth: {fileID: 0}

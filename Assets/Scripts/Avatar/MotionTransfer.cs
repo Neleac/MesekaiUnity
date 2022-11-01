@@ -6,11 +6,21 @@ using UnityEngine.SceneManagement;
 public class MotionTransfer : MonoBehaviour
 {
     // parent joints of all joints to be retargeted
-    public Transform[] srcJoints, tgtJoints;
+    [SerializeField] private Transform srcLArm, srcRArm, srcHead;
+    public Transform tgtLArm, tgtRArm, tgtHead;
     
     // blendshape meshes
     [SerializeField] private SkinnedMeshRenderer srcFace;
     public SkinnedMeshRenderer tgtFace, tgtTeeth;
+
+    private HandSolver handSolver;
+    private bool inHub;
+
+    void Start()
+    {
+        handSolver = GetComponent<HandSolver>();
+        inHub = SceneManager.GetActiveScene().name == "Hub";
+    }
 
     void Update()
     {
@@ -32,15 +42,22 @@ public class MotionTransfer : MonoBehaviour
 
     void LateUpdate()
     {
-        // transfer joint rotations
-        for (int i = 0; i < srcJoints.Length; i++)
+        mapJointRotation(srcHead, tgtHead);
+
+        if (inHub)
         {
-            mapJointRotation(srcJoints[i], tgtJoints[i]);
+            if (handSolver.leftDetected) mapJointRotation(srcLArm, tgtLArm);
+            if (handSolver.rightDetected) mapJointRotation(srcRArm, tgtRArm);
+        }
+        else
+        {
+            mapJointRotation(srcLArm, tgtLArm);
+            mapJointRotation(srcRArm, tgtRArm);
         }
     }
 
     private void mapJointRotation(Transform src, Transform tgt)
-    {       
+    {   
         tgt.localRotation = src.localRotation;
 
         foreach (Transform srcChild in src)

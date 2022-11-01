@@ -55,7 +55,10 @@ namespace ReadyPlayerMe
             avatar.GetComponent<Animator>().enabled = false;
 
             // set avatar as motion transfer target
-            motionTransfer.tgtJoints = new Transform[] {avatar.transform.Find("Armature/Hips/Spine")};
+            Transform spine = avatar.transform.Find("Armature/Hips/Spine/Spine1/Spine2");
+            motionTransfer.tgtLArm = spine.Find("LeftShoulder/LeftArm");
+            motionTransfer.tgtRArm = spine.Find("RightShoulder/RightArm");
+            motionTransfer.tgtHead = spine.Find("Neck/Head");
             motionTransfer.tgtFace = avatar.transform.Find("Avatar_Renderer_Head").GetComponent<SkinnedMeshRenderer>();
             motionTransfer.tgtTeeth = avatar.transform.Find("Avatar_Renderer_Teeth").GetComponent<SkinnedMeshRenderer>();
 

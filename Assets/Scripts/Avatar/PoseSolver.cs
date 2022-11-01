@@ -28,7 +28,7 @@ public class PoseSolver : MonoBehaviour
     private Quaternion[] prevRots;
 
     [SerializeField] private Transform hips;
-    public bool mirrorMode;
+    [SerializeField] private bool mirrorMode;
 
     void Start()
     {
@@ -75,9 +75,10 @@ public class PoseSolver : MonoBehaviour
             (Transform parentTf, Transform childTf) = transformPairs[i];
             parentTf.localRotation = Quaternion.identity;
         }
-        spine.localRotation = Quaternion.identity;
-        spine1.localRotation = Quaternion.identity;
-        spine2.localRotation = Quaternion.identity;
+
+        // spine.localRotation = Quaternion.identity;
+        // spine1.localRotation = Quaternion.identity;
+        // spine2.localRotation = Quaternion.identity;
 
         if (poseLandmarks != null) SolvePose();
     }
@@ -108,11 +109,12 @@ public class PoseSolver : MonoBehaviour
         Vector3 v_ShoulderLm = (rShoulderLm - lShoulderLm).normalized;
         Vector3 v_ShoulderTf = (lShoulderTf.position - rShoulderTf.position).normalized;
         Quaternion rot = Quaternion.FromToRotation(v_ShoulderLm, v_ShoulderTf);
-        Quaternion rotInv = Quaternion.Inverse(rot);
 
-        spine.localRotation = Quaternion.Slerp(spine.localRotation, spine.localRotation * rotInv, SMOOTHING);
-        spine1.localRotation = Quaternion.Slerp(spine1.localRotation, spine1.localRotation * rotInv, SMOOTHING);
-        spine2.localRotation = Quaternion.Slerp(spine2.localRotation, spine2.localRotation * rotInv, SMOOTHING);
+        // // spine rotation        
+        // Quaternion rotInv = Quaternion.Inverse(rot);
+        // spine.localRotation = Quaternion.Slerp(spine.localRotation, spine.localRotation * rotInv, SMOOTHING);
+        // spine1.localRotation = Quaternion.Slerp(spine1.localRotation, spine1.localRotation * rotInv, SMOOTHING);
+        // spine2.localRotation = Quaternion.Slerp(spine2.localRotation, spine2.localRotation * rotInv, SMOOTHING);
         
         // convert Landmarks to Vector3s, with shoulders aligned with avatar
         Vector3[] landmarks = new Vector3[poseLandmarks.Landmark.Count];
