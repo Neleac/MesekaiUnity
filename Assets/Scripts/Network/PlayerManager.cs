@@ -12,9 +12,21 @@ public class PlayerManager : MonoBehaviour
     void Awake()
     {
         GameObject defaultAvatar = PhotonNetwork.Instantiate(avatarPrefab.name, new Vector3(65f, 22.175f, 43f), Quaternion.identity);
+        GameObject templateAvatar = GameObject.Find("Template Avatar");
+
+        // setup networking
+        NetworkPlayer networkPlayer = defaultAvatar.GetComponent<NetworkPlayer>();
+        networkPlayer.srcFace = templateAvatar.transform.Find("Avatar_Renderer_Head").GetComponent<SkinnedMeshRenderer>();
+        Transform spine = templateAvatar.transform.Find("Armature/Hips/Spine/Spine1/Spine2");
+        networkPlayer.srcLArm = spine.Find("LeftShoulder/LeftArm");
+        networkPlayer.srcRArm = spine.Find("RightShoulder/RightArm");
+        networkPlayer.srcHead = spine.Find("Neck/Head");
+        networkPlayer.handSolver = templateAvatar.GetComponent<HandSolver>();
+
+        // setup player avatar
         GameObject playerAvatar = GameObject.Find("Avatar");
-        MotionTransfer motionTransfer = GameObject.Find("Template Avatar").GetComponent<MotionTransfer>();
-        
+        MotionTransfer motionTransfer = templateAvatar.GetComponent<MotionTransfer>();
+
         if (playerAvatar == null)
         {
             playerAvatar = defaultAvatar;
@@ -39,7 +51,7 @@ public class PlayerManager : MonoBehaviour
         }
 
         // set motion transfer targets
-        Transform spine = playerAvatar.transform.Find("Armature/Hips/Spine/Spine1/Spine2");
+        spine = playerAvatar.transform.Find("Armature/Hips/Spine/Spine1/Spine2");
         motionTransfer.tgtLArm = spine.Find("LeftShoulder/LeftArm");
         motionTransfer.tgtRArm = spine.Find("RightShoulder/RightArm");
         motionTransfer.tgtHead = spine.Find("Neck/Head");

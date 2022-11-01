@@ -42,7 +42,7 @@ public class MotionTransfer : MonoBehaviour
 
     void LateUpdate()
     {
-        mapJointRotation(srcHead, tgtHead);
+        tgtHead.localRotation = srcHead.localRotation;
 
         if (inHub)
         {

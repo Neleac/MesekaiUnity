@@ -3453,7 +3453,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   avatarPrefab: {fileID: 1719964674429192377, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
-  animController: {fileID: 9100000, guid: 40db3173a05ae3242b1c182a09b0a183, type: 2}
 --- !u!1001 &491241008
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9012,6 +9011,7 @@ PrefabInstance:
     - {fileID: 1867505457840908407, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
     - {fileID: 2666425734999225158, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
     - {fileID: 7159317095085121176, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
+    - {fileID: 5365325073028679801, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 308388dd3d9bfd14a9bc9e98db5252ae, type: 3}
 --- !u!114 &1346047864 stripped
 MonoBehaviour:
@@ -11265,15 +11265,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 68.044
+      value: 65.2
       objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 24.455
+      value: 23.625
       objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 32.92
+      value: 28
       objectReference: {fileID: 0}
     - target: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f, type: 3}
       propertyPath: m_LocalRotation.w

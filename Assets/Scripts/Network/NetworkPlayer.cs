@@ -9,19 +9,25 @@ using StarterAssets;
 public class NetworkPlayer : MonoBehaviourPun, IPunObservable
 {
     [SerializeField] private GameObject playerFollowCam;
-    [SerializeField] private SkinnedMeshRenderer faceMesh, teethMesh;
-    [SerializeField] private Transform lArmTf, rArmTf, headTf;
 
-    [HideInInspector] public Quaternion headRot;
-    [HideInInspector] public bool lArmMotion, rArmMotion;
-    [HideInInspector] public ArrayList lRots, rRots;
+    // src: template avatar, sends data over network
+    [HideInInspector] public SkinnedMeshRenderer srcFace;
+    [HideInInspector] public Transform srcLArm, srcRArm, srcHead;
+    [HideInInspector] public HandSolver handSolver;
+
+    // tgt: default or custom avatar, receives data from src client
+    public SkinnedMeshRenderer tgtFace, tgtTeeth;
+    public Transform tgtLArm, tgtRArm, tgtHead;
+
+    // stores received joint rots, used in LateUpdate to override animator
+    private ArrayList tgtLArmRots, tgtRArmRots;
+    private Quaternion tgtHeadRot;
 
     void Start()
     {
         if (PhotonNetwork.IsConnected && !photonView.IsMine)
         {
             playerFollowCam.SetActive(false);
-
             GetComponent<CharacterController>().enabled = false;
             GetComponent<PlayerInput>().enabled = false;
             GetComponent<ThirdPersonController>().enabled = false;
@@ -29,107 +35,102 @@ public class NetworkPlayer : MonoBehaviourPun, IPunObservable
             GetComponent<StarterAssetsInputs>().enabled = false;
         }
 
-        // this client uses these to send info over network
-        // other clients uses these to receive info and overwrite animator
-        headRot = headTf.localRotation;
-        lArmMotion = false;
-        rArmMotion = false;
-        lRots = new ArrayList();
-        rRots = new ArrayList();
+        tgtLArmRots = new ArrayList();
+        tgtRArmRots = new ArrayList();
     }
 
     void LateUpdate()
     {
         if (!photonView.IsMine) 
         {
-            headTf.localRotation = headRot;
-            if (lArmMotion) setJointRotations(lArmTf, lRots, 0);
-            if (rArmMotion) setJointRotations(rArmTf, rRots, 0);
+            if (tgtLArmRots.Count > 0) SetRots(tgtLArm, tgtLArmRots, 0);
+            if (tgtRArmRots.Count > 0) SetRots(tgtRArm, tgtRArmRots, 0);
+            tgtHead.localRotation = tgtHeadRot;
         }
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         // facial expression
-        int nBlendshapes = faceMesh.sharedMesh.blendShapeCount;
+        int nBlendshapes = tgtFace.sharedMesh.blendShapeCount;
         for (int i = 0; i < nBlendshapes; i++)
         {
-            if (stream.IsWriting)
+            if (stream.IsWriting)   // send
             {
-                stream.SendNext(faceMesh.GetBlendShapeWeight(i));
+                stream.SendNext(srcFace.GetBlendShapeWeight(i));
             }
-            else
+            else    // receive
             {
                 float weight = (float)stream.ReceiveNext();
-                faceMesh.SetBlendShapeWeight(i, weight);
-                if (faceMesh.sharedMesh.GetBlendShapeName(i) == "jawOpen")
+                tgtFace.SetBlendShapeWeight(i, weight);
+                if (tgtFace.sharedMesh.GetBlendShapeName(i) == "jawOpen")
                 {
-                    teethMesh.SetBlendShapeWeight(i, weight);
+                    tgtTeeth.SetBlendShapeWeight(i, weight);
                 }
             }
         }
 
-        // head
-        if (stream.IsWriting) stream.SendNext(headRot);
-        else headRot = (Quaternion)stream.ReceiveNext();
-
-        // arms
-        if (stream.IsWriting)
+        // joint rotations
+        if (stream.IsWriting)   // send
         {
-            if (lArmMotion)
+            if (handSolver.leftDetected)
             {
-                stream.SendNext(lRots.Count);
-                foreach (Quaternion rot in lRots) stream.SendNext(rot);
+                stream.SendNext(true);
+                SendRots(stream, srcLArm);
             }
             else
             {
-                stream.SendNext(0);
+                stream.SendNext(false);
             }
 
-            if (rArmMotion)
+            if (handSolver.rightDetected)
             {
-                stream.SendNext(rRots.Count);
-                foreach (Quaternion rot in rRots) stream.SendNext(rot);
+                stream.SendNext(true);
+                SendRots(stream, srcRArm);
             }
             else
             {
-                stream.SendNext(0);
+                stream.SendNext(false);
             }
+
+            stream.SendNext(srcHead.localRotation);
         }
-        else
+        else    // receive
         {
-            int jointCount = (int)stream.ReceiveNext();
-            if (jointCount > 0)
-            {
-                lRots.Clear();
-                for (int i = 0; i < jointCount; i++) lRots.Add((Quaternion)stream.ReceiveNext());
-                lArmMotion = true;
-            }
-            else
-            {
-                lArmMotion = false;
-            }
+            tgtLArmRots.Clear();
+            if ((bool)stream.ReceiveNext()) ReceiveRots(stream, tgtLArm, tgtLArmRots);
 
-            jointCount = (int)stream.ReceiveNext();
-            if (jointCount > 0)
-            {
-                rRots.Clear();
-                for (int i = 0; i < jointCount; i++) rRots.Add((Quaternion)stream.ReceiveNext());
-                rArmMotion = true;
-            }
-            else
-            {
-                rArmMotion = false;
-            }
+            tgtRArmRots.Clear();
+            if ((bool)stream.ReceiveNext()) ReceiveRots(stream, tgtRArm, tgtRArmRots);
+
+            tgtHeadRot = (Quaternion)stream.ReceiveNext();
         }
     }
 
-    private int setJointRotations(Transform joint, ArrayList rots, int idx)
+    private void SendRots(PhotonStream stream, Transform joint)
+    {
+        stream.SendNext(joint.localRotation);
+        foreach (Transform child in joint)
+        {
+            SendRots(stream, child);
+        }
+    }
+
+    private void ReceiveRots(PhotonStream stream, Transform joint, ArrayList rots)
+    {
+        rots.Add((Quaternion)stream.ReceiveNext());
+        foreach (Transform child in joint)
+        {
+            ReceiveRots(stream, child, rots);
+        } 
+    }
+
+    private int SetRots(Transform joint, ArrayList rots, int idx)
     {
         joint.localRotation = (Quaternion)rots[idx++];
         foreach (Transform child in joint) 
         {
-            idx = setJointRotations(child, rots, idx);
+            idx = SetRots(child, rots, idx);
         }
         return idx;
     }
