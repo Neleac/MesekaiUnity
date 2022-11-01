@@ -13,12 +13,12 @@ public class MotionTransfer : MonoBehaviour
     [SerializeField] private SkinnedMeshRenderer srcFace;
     public SkinnedMeshRenderer tgtFace, tgtTeeth;
 
-    private HandSolver handSolver;
+
     private bool inHub;
+    [HideInInspector] public NetworkPlayer networkPlayer;
 
     void Start()
     {
-        handSolver = GetComponent<HandSolver>();
         inHub = SceneManager.GetActiveScene().name == "Hub";
     }
 
@@ -46,8 +46,11 @@ public class MotionTransfer : MonoBehaviour
 
         if (inHub)
         {
-            if (handSolver.leftDetected) mapJointRotation(srcLArm, tgtLArm);
-            if (handSolver.rightDetected) mapJointRotation(srcRArm, tgtRArm);
+            if (networkPlayer.idle)
+            {
+                mapJointRotation(srcLArm, tgtLArm);
+                mapJointRotation(srcRArm, tgtRArm);
+            }
         }
         else
         {

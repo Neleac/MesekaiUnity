@@ -21,11 +21,11 @@ public class PlayerManager : MonoBehaviour
         networkPlayer.srcLArm = spine.Find("LeftShoulder/LeftArm");
         networkPlayer.srcRArm = spine.Find("RightShoulder/RightArm");
         networkPlayer.srcHead = spine.Find("Neck/Head");
-        networkPlayer.handSolver = templateAvatar.GetComponent<HandSolver>();
 
         // setup player avatar
         GameObject playerAvatar = GameObject.Find("Avatar");
         MotionTransfer motionTransfer = templateAvatar.GetComponent<MotionTransfer>();
+        motionTransfer.networkPlayer = networkPlayer;
 
         if (playerAvatar == null)
         {

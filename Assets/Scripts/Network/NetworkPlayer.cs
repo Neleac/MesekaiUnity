@@ -13,7 +13,6 @@ public class NetworkPlayer : MonoBehaviourPun, IPunObservable
     // src: template avatar, sends data over network
     [HideInInspector] public SkinnedMeshRenderer srcFace;
     [HideInInspector] public Transform srcLArm, srcRArm, srcHead;
-    [HideInInspector] public HandSolver handSolver;
 
     // tgt: default or custom avatar, receives data from src client
     public SkinnedMeshRenderer tgtFace, tgtTeeth;
@@ -22,6 +21,9 @@ public class NetworkPlayer : MonoBehaviourPun, IPunObservable
     // stores received joint rots, used in LateUpdate to override animator
     private ArrayList tgtLArmRots, tgtRArmRots;
     private Quaternion tgtHeadRot;
+
+    private Vector3 position;
+    [HideInInspector] public bool idle;
 
     void Start()
     {
@@ -37,6 +39,15 @@ public class NetworkPlayer : MonoBehaviourPun, IPunObservable
 
         tgtLArmRots = new ArrayList();
         tgtRArmRots = new ArrayList();
+
+        position = transform.position;
+        idle = true;
+    }
+
+    void Update()
+    {
+        idle = transform.position == position;
+        position = transform.position;
     }
 
     void LateUpdate()
@@ -73,19 +84,10 @@ public class NetworkPlayer : MonoBehaviourPun, IPunObservable
         // joint rotations
         if (stream.IsWriting)   // send
         {
-            if (handSolver.leftDetected)
+            if (idle)
             {
                 stream.SendNext(true);
                 SendRots(stream, srcLArm);
-            }
-            else
-            {
-                stream.SendNext(false);
-            }
-
-            if (handSolver.rightDetected)
-            {
-                stream.SendNext(true);
                 SendRots(stream, srcRArm);
             }
             else
@@ -98,10 +100,12 @@ public class NetworkPlayer : MonoBehaviourPun, IPunObservable
         else    // receive
         {
             tgtLArmRots.Clear();
-            if ((bool)stream.ReceiveNext()) ReceiveRots(stream, tgtLArm, tgtLArmRots);
-
             tgtRArmRots.Clear();
-            if ((bool)stream.ReceiveNext()) ReceiveRots(stream, tgtRArm, tgtRArmRots);
+            if ((bool)stream.ReceiveNext())
+            {
+                ReceiveRots(stream, tgtLArm, tgtLArmRots);
+                ReceiveRots(stream, tgtRArm, tgtRArmRots);
+            }
 
             tgtHeadRot = (Quaternion)stream.ReceiveNext();
         }
