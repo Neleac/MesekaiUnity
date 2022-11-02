@@ -102,7 +102,6 @@ namespace StarterAssets
         private PlayerInput _playerInput;
 #endif
         private Animator _animator;
-        [HideInInspector] public Animator transferAnimator;
         private CharacterController _controller;
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
@@ -188,7 +187,6 @@ namespace StarterAssets
             if (_hasAnimator)
             {
                 _animator.SetBool(_animIDGrounded, Grounded);
-                if (transferAnimator != null) transferAnimator.SetBool(_animIDGrounded, Grounded);
             }
         }
 
@@ -278,12 +276,6 @@ namespace StarterAssets
             {
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
-
-                if (transferAnimator != null) 
-                {
-                    transferAnimator.SetFloat(_animIDSpeed, _animationBlend);
-                    transferAnimator.SetFloat(_animIDMotionSpeed, inputMagnitude);
-                }
             }
         }
 
@@ -299,12 +291,6 @@ namespace StarterAssets
                 {
                     _animator.SetBool(_animIDJump, false);
                     _animator.SetBool(_animIDFreeFall, false);
-
-                    if (transferAnimator != null) 
-                    {
-                        transferAnimator.SetBool(_animIDJump, false);
-                        transferAnimator.SetBool(_animIDFreeFall, false);
-                    }
                 }
 
                 // stop our velocity dropping infinitely when grounded
@@ -323,7 +309,6 @@ namespace StarterAssets
                     if (_hasAnimator)
                     {
                         _animator.SetBool(_animIDJump, true);
-                        if (transferAnimator != null) transferAnimator.SetBool(_animIDJump, true);
                     }
                 }
 
@@ -349,7 +334,6 @@ namespace StarterAssets
                     if (_hasAnimator)
                     {
                         _animator.SetBool(_animIDFreeFall, true);
-                        if (transferAnimator != null) transferAnimator.SetBool(_animIDFreeFall, true);
                     }
                 }
 

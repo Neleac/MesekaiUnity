@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 2150279704201940845}
   - component: {fileID: 5351967091107329281}
   - component: {fileID: 1730537073091273473}
+  - component: {fileID: 8703403634483377385}
   m_Layer: 8
   m_Name: Player Avatar
   m_TagString: Player
@@ -365,12 +366,12 @@ MonoBehaviour:
   srcLArm: {fileID: 0}
   srcRArm: {fileID: 0}
   srcHead: {fileID: 0}
-  handSolver: {fileID: 0}
   tgtFace: {fileID: 3067681545185218935}
   tgtTeeth: {fileID: 3067681544492478459}
   tgtLArm: {fileID: 3067681545207222879}
   tgtRArm: {fileID: 3067681544515623022}
   tgtHead: {fileID: 3067681545650488054}
+  idle: 0
 --- !u!114 &1816577124130184271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,6 +439,21 @@ MonoBehaviour:
   srcFace: {fileID: 3067681545185218935}
   tgtFace: {fileID: 0}
   tgtTeeth: {fileID: 0}
+  networkPlayer: {fileID: 0}
+--- !u!114 &8703403634483377385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1719964674429192377}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b5b81d157e9a8e4e9edcd3063216483, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  src: {fileID: 5365325073028679801}
+  tgt: {fileID: 0}
 --- !u!1 &3067681544374719496
 GameObject:
   m_ObjectHideFlags: 0

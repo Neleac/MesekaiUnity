@@ -5,8 +5,9 @@ using UnityEngine.InputSystem;
 using Photon.Pun;
 using Photon.Realtime;
 using StarterAssets;
+using ReadyPlayerMe;
 
-public class NetworkPlayer : MonoBehaviourPun, IPunObservable
+public class NetworkPlayer : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCallback
 {
     [SerializeField] private GameObject playerFollowCam;
 
@@ -25,6 +26,13 @@ public class NetworkPlayer : MonoBehaviourPun, IPunObservable
     private Vector3 position;
     [HideInInspector] public bool idle;
 
+    private AvatarLoader avatarLoader;
+
+    void Awake()
+    {
+        avatarLoader = GameObject.Find("Avatar Loader").GetComponent<RPMAvatarLoader>().avatarLoader;
+    }
+
     void Start()
     {
         if (PhotonNetwork.IsConnected && !photonView.IsMine)
@@ -37,11 +45,18 @@ public class NetworkPlayer : MonoBehaviourPun, IPunObservable
             GetComponent<StarterAssetsInputs>().enabled = false;
         }
 
+        GameObject templateAvatar = GameObject.Find("Template Avatar");
+        srcFace = templateAvatar.transform.Find("Avatar_Renderer_Head").GetComponent<SkinnedMeshRenderer>();
+        Transform spine = templateAvatar.transform.Find("Armature/Hips/Spine/Spine1/Spine2");
+        srcLArm = spine.Find("LeftShoulder/LeftArm");
+        srcRArm = spine.Find("RightShoulder/RightArm");
+        srcHead = spine.Find("Neck/Head");
+
         tgtLArmRots = new ArrayList();
         tgtRArmRots = new ArrayList();
 
         position = transform.position;
-        idle = true;
+        idle = true;        
     }
 
     void Update()
@@ -54,8 +69,8 @@ public class NetworkPlayer : MonoBehaviourPun, IPunObservable
     {
         if (!photonView.IsMine) 
         {
-            if (tgtLArmRots.Count > 0) SetRots(tgtLArm, tgtLArmRots, 0);
-            if (tgtRArmRots.Count > 0) SetRots(tgtRArm, tgtRArmRots, 0);
+            if (tgtLArmRots.Count > 0) SetRots(srcLArm, tgtLArm, tgtLArmRots, 0);
+            if (tgtRArmRots.Count > 0) SetRots(srcRArm, tgtRArm, tgtRArmRots, 0);
             tgtHead.localRotation = tgtHeadRot;
         }
     }
@@ -64,7 +79,7 @@ public class NetworkPlayer : MonoBehaviourPun, IPunObservable
     {
         // facial expression
         int nBlendshapes = tgtFace.sharedMesh.blendShapeCount;
-        for (int i = 0; i < nBlendshapes; i++)
+        for (int i = 0; i < srcFace.sharedMesh.blendShapeCount; i++)
         {
             if (stream.IsWriting)   // send
             {
@@ -73,10 +88,14 @@ public class NetworkPlayer : MonoBehaviourPun, IPunObservable
             else    // receive
             {
                 float weight = (float)stream.ReceiveNext();
-                tgtFace.SetBlendShapeWeight(i, weight);
-                if (tgtFace.sharedMesh.GetBlendShapeName(i) == "jawOpen")
+                string name = srcFace.sharedMesh.GetBlendShapeName(i);
+
+                int idx = tgtFace.sharedMesh.GetBlendShapeIndex(name);
+                if (idx != -1) tgtFace.SetBlendShapeWeight(idx, weight);
+
+                if (name == "jawOpen")
                 {
-                    tgtTeeth.SetBlendShapeWeight(i, weight);
+                    tgtTeeth.SetBlendShapeWeight(idx, weight);
                 }
             }
         }
@@ -129,13 +148,64 @@ public class NetworkPlayer : MonoBehaviourPun, IPunObservable
         } 
     }
 
-    private int SetRots(Transform joint, ArrayList rots, int idx)
+    private int SetRots(Transform src, Transform tgt, ArrayList rots, int idx)
     {
-        joint.localRotation = (Quaternion)rots[idx++];
-        foreach (Transform child in joint) 
+        tgt.localRotation = (Quaternion)rots[idx++];
+
+        foreach (Transform srcChild in src)
         {
-            idx = SetRots(child, rots, idx);
+            Transform tgtChild = tgt.Find(srcChild.name);
+            idx = SetRots(srcChild, tgtChild, rots, idx);
         }
+        
         return idx;
+    }
+
+    public void OnPhotonInstantiate(PhotonMessageInfo info)
+    {
+        if (!info.photonView.IsMine)
+        {
+            object[] instData = info.photonView.InstantiationData;
+            if (instData != null)   // client is using custom avatar
+            {
+                // hide default avatar
+                Component[] meshes = GetComponentsInChildren(typeof(SkinnedMeshRenderer));
+                foreach (SkinnedMeshRenderer mesh in meshes) mesh.enabled = false;
+
+                string avatarURL = (string)instData[0];
+                avatarLoader.LoadAvatar(avatarURL, OnAvatarImported, OnAvatarLoaded);
+            }
+        }
+    }
+
+    private void OnAvatarImported(GameObject avatar)
+    {
+        Debug.Log($"Avatar imported. [{Time.timeSinceLevelLoad:F2}]");
+    }
+
+    private void OnAvatarLoaded(GameObject avatar, AvatarMetaData metaData)
+    {
+        Debug.Log($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n{metaData}");
+
+        // transfer animations
+        AnimationTransfer animTransfer = GetComponent<AnimationTransfer>();
+        animTransfer.tgt = avatar.GetComponent<Animator>();
+        animTransfer.SetController();
+        animTransfer.enabled = true;
+
+        // parent to default avatar
+        avatar.transform.parent = transform;
+        avatar.transform.localPosition = Vector3.zero;
+        avatar.transform.localRotation = Quaternion.identity;
+        avatar.transform.localScale = Vector3.one;
+
+        // set targets of received blendshapes and rotations
+        tgtFace = avatar.transform.Find("Avatar_Renderer_Head").GetComponent<SkinnedMeshRenderer>();
+        tgtTeeth = avatar.transform.Find("Avatar_Renderer_Teeth").GetComponent<SkinnedMeshRenderer>();
+
+        Transform spine = avatar.transform.Find("Armature/Hips/Spine/Spine1/Spine2");
+        tgtLArm = spine.Find("LeftShoulder/LeftArm");
+        tgtRArm = spine.Find("RightShoulder/RightArm");
+        tgtHead = spine.Find("Neck/Head");
     }
 }

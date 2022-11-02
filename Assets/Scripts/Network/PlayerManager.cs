@@ -11,21 +11,23 @@ public class PlayerManager : MonoBehaviour
 
     void Awake()
     {
-        GameObject defaultAvatar = PhotonNetwork.Instantiate(avatarPrefab.name, new Vector3(65f, 22.175f, 43f), Quaternion.identity);
-        GameObject templateAvatar = GameObject.Find("Template Avatar");
+        GameObject playerAvatar = GameObject.Find("Custom Avatar");    // if custom avatar is available
+        
+        GameObject defaultAvatar;
+        if (playerAvatar == null)
+        {
+            defaultAvatar = PhotonNetwork.Instantiate(avatarPrefab.name, new Vector3(65f, 22.175f, 43f), Quaternion.identity);
+        }
+        else
+        {
+            // instantiate custom avatar with RPM url for other clients to load the avatar
+            object[] instData = {(object)playerAvatar.GetComponent<AvatarURL>().url};
+            defaultAvatar = PhotonNetwork.Instantiate(avatarPrefab.name, new Vector3(65f, 22.175f, 43f), Quaternion.identity, 0, instData);
+        }
 
-        // setup networking
-        NetworkPlayer networkPlayer = defaultAvatar.GetComponent<NetworkPlayer>();
-        networkPlayer.srcFace = templateAvatar.transform.Find("Avatar_Renderer_Head").GetComponent<SkinnedMeshRenderer>();
-        Transform spine = templateAvatar.transform.Find("Armature/Hips/Spine/Spine1/Spine2");
-        networkPlayer.srcLArm = spine.Find("LeftShoulder/LeftArm");
-        networkPlayer.srcRArm = spine.Find("RightShoulder/RightArm");
-        networkPlayer.srcHead = spine.Find("Neck/Head");
-
-        // setup player avatar
-        GameObject playerAvatar = GameObject.Find("Avatar");
-        MotionTransfer motionTransfer = templateAvatar.GetComponent<MotionTransfer>();
-        motionTransfer.networkPlayer = networkPlayer;
+        // setup motion transfer
+        MotionTransfer motionTransfer = GameObject.Find("Template Avatar").GetComponent<MotionTransfer>();
+        motionTransfer.networkPlayer = defaultAvatar.GetComponent<NetworkPlayer>();
 
         if (playerAvatar == null)
         {
@@ -33,11 +35,13 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {
-            // custom avatar
+            // transfer animations
             Animator animator = playerAvatar.GetComponent<Animator>();
-            animator.runtimeAnimatorController = defaultAvatar.GetComponent<Animator>().runtimeAnimatorController;
+            AnimationTransfer animTransfer = defaultAvatar.GetComponent<AnimationTransfer>();
+            animTransfer.tgt = animator;
+            animTransfer.SetController();
             animator.enabled = true;
-            defaultAvatar.GetComponent<ThirdPersonController>().transferAnimator = animator;
+            animTransfer.enabled = true;
 
             // hide default avatar
             Component[] meshes = defaultAvatar.GetComponentsInChildren(typeof(SkinnedMeshRenderer));
@@ -50,8 +54,7 @@ public class PlayerManager : MonoBehaviour
             playerAvatar.transform.localScale = Vector3.one;
         }
 
-        // set motion transfer targets
-        spine = playerAvatar.transform.Find("Armature/Hips/Spine/Spine1/Spine2");
+        Transform spine = playerAvatar.transform.Find("Armature/Hips/Spine/Spine1/Spine2");
         motionTransfer.tgtLArm = spine.Find("LeftShoulder/LeftArm");
         motionTransfer.tgtRArm = spine.Find("RightShoulder/RightArm");
         motionTransfer.tgtHead = spine.Find("Neck/Head");
