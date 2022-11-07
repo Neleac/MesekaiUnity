@@ -8,11 +8,14 @@ Mesekai is a real-time motion tracking virtual avatar application. Use your phys
 
 The primary use case is Vtubing. Additionally, the motion tracking feature can be applied to a 3rd person online multiplayer game for immersive social interactions. Enter the hub world to try this feature with other players.
 
+## Trailer
+[YouTube video: Mesekai - Webcam Motion Tracking Avatars](https://www.youtube.com/watch?v=rYbg6OU8-7E)
+
 ## Download
 [itch.io page](https://neleac.itch.io/mesekai)
 
 ## Browser Verison
-[Mesekai repo](https://github.com/Neleac/Mesekai)
+[Mesekai repository](https://github.com/Neleac/Mesekai)
 
 ## Extended Abstract
 [Motion Tracking Avatars in Desktop Multiplayer Online Games](https://github.com/Neleac/MesekaiUnity/blob/main/public/Motion%20Tracking%20Avatars%20in%20Desktop%20Multiplayer%20Online%20Games.pdf)
