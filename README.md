@@ -1,7 +1,7 @@
 # Mesekai Unity
 <p align="center">
   <img src="https://github.com/Neleac/MesekaiUnity/blob/main/public/avatar.PNG" width="45%" />
-  <img src="https://github.com/Neleac/MesekaiUnity/blob/main/public/world.PNG" width="45%" />
+  <img src="https://github.com/Neleac/MesekaiUnity/blob/main/public/world.PNG" width="42.75%" />
 </p>
 
 Mesekai is a real-time motion tracking virtual avatar application. Use your physical body through webcam video to control the avatar's arms, fingers, head, and facial expressions. It supports personalized [ReadyPlayerMe](https://readyplayer.me) avatars.
