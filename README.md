@@ -22,3 +22,5 @@ The primary use case is Vtubing. Additionally, the motion tracking feature can b
 
 ## Dependencies
 This project performs pose estimation using my fork of the [MediaPipeUnityPlugin](https://github.com/Neleac/MediaPipeUnityPlugin/tree/mesekai). Refer to the [git documentation](https://git-scm.com/book/en/v2/Git-Tools-Submodules) on setting up submodules. Follow MediaPipeUnityPlugin's instructions to build the plugin. Once successful, move `/Packages/com.github.homuler.mediapipe/` and `/Assets/StreamingAssets/` into the main project.
+
+Also need [git LFS](https://git-lfs.com/).
